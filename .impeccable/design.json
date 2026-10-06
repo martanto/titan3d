@@ -593,7 +593,7 @@
       "kind": "nav",
       "refersTo": "tab",
       "description": "View tabs; the current view is ink with a 2 px accent underline on the bar hairline.",
-      "html": "<nav class=\"ds-tabs\" aria-label=\"Views\"><span class=\"ds-brand\">titan3d<small>granular-flow model</small></span><a href=\"#\">Setup</a><a href=\"#\">Runs</a><a href=\"#\" aria-current=\"page\">Results</a></nav>",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Views\"><span class=\"ds-brand\">titan3d<small>v0.1.0 · built by github.com/martanto</small></span><a href=\"#\">Setup</a><a href=\"#\">Runs</a><a href=\"#\" aria-current=\"page\">Results</a><a href=\"#\">System</a></nav>",
       "css": ".ds-tabs{display:flex;align-items:stretch;gap:4px;height:48px;padding:0 16px;background:var(--panel,#fff);border-bottom:1px solid var(--line,#dfe2e6);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.875rem}.ds-brand{display:flex;align-items:center;margin-right:12px;font-weight:700;font-size:1rem;color:var(--fg,#15181c)}.ds-brand small{font-weight:400;font-size:0.75rem;color:var(--muted,#535b64);margin-left:8px}.ds-tabs a{display:flex;align-items:center;padding:0 12px;color:var(--muted,#535b64);text-decoration:none;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}.ds-tabs a:hover{color:var(--fg,#15181c)}.ds-tabs a:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}.ds-tabs a[aria-current=page]{color:var(--fg,#15181c);border-bottom-color:var(--accent,#1b56c9)}"
     },
     {
@@ -616,9 +616,9 @@
       "name": "Status Pill and Stage Badges",
       "kind": "chip",
       "refersTo": "status-pill",
-      "description": "Outline status pill (run state) and squared stage badges; the warn badge is mandatory when flow depth is exaggerated.",
-      "html": "<div class=\"ds-chips\"><span class=\"ds-status ok\">completed</span><span class=\"ds-status run\">running</span><span class=\"ds-status err\">failed</span><span class=\"ds-badge\">Envelope, 0–120 s</span><span class=\"ds-badge warn\">Flow depth ×3 (first 10 m)</span></div>",
-      "css": ".ds-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.75rem;font-weight:600}.ds-status{padding:1px 8px;border-radius:999px;border:1px solid currentColor}.ds-status.ok{color:var(--ok,#1a7f37)}.ds-status.run{color:var(--accent,#1b56c9)}.ds-status.err{color:var(--err,#b42318)}.ds-badge{background:var(--panel,#fff);border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);padding:2px 8px;color:var(--fg,#15181c)}.ds-badge.warn{border-color:var(--warn,#8a5a00);color:var(--warn,#8a5a00)}"
+      "description": "Outline status pill (run state) and squared stage badges; the warn badge is mandatory when flow depth is exaggerated. Health pills (System page) reuse it; Critical alone gets an err-weak fill.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-status ok\">completed</span><span class=\"ds-status run\">running</span><span class=\"ds-status err\">failed</span><span class=\"ds-status crit\">Critical</span><span class=\"ds-badge\">Envelope, 0–120 s</span><span class=\"ds-badge warn\">Flow depth ×3 (first 10 m)</span></div>",
+      "css": ".ds-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.75rem;font-weight:600}.ds-status{padding:1px 8px;border-radius:999px;border:1px solid currentColor}.ds-status.ok{color:var(--ok,#1a7f37)}.ds-status.run{color:var(--accent,#1b56c9)}.ds-status.err{color:var(--err,#b42318)}.ds-badge{background:var(--panel,#fff);border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);padding:2px 8px;color:var(--fg,#15181c)}.ds-badge.warn{border-color:var(--warn,#8a5a00);color:var(--warn,#8a5a00)}.ds-status.crit{color:var(--err,#b42318);background:var(--err-weak,#fdecea)}"
     },
     {
       "name": "Readouts",
@@ -643,6 +643,14 @@
       "description": "Signature: auto-written figure caption with provenance and figure actions beside it.",
       "html": "<div class=\"ds-cap\"><p><strong>Figure.</strong> Maximum flow depth over 0–120 s outside the release footprint (outlined). Coulomb basal friction φ_bed = 24°. Grid 60 m. Runout 4,530 m. titan3d 0.1.0, DEM sha256 337c45c8…, run a9544b45. Model output, not an official hazard map.</p><div class=\"act\"><button>Export figure</button><button>Copy caption</button></div></div>",
       "css": ".ds-cap{display:flex;gap:16px;align-items:baseline;padding:8px 16px;background:var(--panel,#fff);border-top:1px solid var(--line,#dfe2e6);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.8125rem;line-height:1.45;color:var(--fg,#15181c)}.ds-cap p{flex:1;margin:0;max-width:120ch}.ds-cap strong{font-weight:600}.ds-cap .act{display:flex;gap:8px;align-self:center}.ds-cap button{min-height:36px;padding:0 16px;border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);background:var(--panel,#fff);color:inherit;font-family:inherit;font-weight:600;font-size:0.875rem;cursor:pointer;white-space:nowrap}.ds-cap button:hover{background:var(--panel-2,#f6f7f8);border-color:var(--fg,#15181c)}.ds-cap button:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}"
+    },
+    {
+      "name": "Usage Meter",
+      "kind": "custom",
+      "refersTo": "usage-meter",
+      "description": "System page resource bar: ink fill (warn/err by state) over 10 % hairline ticks, dashed warning and critical limit marks, percentage with muted unit.",
+      "html": "<div class=\"ds-um\"><div class=\"bar\"><span class=\"fill\" style=\"--p:.638\"></span><span class=\"mark\" style=\"left:80%\"></span><span class=\"mark crit\" style=\"left:90%\"></span></div><span class=\"pct\">63.8<span class=\"u\">%</span></span></div>",
+      "css": ".ds-um{display:flex;align-items:center;gap:12px;width:420px;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.875rem;color:var(--fg,#15181c)}.ds-um .bar{position:relative;flex:1;height:12px;border:1px solid var(--control,#858d97);background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),var(--line,#dfe2e6) calc(10% - 1px) 10%)}.ds-um .fill{position:absolute;inset:0;background:var(--fg,#15181c);transform-origin:left center;transform:scaleX(var(--p,0))}.ds-um .mark{position:absolute;top:-4px;bottom:-4px;border-left:1.5px dashed var(--warn,#8a5a00)}.ds-um .mark.crit{border-left-color:var(--err,#b42318)}.ds-um .pct{width:7ch;text-align:right;font-weight:600;white-space:nowrap}.ds-um .u{color:var(--muted,#535b64);font-size:.72em;margin-left:.18em;font-weight:400}"
     }
   ],
   "narrative": {

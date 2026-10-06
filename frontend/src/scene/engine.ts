@@ -181,7 +181,7 @@ void main() {
 const FLOW_FS = /* glsl */ `
 precision highp float;
 uniform sampler2D uRamp;
-uniform float uMode, uHmax, uVmax, uEnvMax, uDepthMax, uFogNear, uFogFar;
+uniform float uMode, uHmax, uVmax, uEnvMax, uDepthMax, uFogNear, uFogFar, uOutline;
 uniform vec3 uScene, uLight, uInk;
 in float vH;
 in float vS;
@@ -204,7 +204,8 @@ void main() {
   // crisp 1 px paper-coloured line at the threshold contour (outside every colour map's range)
   float px = (show - thr) / max(fwidth(show), 1e-5);
   float line = 1.0 - clamp(px - 0.5, 0.0, 1.0);
-  col = mix(col, uInk, line * 0.9);
+  // plan view only: in 3D the hillshade already separates the flow and the line would stipple
+  col = mix(col, uInk, line * 0.9 * uOutline);
   // soft edge between cells instead of a hard stepped cut-off
   float a = 0.96 * smoothstep(thr, thr * 1.6, show + 0.6 * fwidth(show));
   float fog = smoothstep(uFogNear, uFogFar, vD);
@@ -268,6 +269,8 @@ export class FlowScene {
   readonly ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 2000);
   readonly controls: OrbitControls;
   view: ViewKind = "plan";
+  /** Skip rendering while the stage is hidden (e.g. on the System page). */
+  paused = false;
   surface: SurfaceKind = "natural";
   private contours = true;
   private mute = 0;
@@ -336,6 +339,7 @@ export class FlowScene {
     this.renderer.setAnimationLoop((now) => {
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
+      if (this.paused) return;
       for (const f of this.tickers) f(dt);
       if (this.view === "oblique") this.controls.update();
       this.renderer.render(this.scene, this.camera);
@@ -470,6 +474,8 @@ export class FlowScene {
     this.controls.enabled = v === "oblique";
     this.canvas.style.cursor = v === "plan" ? "crosshair" : "grab";
     this.applyFog();
+    const fu = (this.flowMesh?.material as THREE.ShaderMaterial | undefined)?.uniforms;
+    if (fu) fu.uOutline.value = v === "plan" ? 1 : 0;
   }
 
   private updateOrtho(): void {
@@ -748,6 +754,7 @@ export class FlowScene {
         uHmax: { value: m.hmax },
         uEnvMax: { value: m.hmax },
         uDepthMax: { value: m.hmax },
+        uOutline: { value: this.view === "plan" ? 1 : 0 },
         uInk: { value: new THREE.Color(css("--panel") || "#ffffff") },
         uVmax: { value: m.vmax },
         uBoost: { value: 1 },

@@ -411,7 +411,7 @@ export function mountResults(stage: Stage, panel: HTMLElement, job: Simulation):
         ),
         h(
           "div",
-          { class: "btn-row", style: "margin-top: 8px" },
+          { class: "flex flex-wrap gap-2 mt-2" },
           h("button", { type: "button", class: "btn small", onclick: () => setPresenter(true) }, "Presenter mode"),
           h(
             "button",
@@ -453,7 +453,7 @@ export function mountResults(stage: Stage, panel: HTMLElement, job: Simulation):
           h("h2", {}, "Figure and data"),
           h(
             "div",
-            { class: "btn-row" },
+            { class: "flex flex-wrap gap-2" },
             h(
               "button",
               {
@@ -487,10 +487,10 @@ export function mountResults(stage: Stage, panel: HTMLElement, job: Simulation):
                 {},
                 h(
                   "a",
-                  { class: "option", href: api.fileUrl(job.id, name), download: `${job.id}_${name}`, style: "grid-template-columns:auto 1fr auto" },
+                  { class: "option", href: api.fileUrl(job.id, name), download: `${job.id}_${name}` },
                   icon("download"),
                   h("span", { class: "name" }, label),
-                  h("span", { class: "muted", style: "font-size:12px" }, kind),
+                  h("span", { class: "text-muted text-xs" }, kind),
                 ),
               ),
             ),

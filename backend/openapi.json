@@ -799,6 +799,74 @@
           }
         }
       }
+    },
+    "/api/system": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Server resources, services and storage",
+        "description": "Disk, memory and CPU usage, service health and storage, cached briefly.",
+        "operationId": "system_health_api_system_get",
+        "parameters": [
+          {
+            "name": "refresh",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Measure now instead of reusing the last reading",
+              "default": false,
+              "title": "Refresh"
+            },
+            "description": "Measure now instead of reusing the last reading"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/system/caches/clear": {
+      "post": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Clear regenerable caches",
+        "description": "Delete terrain previews and playback bundles; they are rebuilt on the next request.",
+        "operationId": "clear_caches_api_system_caches_clear_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheClearOut"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -850,6 +918,30 @@
           "files"
         ],
         "title": "Body_upload_dem_api_dems_post"
+      },
+      "CacheClearOut": {
+        "properties": {
+          "files": {
+            "type": "integer",
+            "title": "Files"
+          },
+          "bytes": {
+            "type": "integer",
+            "title": "Bytes"
+          },
+          "size": {
+            "type": "string",
+            "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "files",
+          "bytes",
+          "size"
+        ],
+        "title": "CacheClearOut",
+        "description": "Result of clearing regenerable caches."
       },
       "DemOut": {
         "properties": {
@@ -1693,6 +1785,71 @@
         "title": "ProgressOut",
         "description": "Live progress of a run."
       },
+      "ResourceOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "disk",
+              "memory",
+              "cpu"
+            ],
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "What is measured, e.g. the partition path"
+          },
+          "fraction": {
+            "type": "number",
+            "title": "Fraction",
+            "description": "Used fraction (0–1)"
+          },
+          "used": {
+            "type": "string",
+            "title": "Used"
+          },
+          "capacity": {
+            "type": "string",
+            "title": "Capacity"
+          },
+          "free": {
+            "type": "string",
+            "title": "Free"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "warning",
+              "critical"
+            ],
+            "title": "Status"
+          },
+          "thresholds": {
+            "$ref": "#/components/schemas/Thresholds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "detail",
+          "fraction",
+          "used",
+          "capacity",
+          "free",
+          "status",
+          "thresholds"
+        ],
+        "title": "ResourceOut",
+        "description": "One server resource (disk, memory, CPU)."
+      },
       "Rheology": {
         "type": "string",
         "enum": [
@@ -1855,6 +2012,95 @@
         "type": "object",
         "title": "ScenarioRequest",
         "description": "A complete simulation configuration."
+      },
+      "ServiceItem": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "ServiceItem",
+        "description": "A labelled value shown in a service's details."
+      },
+      "ServiceOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "warning",
+              "critical"
+            ],
+            "title": "Status"
+          },
+          "response_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Ms",
+            "description": "Time of one light probe"
+          },
+          "details": {
+            "items": {
+              "$ref": "#/components/schemas/ServiceItem"
+            },
+            "type": "array",
+            "title": "Details"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "status"
+        ],
+        "title": "ServiceOut",
+        "description": "An application service and its health."
       },
       "SimulationCreated": {
         "properties": {
@@ -2031,6 +2277,179 @@
         ],
         "title": "SimulationOut",
         "description": "A simulation job."
+      },
+      "StorageItem": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "files": {
+            "type": "integer",
+            "title": "Files"
+          },
+          "bytes": {
+            "type": "integer",
+            "title": "Bytes"
+          },
+          "size": {
+            "type": "string",
+            "title": "Size"
+          },
+          "regenerable": {
+            "type": "boolean",
+            "title": "Regenerable",
+            "description": "Can be deleted and rebuilt on demand"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "description",
+          "files",
+          "bytes",
+          "size",
+          "regenerable"
+        ],
+        "title": "StorageItem",
+        "description": "A category of data on disk."
+      },
+      "SystemOut": {
+        "properties": {
+          "condition": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "warning",
+              "critical"
+            ],
+            "title": "Condition"
+          },
+          "measured_at": {
+            "type": "string",
+            "title": "Measured At",
+            "description": "ISO-8601 UTC time of the reading"
+          },
+          "cache_seconds": {
+            "type": "integer",
+            "title": "Cache Seconds",
+            "description": "Readings are reused for this long"
+          },
+          "host": {
+            "type": "string",
+            "title": "Host"
+          },
+          "os": {
+            "type": "string",
+            "title": "Os"
+          },
+          "environment": {
+            "type": "string",
+            "title": "Environment",
+            "description": "How the app is served (production build or API only)"
+          },
+          "python": {
+            "type": "string",
+            "title": "Python"
+          },
+          "titan3d": {
+            "type": "string",
+            "title": "Titan3D"
+          },
+          "commit": {
+            "type": "string",
+            "title": "Commit"
+          },
+          "data_dir": {
+            "type": "string",
+            "title": "Data Dir"
+          },
+          "server_uptime_s": {
+            "type": "number",
+            "title": "Server Uptime S"
+          },
+          "app_uptime_s": {
+            "type": "number",
+            "title": "App Uptime S"
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceOut"
+            },
+            "type": "array",
+            "title": "Resources"
+          },
+          "services": {
+            "items": {
+              "$ref": "#/components/schemas/ServiceOut"
+            },
+            "type": "array",
+            "title": "Services"
+          },
+          "storage": {
+            "items": {
+              "$ref": "#/components/schemas/StorageItem"
+            },
+            "type": "array",
+            "title": "Storage"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "condition",
+          "measured_at",
+          "cache_seconds",
+          "host",
+          "os",
+          "environment",
+          "python",
+          "titan3d",
+          "commit",
+          "data_dir",
+          "server_uptime_s",
+          "app_uptime_s",
+          "resources",
+          "services",
+          "storage",
+          "notes"
+        ],
+        "title": "SystemOut",
+        "description": "System health snapshot."
+      },
+      "Thresholds": {
+        "properties": {
+          "warning": {
+            "type": "number",
+            "title": "Warning"
+          },
+          "critical": {
+            "type": "number",
+            "title": "Critical"
+          }
+        },
+        "type": "object",
+        "required": [
+          "warning",
+          "critical"
+        ],
+        "title": "Thresholds",
+        "description": "Usage fractions at which a resource turns warning / critical."
       },
       "ValidationError": {
         "properties": {

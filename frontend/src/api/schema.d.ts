@@ -340,6 +340,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/system": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Server resources, services and storage
+         * @description Disk, memory and CPU usage, service health and storage, cached briefly.
+         */
+        get: operations["system_health_api_system_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/system/caches/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clear regenerable caches
+         * @description Delete terrain previews and playback bundles; they are rebuilt on the next request.
+         */
+        post: operations["clear_caches_api_system_caches_clear_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -370,6 +410,18 @@ export interface components {
              * @default
              */
             name: string;
+        };
+        /**
+         * CacheClearOut
+         * @description Result of clearing regenerable caches.
+         */
+        CacheClearOut: {
+            /** Files */
+            files: number;
+            /** Bytes */
+            bytes: number;
+            /** Size */
+            size: string;
         };
         /**
          * DemOut
@@ -807,6 +859,41 @@ export interface components {
             released_m3?: number | null;
         };
         /**
+         * ResourceOut
+         * @description One server resource (disk, memory, CPU).
+         */
+        ResourceOut: {
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "disk" | "memory" | "cpu";
+            /** Label */
+            label: string;
+            /**
+             * Detail
+             * @description What is measured, e.g. the partition path
+             */
+            detail: string;
+            /**
+             * Fraction
+             * @description Used fraction (0–1)
+             */
+            fraction: number;
+            /** Used */
+            used: string;
+            /** Capacity */
+            capacity: string;
+            /** Free */
+            free: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "normal" | "warning" | "critical";
+            thresholds: components["schemas"]["Thresholds"];
+        };
+        /**
          * Rheology
          * @description Basal resistance law.
          * @enum {string}
@@ -892,6 +979,42 @@ export interface components {
             output_every: number;
         };
         /**
+         * ServiceItem
+         * @description A labelled value shown in a service's details.
+         */
+        ServiceItem: {
+            /** Label */
+            label: string;
+            /** Value */
+            value: string;
+        };
+        /**
+         * ServiceOut
+         * @description An application service and its health.
+         */
+        ServiceOut: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Version */
+            version?: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "normal" | "warning" | "critical";
+            /**
+             * Response Ms
+             * @description Time of one light probe
+             */
+            response_ms?: number | null;
+            /** Details */
+            details?: components["schemas"]["ServiceItem"][];
+            /** Note */
+            note?: string | null;
+        };
+        /**
          * SimulationCreated
          * @description Response to a submitted simulation.
          */
@@ -954,6 +1077,89 @@ export interface components {
              * @description Downloadable artifact names
              */
             artifacts?: string[];
+        };
+        /**
+         * StorageItem
+         * @description A category of data on disk.
+         */
+        StorageItem: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Description */
+            description: string;
+            /** Files */
+            files: number;
+            /** Bytes */
+            bytes: number;
+            /** Size */
+            size: string;
+            /**
+             * Regenerable
+             * @description Can be deleted and rebuilt on demand
+             */
+            regenerable: boolean;
+        };
+        /**
+         * SystemOut
+         * @description System health snapshot.
+         */
+        SystemOut: {
+            /**
+             * Condition
+             * @enum {string}
+             */
+            condition: "normal" | "warning" | "critical";
+            /**
+             * Measured At
+             * @description ISO-8601 UTC time of the reading
+             */
+            measured_at: string;
+            /**
+             * Cache Seconds
+             * @description Readings are reused for this long
+             */
+            cache_seconds: number;
+            /** Host */
+            host: string;
+            /** Os */
+            os: string;
+            /**
+             * Environment
+             * @description How the app is served (production build or API only)
+             */
+            environment: string;
+            /** Python */
+            python: string;
+            /** Titan3D */
+            titan3d: string;
+            /** Commit */
+            commit: string;
+            /** Data Dir */
+            data_dir: string;
+            /** Server Uptime S */
+            server_uptime_s: number;
+            /** App Uptime S */
+            app_uptime_s: number;
+            /** Resources */
+            resources: components["schemas"]["ResourceOut"][];
+            /** Services */
+            services: components["schemas"]["ServiceOut"][];
+            /** Storage */
+            storage: components["schemas"]["StorageItem"][];
+            /** Notes */
+            notes: string[];
+        };
+        /**
+         * Thresholds
+         * @description Usage fractions at which a resource turns warning / critical.
+         */
+        Thresholds: {
+            /** Warning */
+            warning: number;
+            /** Critical */
+            critical: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -1567,6 +1773,58 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    system_health_api_system_get: {
+        parameters: {
+            query?: {
+                /** @description Measure now instead of reusing the last reading */
+                refresh?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SystemOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    clear_caches_api_system_caches_clear_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CacheClearOut"];
                 };
             };
         };

@@ -1,0 +1,103 @@
+# titan3d behind nginx — reference configuration.
+#
+# Layout assumed below (adjust paths):
+#   repository      /opt/titan3d
+#   app server      `uv run titan3d serve` on 127.0.0.1:8000 (systemd unit: see deploy/README.md)
+#   built UI        /opt/titan3d/frontend/dist (npm run build)
+#
+# Install:  sudo cp deploy/nginx.conf.example /etc/nginx/sites-available/titan3d
+#           sudo ln -s /etc/nginx/sites-available/titan3d /etc/nginx/sites-enabled/
+#           sudo nginx -t && sudo systemctl reload nginx
+#
+# titan3d must be served at the root of a (sub)domain; a sub-path such as /titan3d/ is not supported.
+
+upstream titan3d_app {
+    server 127.0.0.1:8000;
+    keepalive 16;
+}
+
+# HTTP → HTTPS redirect (remove this block and use the `listen 80` server below for an HTTP-only intranet).
+server {
+    listen 80;
+    listen [::]:80;
+    server_name titan3d.example.org;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name titan3d.example.org;
+
+    # TLS (e.g. from certbot: sudo certbot --nginx -d titan3d.example.org)
+    ssl_certificate     /etc/letsencrypt/live/titan3d.example.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/titan3d.example.org/privkey.pem;
+
+    # ---------------------------------------------------------------- uploads
+    # DEM uploads: up to TITAN3D_MAX_UPLOAD_FILE_MB (1024 MB default) per file and several files per request.
+    client_max_body_size 4g;
+    client_body_timeout  600s;
+    # stream request bodies straight to the app instead of buffering whole uploads on disk
+    proxy_request_buffering off;
+
+    # ------------------------------------------------------- optional basic auth
+    # Either protect here with nginx, or set TITAN3D_BASIC_AUTH_USER/PASSWORD in the app (not both).
+    # Create the file with: sudo htpasswd -c /etc/nginx/titan3d.htpasswd pvmbg
+    # auth_basic           "titan3d";
+    # auth_basic_user_file /etc/nginx/titan3d.htpasswd;
+
+    # ------------------------------------------------------------- built UI
+    # Serving the static UI from nginx is optional: without the `root` and the two locations below,
+    # the app itself serves frontend/dist (send everything to `location /api/`'s proxy instead).
+    root /opt/titan3d/frontend/dist;
+
+    # content-hashed bundles: cache forever
+    location /assets/ {
+        try_files $uri =404;
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # SPA: index.html must revalidate so a rebuilt UI is picked up at once
+    location / {
+        try_files $uri /index.html;
+        add_header Cache-Control "no-cache";
+    }
+
+    # -------------------------------------------------------------------- API
+    location /api/ {
+        proxy_pass         http://titan3d_app;
+        proxy_http_version 1.1;
+        proxy_set_header   Connection        "";
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+
+        # result and preview bundles can take a while to build on first request
+        proxy_connect_timeout 10s;
+        proxy_send_timeout    600s;
+        proxy_read_timeout    600s;
+    }
+
+    # health check stays open even when basic auth is enabled above
+    location = /api/health {
+        auth_basic off;
+        proxy_pass http://titan3d_app;
+    }
+
+    # ------------------------------------------------------------ compression
+    # The app already gzips API JSON and serves playback bundles pre-compressed
+    # (nginx never re-compresses a response that has Content-Encoding).
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1024;
+}
+
+# HTTP-only intranet alternative (use instead of the two servers above):
+# server {
+#     listen 80;
+#     server_name titan3d.lan;
+#     ... same body as the 443 server, without the ssl_* lines ...
+# }

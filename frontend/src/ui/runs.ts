@@ -65,10 +65,10 @@ export function mountRuns(stage: Stage, panel: HTMLElement): () => void {
         j.status === "completed" ? ` · ${duration(j.progress.elapsed_s)} solver time` : "",
         active ? ` · t = ${num(j.progress.sim_t, 1)} s` : "",
       ),
-      j.error ? h("span", { class: "meta", style: "color: var(--err)" }, j.error) : null,
+      j.error ? h("span", { class: "meta text-err" }, j.error) : null,
       h(
         "div",
-        { class: "btn-row" },
+        { class: "flex flex-wrap gap-2" },
         h("a", { class: "btn small", href: `#/run/${j.id}` }, j.status === "completed" ? "Open results" : active ? "Follow progress" : "Details"),
         h(
           "button",

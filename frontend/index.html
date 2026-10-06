@@ -11,21 +11,26 @@
   <body>
     <div class="app" id="app">
       <header class="topbar">
-        <a class="brand" href="#/setup">titan3d<small>granular-flow model</small></a>
+        <div class="brand">
+          <a class="brand-name" href="#/setup">titan3d</a>
+          <small
+            ><span id="appVersion"></span>built by
+            <a href="https://github.com/martanto" target="_blank" rel="noopener">github.com/martanto</a></small
+          >
+        </div>
         <nav class="tabs" aria-label="Views">
           <a href="#/setup" data-tab="setup">Setup</a>
           <a href="#/runs" data-tab="runs">Runs</a>
           <a href="#/run" data-tab="run" id="tabRun" aria-disabled="true">Results</a>
+          <a href="#/system" data-tab="system">System</a>
         </nav>
         <div class="topbar-meta">
           <span class="dem-name" id="demIndicator"></span>
         </div>
         <div class="topbar-actions">
-          <div class="toolgroup">
-            <button type="button" id="themeBtn" aria-label="Switch colour theme" title="Colour theme">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" /><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" /></svg>
-            </button>
-          </div>
+          <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch colour theme" title="Colour theme">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" /><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" /></svg>
+          </button>
         </div>
       </header>
 
@@ -66,6 +71,7 @@
         </section>
         <aside class="panel" id="panel" aria-label="Controls"></aside>
       </main>
+      <main class="system-page" id="systemPage" aria-label="System health" hidden></main>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

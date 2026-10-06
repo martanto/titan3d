@@ -207,7 +207,7 @@ export class Stage {
         "div",
         { class: "box", role: kind === "error" ? "alert" : "status" },
         h("h2", {}, title),
-        body ? h("p", { class: "muted" }, body) : null,
+        body ? h("p", { class: "text-muted" }, body) : null,
         action ?? null,
       ),
     );
@@ -245,7 +245,7 @@ export class Stage {
         { class: "cb-note" },
         spec.plain
           ? "Left of the scale: little; right: a lot."
-          : `${sqrtScale ? "Square-root scale" : "Linear scale"} · ${RAMP_NAME[spec.mode]} (Crameri 2018)${spec.mode === "speed" ? "" : " · outlined at " + (spec.mode === "max" ? "0.1" : "0.05") + " m"}${spec.note ? " · " + spec.note : ""}`,
+          : `${sqrtScale ? "Square-root scale" : "Linear scale"} · ${RAMP_NAME[spec.mode]} (Crameri 2018)${spec.mode === "speed" ? "" : (this.scene.view === "plan" ? " · outlined" : " · hidden") + " below " + (spec.mode === "max" ? "0.1" : "0.05") + " m"}${spec.note ? " · " + spec.note : ""}`,
       ),
     );
     this.colourbar.hidden = false;
