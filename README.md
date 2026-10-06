@@ -9,23 +9,21 @@
 
 <table>
   <tr>
-    <td width="50%" valign="top">
+    <td width="25%" valign="top" align="center">
       <a href="assets/setup.png"><img src="assets/setup.png" alt="Setup view: Semeru DEM with natural-colour relief, a pile at the summit, the computational domain and the scenario form"></a>
-      <br><sub><b>Setup:</b> place the release on the DEM, check the estimate, run.</sub>
+      <br><sub><b>Setup</b></sub>
     </td>
-    <td width="50%" valign="top">
+    <td width="25%" valign="top" align="center">
       <a href="assets/results-plan.png"><img src="assets/results-plan.png" alt="Results in plan view: maximum flow depth envelope on a hillshade with UTM graticule, contours, colourbar, flow readouts and time series"></a>
-      <br><sub><b>Results, plan view:</b> maximum-depth envelope as a figure with caption and readouts.</sub>
+      <br><sub><b>Results, plan</b></sub>
     </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
+    <td width="25%" valign="top" align="center">
       <a href="assets/results-3d.png"><img src="assets/results-3d.png" alt="Results in 3D: the maximum-depth envelope draped on the Semeru terrain in a perspective view"></a>
-      <br><sub><b>Results, 3D:</b> the same envelope in perspective, vertical exaggeration stated.</sub>
+      <br><sub><b>Results, 3D</b></sub>
     </td>
-    <td width="50%" valign="top">
+    <td width="25%" valign="top" align="center">
       <a href="assets/system.png"><img src="assets/system.png" alt="System page: condition summary, disk, memory and CPU usage bars with limits, services and storage"></a>
-      <br><sub><b>System:</b> disk, memory, CPU, services and storage.</sub>
+      <br><sub><b>System</b></sub>
     </td>
   </tr>
 </table>
