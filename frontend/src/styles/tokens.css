@@ -1,0 +1,117 @@
+/* titan3d design tokens: scientific figure on neutral paper.
+   Colour is reserved for data (Crameri maps); chrome is ink on paper with one
+   functional accent for actions and selection. */
+:root {
+  color-scheme: light;
+  --font: "Source Sans 3 Variable", "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* type scale (fixed rem, ratio ≈ 1.15) */
+  --t-xs: 0.75rem; /* 12 */
+  --t-sm: 0.8125rem; /* 13 */
+  --t-md: 0.875rem; /* 14 body */
+  --t-lg: 1rem; /* 16 */
+  --t-xl: 1.25rem; /* 20 */
+  --t-2xl: 1.5rem; /* 24 */
+  --t-num: 1.375rem; /* 22 readouts */
+
+  /* spacing (4 px grid) */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+
+  --radius: 4px;
+  --panel-w: 392px;
+  --topbar-h: 48px;
+
+  /* light: figure paper */
+  --bg: #f1f3f5;
+  --panel: #ffffff;
+  --panel-2: #f6f7f8;
+  --fg: #15181c;
+  --muted: #535b64; /* 7.0:1 on panel, 6.3:1 on bg */
+  --line: #dfe2e6; /* separators (decorative) */
+  --control: #858d97; /* control borders, 3.3:1 on panel */
+  --accent: #1b56c9; /* actions + selection, 6.2:1 on panel */
+  --accent-weak: #e7eefc;
+  --on-accent: #ffffff;
+  --ok: #1a7f37;
+  --warn: #8a5a00;
+  --err: #b42318;
+  --err-weak: #fdecea;
+  --focus: #1b56c9;
+
+  /* stage */
+  --scene: #e9ecef;
+  --terrain-low: #a9afb5;
+  --terrain-mid: #d0d4d8;
+  --terrain-high: #f5f6f7;
+  --contour: #353b42;
+  --grid-line: rgba(21, 24, 28, 0.38);
+  --pile: #15181c;
+  --vent: #c2410c;
+
+  --shadow: 0 1px 2px rgba(21, 24, 28, 0.08), 0 4px 12px rgba(21, 24, 28, 0.08);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1215;
+    --panel: #171b1f;
+    --panel-2: #1d2227;
+    --fg: #e7eaed;
+    --muted: #a3abb4;
+    --line: #2b3238;
+    --control: #6f7882;
+    --accent: #7aa6ff;
+    --accent-weak: #1c2a44;
+    --on-accent: #0b1220;
+    --ok: #56c271;
+    --warn: #e0b04f;
+    --err: #ff7b6e;
+    --err-weak: #3a1d1a;
+    --focus: #7aa6ff;
+    --scene: #121519;
+    --terrain-low: #5a626b;
+    --terrain-mid: #7d868f;
+    --terrain-high: #c3c9cf;
+    --contour: #07090b;
+    --grid-line: rgba(231, 234, 237, 0.34);
+    --pile: #e7eaed;
+    --vent: #ff8a4c;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1215;
+  --panel: #171b1f;
+  --panel-2: #1d2227;
+  --fg: #e7eaed;
+  --muted: #a3abb4;
+  --line: #2b3238;
+  --control: #6f7882;
+  --accent: #7aa6ff;
+  --accent-weak: #1c2a44;
+  --on-accent: #0b1220;
+  --ok: #56c271;
+  --warn: #e0b04f;
+  --err: #ff7b6e;
+  --err-weak: #3a1d1a;
+  --focus: #7aa6ff;
+  --scene: #121519;
+  --terrain-low: #5a626b;
+  --terrain-mid: #7d868f;
+  --terrain-high: #c3c9cf;
+  --contour: #07090b;
+  --grid-line: rgba(231, 234, 237, 0.34);
+  --pile: #e7eaed;
+  --vent: #ff8a4c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35);
+}

@@ -1,0 +1,18 @@
+# Optional. The default way to run titan3d is `uv run titan3d serve` (see deploy/README.md).
+services:
+  titan3d:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - titan3d-data:/app/backend/data # SQLite DB, uploaded DEMs, run outputs
+      - ../dem:/app/dem:ro # built-in DEM tiles
+    restart: unless-stopped
+
+volumes:
+  titan3d-data:

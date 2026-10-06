@@ -1,0 +1,717 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-06T15:07:03+00:00",
+  "title": "Design System: titan3d",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Survey Blue",
+        "canonical": "#1b56c9",
+        "tonalRamp": [
+          "#00003d",
+          "#001962",
+          "#0f3889",
+          "#2958b2",
+          "#4a7cdc",
+          "#72a3fe",
+          "#9bcaff",
+          "#c2efff"
+        ]
+      },
+      "accent-dark": {
+        "role": "primary",
+        "displayName": "Survey Blue (dark theme)",
+        "canonical": "#7aa6ff"
+      },
+      "accent-weak": {
+        "role": "primary",
+        "displayName": "Survey Blue Wash",
+        "canonical": "#e7eefc",
+        "tonalRamp": [
+          "#080b12",
+          "#20242c",
+          "#3b404a",
+          "#585e69",
+          "#7a808c",
+          "#9fa5b0",
+          "#c5cbd6",
+          "#e9eff9"
+        ]
+      },
+      "accent-weak-dark": {
+        "role": "primary",
+        "displayName": "Survey Blue Wash (dark theme)",
+        "canonical": "#1c2a44"
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "On Accent",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a4a4a4",
+          "#cacaca",
+          "#eeeeee"
+        ]
+      },
+      "on-accent-dark": {
+        "role": "primary",
+        "displayName": "On Accent (dark theme)",
+        "canonical": "#0b1220"
+      },
+      "paper-ground": {
+        "role": "neutral",
+        "displayName": "Figure Paper",
+        "canonical": "#f1f3f5",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232425",
+          "#3e4041",
+          "#5c5e5f",
+          "#7f8082",
+          "#a3a5a6",
+          "#c9cbcc",
+          "#edeff0"
+        ]
+      },
+      "paper-ground-dark": {
+        "role": "neutral",
+        "displayName": "Figure Paper (dark theme)",
+        "canonical": "#0f1215"
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a4a4a4",
+          "#cacaca",
+          "#eeeeee"
+        ]
+      },
+      "panel-dark": {
+        "role": "neutral",
+        "displayName": "Sheet White (dark theme)",
+        "canonical": "#171b1f"
+      },
+      "panel-2": {
+        "role": "neutral",
+        "displayName": "Tint Sheet",
+        "canonical": "#f6f7f8",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#232425",
+          "#3f4040",
+          "#5d5e5e",
+          "#7f8081",
+          "#a4a5a5",
+          "#cacacb",
+          "#eeeeef"
+        ]
+      },
+      "panel-2-dark": {
+        "role": "neutral",
+        "displayName": "Tint Sheet (dark theme)",
+        "canonical": "#1d2227"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Plate Ink",
+        "canonical": "#15181c",
+        "tonalRamp": [
+          "#090b0e",
+          "#222428",
+          "#3d4044",
+          "#5a5e63",
+          "#7d8186",
+          "#a1a5aa",
+          "#c7cbcf",
+          "#ebeff3"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Plate Ink (dark theme)",
+        "canonical": "#e7eaed"
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Annotation Grey",
+        "canonical": "#535b64",
+        "tonalRamp": [
+          "#070c11",
+          "#1f252b",
+          "#3a4048",
+          "#575e67",
+          "#79818a",
+          "#9ea6af",
+          "#c4cbd4",
+          "#e8eff8"
+        ]
+      },
+      "muted-ink-dark": {
+        "role": "neutral",
+        "displayName": "Annotation Grey (dark theme)",
+        "canonical": "#a3abb4"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#dfe2e6",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#222427",
+          "#3e4043",
+          "#5b5e61",
+          "#7e8084",
+          "#a2a5a8",
+          "#c8cbce",
+          "#eceff2"
+        ]
+      },
+      "hairline-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark theme)",
+        "canonical": "#2b3238"
+      },
+      "control-stroke": {
+        "role": "neutral",
+        "displayName": "Control Stroke",
+        "canonical": "#858d97",
+        "tonalRamp": [
+          "#070b11",
+          "#1f252b",
+          "#3a4048",
+          "#575e67",
+          "#79818b",
+          "#9ea5af",
+          "#c4cbd4",
+          "#e8eff8"
+        ]
+      },
+      "control-stroke-dark": {
+        "role": "neutral",
+        "displayName": "Control Stroke (dark theme)",
+        "canonical": "#6f7882"
+      },
+      "ok": {
+        "role": "semantic",
+        "displayName": "Run Complete Green",
+        "canonical": "#1a7f37",
+        "tonalRamp": [
+          "#001400",
+          "#003100",
+          "#005011",
+          "#0b712d",
+          "#3b964f",
+          "#69ba77",
+          "#95e0a0",
+          "#bdffc6"
+        ]
+      },
+      "ok-dark": {
+        "role": "semantic",
+        "displayName": "Run Complete Green (dark theme)",
+        "canonical": "#56c271"
+      },
+      "warn": {
+        "role": "semantic",
+        "displayName": "Caution Ochre",
+        "canonical": "#8a5a00",
+        "tonalRamp": [
+          "#1e0200",
+          "#3c1a00",
+          "#5d3500",
+          "#805300",
+          "#a6762f",
+          "#c99b5d",
+          "#eec289",
+          "#ffe7b2"
+        ]
+      },
+      "warn-dark": {
+        "role": "semantic",
+        "displayName": "Caution Ochre (dark theme)",
+        "canonical": "#e0b04f"
+      },
+      "err": {
+        "role": "semantic",
+        "displayName": "Fault Red",
+        "canonical": "#b42318",
+        "tonalRamp": [
+          "#2e0000",
+          "#530000",
+          "#7a0c06",
+          "#a22f24",
+          "#cc5546",
+          "#f17e6e",
+          "#ffa897",
+          "#ffcfbf"
+        ]
+      },
+      "err-dark": {
+        "role": "semantic",
+        "displayName": "Fault Red (dark theme)",
+        "canonical": "#ff7b6e"
+      },
+      "err-weak": {
+        "role": "semantic",
+        "displayName": "Fault Wash",
+        "canonical": "#fdecea",
+        "tonalRamp": [
+          "#110908",
+          "#2b2120",
+          "#483c3b",
+          "#675a58",
+          "#8b7c7b",
+          "#afa19f",
+          "#d4c7c5",
+          "#f8ebea"
+        ]
+      },
+      "err-weak-dark": {
+        "role": "semantic",
+        "displayName": "Fault Wash (dark theme)",
+        "canonical": "#3a1d1a"
+      },
+      "scene": {
+        "role": "stage",
+        "displayName": "Stage Ground",
+        "canonical": "#e9ecef",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#222426",
+          "#3e4042",
+          "#5b5e60",
+          "#7e8083",
+          "#a2a5a7",
+          "#c8cbcd",
+          "#eceff1"
+        ]
+      },
+      "scene-dark": {
+        "role": "stage",
+        "displayName": "Stage Ground (dark theme)",
+        "canonical": "#121519"
+      },
+      "terrain-low": {
+        "role": "stage",
+        "displayName": "Hillshade Low",
+        "canonical": "#a9afb5",
+        "tonalRamp": [
+          "#080c0f",
+          "#212428",
+          "#3c4045",
+          "#595e63",
+          "#7b8186",
+          "#a0a5ab",
+          "#c6cbd0",
+          "#eaeff4"
+        ]
+      },
+      "terrain-low-dark": {
+        "role": "stage",
+        "displayName": "Hillshade Low (dark theme)",
+        "canonical": "#5a626b"
+      },
+      "terrain-mid": {
+        "role": "stage",
+        "displayName": "Hillshade Mid",
+        "canonical": "#d0d4d8",
+        "tonalRamp": [
+          "#090b0d",
+          "#222427",
+          "#3d4043",
+          "#5b5e61",
+          "#7d8184",
+          "#a2a5a8",
+          "#c8cbce",
+          "#eceff2"
+        ]
+      },
+      "terrain-mid-dark": {
+        "role": "stage",
+        "displayName": "Hillshade Mid (dark theme)",
+        "canonical": "#7d868f"
+      },
+      "terrain-high": {
+        "role": "stage",
+        "displayName": "Hillshade High",
+        "canonical": "#f5f6f7",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#232425",
+          "#3f4040",
+          "#5d5e5e",
+          "#7f8081",
+          "#a4a5a5",
+          "#cacacb",
+          "#eeeeef"
+        ]
+      },
+      "terrain-high-dark": {
+        "role": "stage",
+        "displayName": "Hillshade High (dark theme)",
+        "canonical": "#c3c9cf"
+      },
+      "contour": {
+        "role": "stage",
+        "displayName": "Contour Ink",
+        "canonical": "#353b42",
+        "tonalRamp": [
+          "#080b10",
+          "#20242a",
+          "#3b4047",
+          "#585e66",
+          "#7a8189",
+          "#9fa5ad",
+          "#c5cbd2",
+          "#e9eff6"
+        ]
+      },
+      "contour-dark": {
+        "role": "stage",
+        "displayName": "Contour Ink (dark theme)",
+        "canonical": "#07090b"
+      },
+      "pile": {
+        "role": "stage",
+        "displayName": "Pile Marker",
+        "canonical": "#15181c",
+        "tonalRamp": [
+          "#090b0e",
+          "#222428",
+          "#3d4044",
+          "#5a5e63",
+          "#7d8186",
+          "#a1a5aa",
+          "#c7cbcf",
+          "#ebeff3"
+        ]
+      },
+      "pile-dark": {
+        "role": "stage",
+        "displayName": "Pile Marker (dark theme)",
+        "canonical": "#e7eaed"
+      },
+      "vent": {
+        "role": "stage",
+        "displayName": "Vent Orange",
+        "canonical": "#c2410c",
+        "tonalRamp": [
+          "#2d0000",
+          "#520000",
+          "#791200",
+          "#a13304",
+          "#cb5832",
+          "#ef825f",
+          "#ffab8a",
+          "#ffd2b2"
+        ]
+      },
+      "vent-dark": {
+        "role": "stage",
+        "displayName": "Vent Orange (dark theme)",
+        "canonical": "#ff8a4c"
+      },
+      "grid-line": {
+        "role": "stage",
+        "displayName": "Graticule",
+        "canonical": "rgba(21, 24, 28, 0.38)"
+      },
+      "grid-line-dark": {
+        "role": "stage",
+        "displayName": "Graticule (dark theme)",
+        "canonical": "rgba(231, 234, 237, 0.34)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Elapsed clock on the Running card; presenter time readout."
+      },
+      "readout": {
+        "displayName": "Readout",
+        "purpose": "Key result numbers in Results, unit muted at 0.72em."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Context panel heading (scenario name)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h2, estimate values, wordmark (700)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default text, buttons and tabs (600), inputs."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, segmented/toolgroup options, small buttons, caption strip (400)."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Help, units, meta, colourbar ticks and notes, badges, probe."
+      }
+    },
+    "dataColorMaps": [
+      {
+        "name": "batlow",
+        "quantity": "flow depth h at t",
+        "scale": "square root",
+        "source": "Crameri (2018) doi:10.5281/zenodo.1243862"
+      },
+      {
+        "name": "imola",
+        "quantity": "speed |u| at t",
+        "scale": "linear",
+        "source": "Crameri (2018)"
+      },
+      {
+        "name": "lajolla (reversed)",
+        "quantity": "maximum-depth envelope",
+        "scale": "square root; release footprint masked and outlined",
+        "source": "Crameri (2018)"
+      }
+    ],
+    "terrainSurfaces": [
+      {
+        "name": "natural",
+        "purpose": "Default on terrain-only views (Setup, Running). DEM-derived synthetic relief: vegetation below a treeline at 78% of relief, bare rock on steep slopes (~36-48 deg), ash towards the summit; disclosed in the caption as not imagery. Under data layers muted 0.6 towards grey."
+      },
+      {
+        "name": "hillshade",
+        "purpose": "Default under data layers (Results). Greyscale ramp terrain-low/mid/high lit from the north-west; contours mixed 18% minor, 42% index (every 5th interval)."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "float",
+        "value": "0 1px 2px rgba(21, 24, 28, 0.08), 0 4px 12px rgba(21, 24, 28, 0.08)",
+        "purpose": "Stage overlays (toolgroups, colourbar, probe, presenter bar) and toast only."
+      },
+      {
+        "name": "float-dark",
+        "value": "0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35)",
+        "purpose": "Float in the dark theme."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "All state transitions and the progress fill."
+      },
+      {
+        "name": "state",
+        "value": "150ms",
+        "purpose": "Button background/border transitions."
+      },
+      {
+        "name": "progress",
+        "value": "600ms",
+        "purpose": "Progress fill scale."
+      },
+      {
+        "name": "hatch",
+        "value": "0.9s linear infinite",
+        "purpose": "Moving diagonal hatch on an active progress fill."
+      },
+      {
+        "name": "sweep",
+        "value": "1.4s infinite",
+        "purpose": "Indeterminate progress."
+      },
+      {
+        "name": "pulse",
+        "value": "1.6s ease-in-out infinite",
+        "purpose": "Current phase dot."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transitions 1ms; hatch and pulse off; sweep becomes a static 35% fill",
+        "purpose": "prefers-reduced-motion: reduce. Playback never autostarts."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow-panel",
+        "value": "960px",
+        "purpose": "Panel 340 px; wordmark subtitle hidden."
+      },
+      {
+        "name": "stacked",
+        "value": "760px",
+        "purpose": "Page scroll, stacked stage and panel, legend strip under the map, 40 px tool targets."
+      }
+    ],
+    "layout": {
+      "topbarHeight": "48px",
+      "panelWidth": "392px",
+      "colourbarWidth": "260px",
+      "captionMaxWidth": "120ch"
+    }
+  },
+  "components": [
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Secondary actions: Presenter mode, Run again, Export figure, Copy caption.",
+      "html": "<button class=\"ds-btn\"><svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><rect x=\"2\" y=\"3\" width=\"12\" height=\"10\" rx=\"1\"/><path d=\"M2 11l4-4 3 3 2-2 3 3\"/></svg>Export figure</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 16px;border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);background:var(--panel,#fff);color:var(--fg,#15181c);font-weight:600;font-size:0.875rem;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color 150ms cubic-bezier(0.22,1,0.36,1),border-color 150ms cubic-bezier(0.22,1,0.36,1)}.ds-btn:hover{background:var(--panel-2,#f6f7f8);border-color:var(--fg,#15181c)}.ds-btn:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}.ds-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one committing action per view (Run simulation), full width in the sticky panel foot.",
+      "html": "<button class=\"ds-btn-primary\">Run simulation</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:240px;padding:0 16px;border:1px solid var(--accent,#1b56c9);border-radius:var(--radius,4px);background:var(--accent,#1b56c9);color:var(--on-accent,#fff);font-weight:600;font-size:0.875rem;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;cursor:pointer}.ds-btn-primary:hover{filter:brightness(1.08)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}"
+    },
+    {
+      "name": "Input with Unit",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Numeric field: right-aligned tabular value, no spinners, muted SI unit inside the field.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-vol\">Volume</label><div class=\"ds-iu\"><input id=\"ds-vol\" type=\"text\" inputmode=\"decimal\" value=\"8.482e6\"><span>m³</span></div><span class=\"ds-help\">Paraboloid pile, released at t = 0.</span></div>",
+      "css": ".ds-field{display:grid;gap:4px;width:220px;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;color:var(--fg,#15181c)}.ds-field label{font-size:0.8125rem;font-weight:600}.ds-iu{position:relative;display:flex;align-items:center}.ds-iu input{width:100%;min-height:36px;padding:4px 2.8em 4px 8px;border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);background:var(--panel,#fff);color:inherit;font:inherit;font-size:0.875rem;text-align:right;font-variant-numeric:tabular-nums}.ds-iu input:hover{border-color:var(--fg,#15181c)}.ds-iu input:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}.ds-iu span{position:absolute;right:8px;color:var(--muted,#535b64);font-size:0.75rem;pointer-events:none}.ds-help{font-size:0.75rem;color:var(--muted,#535b64)}"
+    },
+    {
+      "name": "Top Bar Tabs",
+      "kind": "nav",
+      "refersTo": "tab",
+      "description": "View tabs; the current view is ink with a 2 px accent underline on the bar hairline.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Views\"><span class=\"ds-brand\">titan3d<small>granular-flow model</small></span><a href=\"#\">Setup</a><a href=\"#\">Runs</a><a href=\"#\" aria-current=\"page\">Results</a></nav>",
+      "css": ".ds-tabs{display:flex;align-items:stretch;gap:4px;height:48px;padding:0 16px;background:var(--panel,#fff);border-bottom:1px solid var(--line,#dfe2e6);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.875rem}.ds-brand{display:flex;align-items:center;margin-right:12px;font-weight:700;font-size:1rem;color:var(--fg,#15181c)}.ds-brand small{font-weight:400;font-size:0.75rem;color:var(--muted,#535b64);margin-left:8px}.ds-tabs a{display:flex;align-items:center;padding:0 12px;color:var(--muted,#535b64);text-decoration:none;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}.ds-tabs a:hover{color:var(--fg,#15181c)}.ds-tabs a:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}.ds-tabs a[aria-current=page]{color:var(--fg,#15181c);border-bottom-color:var(--accent,#1b56c9)}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented-option",
+      "description": "Equal-width mutually exclusive options with optional muted sub line; selected fills with the accent.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button aria-pressed=\"true\">Maximum depth<small>envelope</small></button><button aria-pressed=\"false\">Depth<small>h at t</small></button><button aria-pressed=\"false\">Speed<small>|u| at t</small></button></div>",
+      "css": ".ds-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;width:360px;border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);overflow:hidden;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;}.ds-seg button{min-height:36px;padding:0 8px;background:var(--panel,#fff);color:var(--fg,#15181c);border:0;font-family:inherit;font-weight:600;font-size:0.8125rem;line-height:1.3;cursor:pointer}.ds-seg button+button{border-left:1px solid var(--line,#dfe2e6)}.ds-seg button:hover{background:var(--panel-2,#f6f7f8)}.ds-seg button:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:-2px}.ds-seg button[aria-pressed=true]{background:var(--accent,#1b56c9);color:var(--on-accent,#fff)}.ds-seg small{display:block;font-weight:400;font-size:0.75rem;opacity:.85}"
+    },
+    {
+      "name": "Stage Toolgroup",
+      "kind": "custom",
+      "refersTo": "toolgroup-button",
+      "description": "Floating bordered strip of stage tools (view, terrain surface, zoom) with the Float shadow.",
+      "html": "<div class=\"ds-tg\" role=\"group\" aria-label=\"Terrain surface\"><button aria-pressed=\"false\">Natural</button><button aria-pressed=\"true\">Hillshade</button><button aria-label=\"Zoom in\"><svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M8 3v10M3 8h10\"/></svg></button></div>",
+      "css": ".ds-tg{display:inline-flex;background:var(--panel,#fff);border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);box-shadow:0 1px 2px rgba(21,24,28,.08),0 4px 12px rgba(21,24,28,.08);overflow:hidden;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;}.ds-tg button{min-width:36px;height:36px;padding:0 12px;border:0;background:transparent;color:var(--fg,#15181c);font-family:inherit;font-weight:600;font-size:0.8125rem;cursor:pointer}.ds-tg button+button{border-left:1px solid var(--line,#dfe2e6)}.ds-tg button:hover{background:var(--panel-2,#f6f7f8)}.ds-tg button:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:-2px}.ds-tg button[aria-pressed=true]{background:var(--accent,#1b56c9);color:var(--on-accent,#fff)}.ds-tg svg{width:16px;height:16px;display:block;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round}"
+    },
+    {
+      "name": "Status Pill and Stage Badges",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "Outline status pill (run state) and squared stage badges; the warn badge is mandatory when flow depth is exaggerated.",
+      "html": "<div class=\"ds-chips\"><span class=\"ds-status ok\">completed</span><span class=\"ds-status run\">running</span><span class=\"ds-status err\">failed</span><span class=\"ds-badge\">Envelope, 0–120 s</span><span class=\"ds-badge warn\">Flow depth ×3 (first 10 m)</span></div>",
+      "css": ".ds-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.75rem;font-weight:600}.ds-status{padding:1px 8px;border-radius:999px;border:1px solid currentColor}.ds-status.ok{color:var(--ok,#1a7f37)}.ds-status.run{color:var(--accent,#1b56c9)}.ds-status.err{color:var(--err,#b42318)}.ds-badge{background:var(--panel,#fff);border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);padding:2px 8px;color:var(--fg,#15181c)}.ds-badge.warn{border-color:var(--warn,#8a5a00);color:var(--warn,#8a5a00)}"
+    },
+    {
+      "name": "Readouts",
+      "kind": "card",
+      "refersTo": "estimate",
+      "description": "Key/value/note readouts in a two-column grid; numbers tabular with a muted unit.",
+      "html": "<div class=\"ds-ro\"><div><span class=\"k\">Maximum runout</span><span class=\"v\">4,530<span class=\"u\">m</span></span><span class=\"n\">from the first source</span></div><div><span class=\"k\">Peak speed</span><span class=\"v\">94.5<span class=\"u\">m/s</span></span><span class=\"n\">h &gt; 0.1 m</span></div></div>",
+      "css": ".ds-ro{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;width:340px;padding:12px;background:var(--panel-2,#f6f7f8);border-radius:var(--radius,4px);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;color:var(--fg,#15181c)}.ds-ro div{display:grid}.ds-ro .k,.ds-ro .n{font-size:0.75rem;color:var(--muted,#535b64)}.ds-ro .v{font-size:1.375rem;font-weight:600;white-space:nowrap}.ds-ro .u{color:var(--muted,#535b64);font-size:.72em;margin-left:.18em;font-weight:400}"
+    },
+    {
+      "name": "Colourbar",
+      "kind": "custom",
+      "refersTo": "colourbar",
+      "description": "Map legend: title with unit, ramp sampled from the Crameri table, ink ticks, scale type and citation note.",
+      "html": "<div class=\"ds-cb\"><div class=\"t\">Maximum flow depth over the run (m)</div><div class=\"bar\"></div><div class=\"ticks\"><span>0</span><span>6</span><span>26</span></div><div class=\"note\">Square-root scale · lajolla (reversed) (Crameri 2018) · outlined at 0.1 m</div></div>",
+      "css": ".ds-cb{width:260px;background:var(--panel,#fff);border:1px solid var(--line,#dfe2e6);border-radius:var(--radius,4px);padding:8px 12px;box-shadow:0 1px 2px rgba(21,24,28,.08),0 4px 12px rgba(21,24,28,.08);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.75rem;color:var(--fg,#15181c)}.ds-cb .t{font-weight:600;font-size:0.8125rem}.ds-cb .bar{height:12px;margin-top:8px;border:1px solid var(--control,#858d97);background:linear-gradient(90deg,#fffecb,#f5d97f,#ec9f55,#d9603f,#a42f2f,#5e1f1d,#1a1a01)}.ds-cb .ticks{display:flex;justify-content:space-between;margin-top:2px}.ds-cb .note{color:var(--muted,#535b64);margin-top:2px}"
+    },
+    {
+      "name": "Caption Strip",
+      "kind": "custom",
+      "refersTo": "caption-strip",
+      "description": "Signature: auto-written figure caption with provenance and figure actions beside it.",
+      "html": "<div class=\"ds-cap\"><p><strong>Figure.</strong> Maximum flow depth over 0–120 s outside the release footprint (outlined). Coulomb basal friction φ_bed = 24°. Grid 60 m. Runout 4,530 m. titan3d 0.1.0, DEM sha256 337c45c8…, run a9544b45. Model output, not an official hazard map.</p><div class=\"act\"><button>Export figure</button><button>Copy caption</button></div></div>",
+      "css": ".ds-cap{display:flex;gap:16px;align-items:baseline;padding:8px 16px;background:var(--panel,#fff);border-top:1px solid var(--line,#dfe2e6);font-family:var(--font,'Source Sans 3 Variable',system-ui,sans-serif);font-variant-numeric:tabular-nums;font-size:0.8125rem;line-height:1.45;color:var(--fg,#15181c)}.ds-cap p{flex:1;margin:0;max-width:120ch}.ds-cap strong{font-weight:600}.ds-cap .act{display:flex;gap:8px;align-self:center}.ds-cap button{min-height:36px;padding:0 16px;border:1px solid var(--control,#858d97);border-radius:var(--radius,4px);background:var(--panel,#fff);color:inherit;font-family:inherit;font-weight:600;font-size:0.875rem;cursor:pointer;white-space:nowrap}.ds-cap button:hover{background:var(--panel-2,#f6f7f8);border-color:var(--fg,#15181c)}.ds-cap button:focus-visible{outline:2px solid var(--focus,#1b56c9);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Figure Is the Interface",
+    "overview": "Every stage view is a publication-ready scientific figure. Plan views carry a UTM graticule with edge labels, a scale bar and north arrow in the lower left, labelled index contours, and a colourbar that states units, scale type and colour-map citation. Perspective views state their vertical exaggeration. Every view has an auto-written figure caption with provenance (code version, DEM hash, run id) and the disclaimer \"Model output, not an official hazard map\". The chrome around the figure works like an instrument panel: neutral paper, near-black ink, hairline rules and one functional blue.\n\nThe density is that of a lab instrument. A fixed 392 px context panel on the right holds forms, progress or readouts in a 4 px rhythm. The stage on the left gets all remaining width and stays plain. Colour belongs to the data: Crameri scientific colour maps for flow fields, and greyscale hillshade under data so no terrain hue competes with them. On terrain-only views (Setup, Running) the default is a natural-colour relief synthesised from the DEM, which the caption says is not imagery. The system rejects the category default of a dark, game-like 3D canvas with floating chrome and decorative gradients.\n\nLight (figure paper) and dark themes are both first-class. Dark follows `prefers-color-scheme` unless the user picks a theme with the top-bar toggle, which sets `data-theme`.",
+    "keyCharacteristics": [
+      "Neutral cool paper with white panels; near-black ink; hairlines for separation, a stronger control stroke (at least 3:1) for anything interactive.",
+      "One blue accent, used only for actions, selection and progress.",
+      "Colour inside the figure comes only from Crameri batlow, imola and lajolla (reversed), or the DEM-derived natural relief.",
+      "One sans (Source Sans 3, self-hosted) with tabular numerals everywhere, sentence-case labels, and an SI unit on every number.",
+      "Map furniture drawn on a canvas so exported figures composite it pixel-exact.",
+      "Flat at rest; a soft shadow only on elements floating over the stage."
+    ],
+    "rules": [
+      {
+        "name": "The Data Owns Colour Rule",
+        "body": "Hue inside the figure belongs to the data. Under a flow layer the terrain is greyscale hillshade by default. If the user picks Natural there, it is desaturated (mute 0.6) so no vegetation green collides with a colour map.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Blue Rule",
+        "body": "The accent marks actions, selection and progress only. It never decorates, never fills a panel, and never appears in the data colour maps.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Weight Stroke Rule",
+        "body": "Hairline separates; control stroke encloses. Any boundary the user acts on uses control stroke.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "`font-variant-numeric: tabular-nums` is set on body and inputs, so every number aligns in columns. Numeric inputs are right-aligned, have no spinners, and show their unit inside the field.",
+        "section": "typography"
+      },
+      {
+        "name": "The Unit Rule",
+        "body": "No bare numbers. Every value carries an SI unit (m, m/s, km², m³, °, %, s). Units are muted and smaller than the value. Coordinates group thousands with a space (\"9 105 000\").",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence-Case Rule",
+        "body": "Labels, buttons, tabs and headings are sentence case at normal letter-spacing. No uppercase tracking, and no small labels above headings.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Chip Rule",
+        "body": "Furniture text over the map (graticule, contour, scale-bar labels, notes) sits on a paper rectangle at 86% opacity, not a shadow or outline glow, so it stays legible over terrain, flow and overlay lines.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** treat every stage view as a figure: graticule with edge labels, scale bar with the north arrow above it at lower left, labelled index contours (every fifth interval), colourbar with unit, scale type and Crameri citation, and an auto-written caption with provenance.",
+      "**Do** state the vertical exaggeration on every perspective view (\"not to scale · vertical exaggeration N×\").",
+      "**Do** default the terrain to the DEM-derived Natural relief on terrain-only views and to greyscale hillshade under data, and disclose the synthetic surface in the caption.",
+      "**Do** show flow depth true by default, and badge any exaggeration with the warn badge and in the caption.",
+      "**Do** give each quantity its own Crameri map (batlow depth, imola speed, lajolla reversed envelope) and outline the flow edge at the stated threshold.",
+      "**Do** put an SI unit on every number and set numerals tabular. Units go inside numeric inputs.",
+      "**Do** use control stroke (at least 3:1) for every interactive boundary, and a 2 px accent focus outline with 2 px offset.",
+      "**Do** keep motion functional and short (150 ms state transitions, 600 ms progress fill, ease `cubic-bezier(0.22, 1, 0.36, 1)`). Under `prefers-reduced-motion`, collapse transitions to 1 ms, stop the hatch and pulse, and replace the sweep with a static 35% fill. Playback never starts on its own.",
+      "**Do** turn the legend into a strip below the map at ≤760 px, never overlapping the figure."
+    ],
+    "donts": [
+      "**Don't** use a dark, game-like 3D canvas with floating chrome and decorative gradients as the default look.",
+      "**Don't** use the accent for decoration, panel fills or data. Don't use rainbow, jet or other perceptually uneven colour maps.",
+      "**Don't** colour the terrain under a data layer with full-saturation natural relief.",
+      "**Don't** add a monospace face, uppercase tracked labels, or small labels above headings.",
+      "**Don't** use shadows on in-panel cards or sections. The Float shadow is for stage overlays and the toast only.",
+      "**Don't** use glyph or emoji icons. Icons are inline stroked SVG at 16 px.",
+      "**Don't** let any number appear without its unit, or any figure export without its caption and furniture."
+    ]
+  }
+}

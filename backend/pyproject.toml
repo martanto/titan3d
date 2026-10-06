@@ -1,0 +1,64 @@
+[build-system]
+requires = ["uv_build >=0.11.0, <0.12"]
+build-backend = "uv_build"
+
+[project]
+name = "titan3d"
+version = "0.1.0"
+authors = [
+    {name = "Martanto", email = "martanto@live.com"},
+]
+description = "Refactoring titan2d using python and typescript"
+readme = "README.md"
+keywords = ["volcano", "modelling", "avalanche", "granular flow", "pyroclastic flow", "titan2d"]
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.5.0",
+    "fastapi>=0.142.2",
+    "loguru>=0.7.3",
+    "numba>=0.68.0",
+    "numpy>=2.4.6",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "python-multipart>=0.0.32",
+    "pyyaml>=6.0.3",
+    "rasterio>=1.4.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.scripts]
+titan3d = "titan3d.cli:main"
+
+[dependency-groups]
+dev = [
+    "uv-build",
+    "ipykernel",
+    "notebook",
+    "ipywidgets",
+    "pandas-stubs>=3.0.0.260204",
+    {include-group = "lint"},
+    {include-group = "test"},
+]
+lint = [
+    "ruff",
+    "ty",
+]
+test = [
+  "pytest",
+  "httpx2>=2.13.1",
+]
+
+[tool.uv]
+cache-dir = "./.cache/uv"
+
+[project.urls]
+Homepage = "https://github.com/martanto/titan3d"
+Issues = "https://github.com/martanto/titan3d/issues"
