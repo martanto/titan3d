@@ -1,4 +1,4 @@
-# granflow — project context
+# titan3d (package: granflow) — project context
 
 Python (NumPy) re-implementation of the Titan2D depth-averaged granular-flow model
 (https://github.com/titan2d/titan2d), with a three.js 3D playback viewer.
