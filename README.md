@@ -10,21 +10,21 @@
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="assets/Screenshot%202026-10-06%20at%2023-09-07%20titan3d.png"><img src="assets/Screenshot%202026-10-06%20at%2023-09-07%20titan3d.png" alt="Setup view: Semeru DEM with natural-colour relief, a pile at the summit, the computational domain and the scenario form"></a>
+      <a href="assets/setup.png"><img src="assets/setup.png" alt="Setup view: Semeru DEM with natural-colour relief, a pile at the summit, the computational domain and the scenario form"></a>
       <br><sub><b>Setup:</b> place the release on the DEM, check the estimate, run.</sub>
     </td>
     <td width="50%" valign="top">
-      <a href="assets/Screenshot%202026-10-06%20at%2023-08-26%20titan3d.png"><img src="assets/Screenshot%202026-10-06%20at%2023-08-26%20titan3d.png" alt="Results in plan view: maximum flow depth envelope on a hillshade with UTM graticule, contours, colourbar, flow readouts and time series"></a>
+      <a href="assets/results-plan.png"><img src="assets/results-plan.png" alt="Results in plan view: maximum flow depth envelope on a hillshade with UTM graticule, contours, colourbar, flow readouts and time series"></a>
       <br><sub><b>Results, plan view:</b> maximum-depth envelope as a figure with caption and readouts.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="assets/Screenshot%202026-10-06%20at%2023-09-32%20titan3d.png"><img src="assets/Screenshot%202026-10-06%20at%2023-09-32%20titan3d.png" alt="Results in 3D: the maximum-depth envelope draped on the Semeru terrain in a perspective view"></a>
+      <a href="assets/results-3d.png"><img src="assets/results-3d.png" alt="Results in 3D: the maximum-depth envelope draped on the Semeru terrain in a perspective view"></a>
       <br><sub><b>Results, 3D:</b> the same envelope in perspective, vertical exaggeration stated.</sub>
     </td>
     <td width="50%" valign="top">
-      <a href="assets/Screenshot%202026-10-06%20at%2023-09-48%20titan3d.png"><img src="assets/Screenshot%202026-10-06%20at%2023-09-48%20titan3d.png" alt="System page: condition summary, disk, memory and CPU usage bars with limits, services and storage"></a>
+      <a href="assets/system.png"><img src="assets/system.png" alt="System page: condition summary, disk, memory and CPU usage bars with limits, services and storage"></a>
       <br><sub><b>System:</b> disk, memory, CPU, services and storage.</sub>
     </td>
   </tr>
