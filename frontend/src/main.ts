@@ -40,7 +40,7 @@ try {
       "div",
       { class: "box", role: "alert" },
       h("h2", {}, "3D graphics are unavailable"),
-      h("p", { class: "muted" }, `This browser could not start WebGL 2 (${(e as Error).message}). Results can still be downloaded from the Runs list.`),
+      h("p", { class: "text-muted" }, `This browser could not start WebGL 2 (${(e as Error).message}). Results can still be downloaded from the Runs list.`),
     ),
   );
   throw e;
@@ -105,7 +105,7 @@ function mountEnded(j: Awaited<ReturnType<typeof api.getSimulation>>): () => voi
         h("p", { class: "note" }, `Simulated ${j.progress.sim_t.toFixed(1)} of ${j.progress.t_end} s before stopping.`),
         h(
           "div",
-          { class: "btn-row" },
+          { class: "flex flex-wrap gap-2" },
           h(
             "button",
             {
