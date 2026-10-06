@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+flow.json
+granflow_viewer.html
