@@ -118,6 +118,8 @@ Previews carry `terrain` plus `valid`, a bit-packed mask of cells with DEM data,
 | `POST` | `/api/scenarios/estimate` | Estimate grid size, memory and runtime | ScenarioRequest | 200 ScenarioEstimate |
 | `POST` | `/api/scenarios/export` | Scenario as YAML | ScenarioRequest | 200 text/plain |
 | `POST` | `/api/scenarios/import` | Validate an uploaded YAML config | multipart form | 200 ScenarioImportOut |
+| `GET` | `/api/system` | Server resources, services and storage | query `refresh` | 200 SystemOut |
+| `POST` | `/api/system/caches/clear` | Clear regenerable caches | — | 200 CacheClearOut |
 
 ## Schemas
 
@@ -357,6 +359,100 @@ Stitched mosaic metadata.
 | `sha256` | string | *required* |  |
 | `tiles` | integer | *required* |  |
 | `crs_assumed` | boolean | *required* |  |
+
+### SystemOut
+
+System health snapshot.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `condition` | `normal` \| `warning` \| `critical` | *required* |  |
+| `measured_at` | string | *required* | ISO-8601 UTC time of the reading |
+| `cache_seconds` | integer | *required* | Readings are reused for this long |
+| `host` | string | *required* |  |
+| `os` | string | *required* |  |
+| `python` | string | *required* |  |
+| `titan3d` | string | *required* |  |
+| `commit` | string | *required* |  |
+| `data_dir` | string | *required* |  |
+| `server_uptime_s` | number | *required* |  |
+| `app_uptime_s` | number | *required* |  |
+| `resources` | array of ResourceOut | *required* |  |
+| `services` | array of ServiceOut | *required* |  |
+| `storage` | array of StorageItem | *required* |  |
+| `notes` | array of string | *required* |  |
+
+### ResourceOut
+
+One server resource (disk, memory, CPU).
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `key` | `disk` \| `memory` \| `cpu` | *required* |  |
+| `label` | string | *required* |  |
+| `detail` | string | *required* | What is measured, e.g. the partition path |
+| `fraction` | number | *required* | Used fraction (0–1) |
+| `used` | string | *required* |  |
+| `capacity` | string | *required* |  |
+| `free` | string | *required* |  |
+| `status` | `normal` \| `warning` \| `critical` | *required* |  |
+| `thresholds` | Thresholds | *required* |  |
+
+### Thresholds
+
+Usage fractions at which a resource turns warning / critical.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `warning` | number | *required* |  |
+| `critical` | number | *required* |  |
+
+### ServiceOut
+
+An application service and its health.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `key` | string | *required* |  |
+| `name` | string | *required* |  |
+| `version` | string \| null |  |  |
+| `status` | `normal` \| `warning` \| `critical` | *required* |  |
+| `response_ms` | number \| null |  | Time of one light probe |
+| `details` | array of ServiceItem |  |  |
+| `note` | string \| null |  |  |
+
+### ServiceItem
+
+A labelled value shown in a service's details.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `label` | string | *required* |  |
+| `value` | string | *required* |  |
+
+### StorageItem
+
+A category of data on disk.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `key` | string | *required* |  |
+| `label` | string | *required* |  |
+| `description` | string | *required* |  |
+| `files` | integer | *required* |  |
+| `bytes` | integer | *required* |  |
+| `size` | string | *required* |  |
+| `regenerable` | boolean | *required* | Can be deleted and rebuilt on demand |
+
+### CacheClearOut
+
+Result of clearing regenerable caches.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `files` | integer | *required* |  |
+| `bytes` | integer | *required* |  |
+| `size` | string | *required* |  |
 
 ### HealthOut
 

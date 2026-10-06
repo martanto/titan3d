@@ -269,6 +269,8 @@ export class FlowScene {
   readonly ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 2000);
   readonly controls: OrbitControls;
   view: ViewKind = "plan";
+  /** Skip rendering while the stage is hidden (e.g. on the System page). */
+  paused = false;
   surface: SurfaceKind = "natural";
   private contours = true;
   private mute = 0;
@@ -337,6 +339,7 @@ export class FlowScene {
     this.renderer.setAnimationLoop((now) => {
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
+      if (this.paused) return;
       for (const f of this.tickers) f(dt);
       if (this.view === "oblique") this.controls.update();
       this.renderer.render(this.scene, this.camera);

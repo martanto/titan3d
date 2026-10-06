@@ -284,12 +284,13 @@ The scale uses fixed rem steps with a ratio of about 1.15.
 
 ## Layout
 
-- **Shell:** a 48 px top bar (wordmark plus "granular-flow model", view tabs Setup / Runs / Results, DEM name on the right, theme toggle), then a two-column workspace: stage `minmax(0, 1fr)` and the context panel at 392 px (340 px at ≤960 px, where the wordmark subtitle is hidden).
+- **Shell:** a 48 px top bar (wordmark plus a muted 12 px line with the running version and the credit "v0.1.0 · built by github.com/martanto", the credit a muted link, view tabs Setup / Runs / Results / System, DEM name on the right, theme toggle as a bare 36 px icon button: no frame, panel-2 fill on hover, focus ring), then a two-column workspace: stage `minmax(0, 1fr)` and the context panel at 392 px (340 px at ≤960 px, where the wordmark subtitle is hidden).
 - **Stage:** a grid with the map cell and a caption strip below it. On wide screens the legend layer shares the map cell: badges top left (64 px in), colourbar lower right (260 px), tools top right in toolgroups.
 - **Map furniture placement (fixed):** north arrow at lower left above the scale bar, scale bar at lower left (alternating ink/paper quarters, about 150 px nice length), projection and grid note along the bottom left ("UTM 49S (WGS 84) · grid 5 000 m · contours 100 m, index 500 m (m a.s.l.)"). Graticule labels sit on the top and left edges on paper chips; labels under the toolbar drop below it. Perspective views drop the graticule and scale bar and state "Perspective view, not to scale · vertical exaggeration N×".
 - **Context panel:** a head (title plus muted sub line, hairline below) and a body of sections separated by hairlines with 16 px vertical padding and 12 px internal gaps. A sticky foot holds the primary action ("Run simulation" at 44 px, full width) and secondary buttons.
 - **Rhythm:** 4 px grid (4 / 8 / 12 / 16 / 20 / 24 / 32). Field groups use 12 px gaps; label to input is 4 px. Paired numeric fields sit in two columns; domain extents form a 2 × 2 grid so every input keeps the standard width.
 - **≤760 px:** the page scrolls. The top bar is sticky and drops the DEM name. Workspace and stage stack. The map is 56svh (min 320 px) with a 28 px right margin kept free for page scrolling. The legend becomes a strip under the map on panel white: badges and a full-width colourbar, unframed and without shadow. The caption wraps at 12 px, actions sit below the text, toolgroup buttons grow to 40 px, and the presenter bar spans the width.
+- **System page:** the workspace (stage and panel) is hidden and 3D rendering paused. A single scrolling column (max 1680 px, 24 px padding, rows sized to content) holds the page head (24 px title, muted sub line, Re-measure button right), the summary strip, the Server card, then Services and Storage side by side (1.65fr / 1fr), stacking at ≤1100 px. At ≤760 px the tables become labelled cards (each cell prints its column name).
 - **Presenter mode:** the panel is hidden, the stage fills the workspace, and a centred presenter bar floats 16 px above the bottom with large time and mode controls. Escape exits.
 
 ## Elevation & Depth
@@ -304,7 +305,7 @@ Flat by default. Panels, cards and sections are separated by hairlines and tonal
 
 ## Shapes
 
-Small, uniform corners: 4 px on every control, card, badge, colourbar, probe and toast. A full pill (999 px) is used only for run status and the progress track. Containers are rectangles drawn with 1 px strokes. Segmented controls and toolgroups are single bordered strips with hairline dividers, clipped to the 4 px corner. The source swatch is a 12 px ring: solid ink for piles, dashed orange for vents. Icons are inline 16 px SVG strokes (1.6 to 1.7 px, round caps). The dropzone uses a dashed control stroke.
+Small, uniform corners: 4 px on every control, card, badge, colourbar, probe and toast. A full pill (999 px) is used only for run and health status and the progress track. Containers are rectangles drawn with 1 px strokes. Segmented controls and toolgroups are single bordered strips with hairline dividers, clipped to the 4 px corner. The source swatch is a 12 px ring: solid ink for piles, dashed orange for vents. Icons are inline 16 px SVG strokes (1.6 to 1.7 px, round caps). The dropzone uses a dashed control stroke.
 
 ## Components
 
@@ -356,6 +357,14 @@ Small, uniform corners: 4 px on every control, card, badge, colourbar, probe and
 ### Badges and status
 - **Badge** (on stage): panel white, control stroke, 4 px corner, 12 px 600. It names the current frame or state ("Envelope, 0–120 s"). The warn variant (warn stroke and text) is mandatory whenever thin-flow depth exaggeration is above 1× ("Flow depth ×N (first 10 m)").
 - **Status pill:** 12 px 600, full pill, 1 px currentColor border, no fill. Colours: ok (completed/ready), accent (running/queued/processing), err (failed/interrupted), muted (cancelled).
+- **Health pill** (System page): the same pill. Normal is ok, Warning is warn, Critical is err on an err-weak fill, the only filled pill, so a critical reading is found at a glance.
+
+### System health
+- **Summary strip:** a bordered panel-white grid of cells (auto-fit, min 170 px) divided by hairlines; each cell is a 12 px 600 muted term over an 18 px 600 value. Secondary parts of a value (the commit hash) are set as a muted unit. The first cell is the overall Condition pill.
+- **Usage meter:** a 12 px bar in a control-stroke frame with hairline ticks every 10 %. The fill is ink, warn at the warning state and err at the critical state. The warning and critical limits are dashed 1.5 px warn / err verticals overhanging the bar by 4 px. The percentage sits right of the bar (600, 7ch, muted unit). A legend in the card head names Used, Warning limit and Critical limit, and a card foot states the thresholds in words.
+- **Resource and service tables:** hairline rows, 12 px muted 600 headers, numeric columns right-aligned with muted units (the Unit Rule). Service details are a small definition list (term over value) in a fixed-width column.
+- **Storage list:** label (600), a muted description with the file count, and the size right-aligned. "Clear caches" is a default button that turns into a danger "Confirm: clear …" on first press and acts on the second, then reports with a toast. It deletes only regenerable previews and playback bundles.
+- **Not realtime:** no polling or timers. The page loads the cached reading (5 minutes) and states its age ("Measured 4 min ago"); Re-measure forces a new reading.
 
 ### Probe
 - Hover readout on the map: panel white, control stroke, Float shadow, at least 200 px wide, 12 px definition list with muted terms and right-aligned values with units.
