@@ -1,0 +1,16 @@
+# Ruff configuration file
+# https://docs.astral.sh/ty/configuration/
+
+[environment]
+root = ["./src"]
+python-version = "3.11"
+
+[src]
+exclude = [
+    "test_**",
+    "tests",
+    "outputs"
+]
+
+[rules]
+no-matching-overload = "ignore"

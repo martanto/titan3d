@@ -2,3 +2,31 @@ __pycache__/
 *.pyc
 flow.json
 granflow_viewer.html
+/dem
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
+
+# Local-only
+changelogs/
+.idea/
+.cache/
+.venv/
+
+# Backend runtime data (DB, uploaded DEMs, runs, logs)
+backend/data/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Deploy secrets
+deploy/.env
+deploy/nginx/.htpasswd
+
+# Test outputs (written next to the test files)
+backend/tests/out_*
+
+# impeccable: local config, caches and review captures (design records are committed)
+.impeccable/config.local.json
+.impeccable/hook.cache.json
+.impeccable/review/

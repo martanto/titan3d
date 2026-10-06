@@ -1,0 +1,2077 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "titan3d",
+    "description": "\nTitan2D-style depth-averaged granular-flow simulations (block-and-ash flows,\ndebris avalanches) on uploaded or built-in DEMs.\n\nTypical flow: pick or upload a DEM (`/dems`), submit a scenario\n(`POST /simulations`), poll its progress (`GET /simulations/{id}`), then load\nthe viewer bundle (`/simulations/{id}/result`) and GIS artifacts.\n",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Service health and version",
+        "description": "Return service status and version.",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dems": {
+      "get": {
+        "tags": [
+          "dems"
+        ],
+        "summary": "List DEMs",
+        "description": "All registered DEMs, the built-in one first.",
+        "operationId": "list_dems_api_dems_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DemOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Dems Api Dems Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dems"
+        ],
+        "summary": "Upload GeoTIFF tiles (stitched in the background)",
+        "description": "Store the tiles and start stitching; poll ``GET /dems/{id}`` until ready.",
+        "operationId": "upload_dem_api_dems_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_dem_api_dems_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dems/{dem_id}": {
+      "get": {
+        "tags": [
+          "dems"
+        ],
+        "summary": "DEM metadata and stitching status",
+        "description": "One DEM.",
+        "operationId": "get_dem_api_dems__dem_id__get",
+        "parameters": [
+          {
+            "name": "dem_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dem Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dems"
+        ],
+        "summary": "Delete DEM",
+        "description": "Delete an uploaded DEM that no simulation uses.",
+        "operationId": "delete_dem_api_dems__dem_id__delete",
+        "parameters": [
+          {
+            "name": "dem_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dem Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dems/{dem_id}/preview": {
+      "get": {
+        "tags": [
+          "dems"
+        ],
+        "summary": "Terrain preview bundle (gzipped JSON)",
+        "description": "Quantised terrain of the whole DEM in its local UTM zone, for placing sources.",
+        "operationId": "preview_dem_api_dems__dem_id__preview_get",
+        "parameters": [
+          {
+            "name": "dem_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dem Id"
+            }
+          },
+          {
+            "name": "max_cells",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1024,
+              "minimum": 64,
+              "default": 512,
+              "title": "Max Cells"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations": {
+      "post": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Queue a simulation",
+        "description": "Validate the scenario against the DEM and queue it.",
+        "operationId": "create_simulation_api_simulations_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationCreated"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "DEM not ready"
+          },
+          "422": {
+            "description": "Invalid"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "List simulations",
+        "description": "Most recent simulations first.",
+        "operationId": "list_simulations_api_simulations_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SimulationOut"
+                  },
+                  "title": "Response List Simulations Api Simulations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}": {
+      "get": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Simulation status and progress",
+        "description": "Status, live progress, provenance and available artifacts.",
+        "operationId": "get_simulation_api_simulations__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Delete a simulation",
+        "description": "Delete a simulation and its artifacts (stops it if running).",
+        "operationId": "delete_simulation_api_simulations__job_id__delete",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}/frames": {
+      "get": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Per-frame statistics so far",
+        "description": "Frame statistics recorded so far (for live sparklines).",
+        "operationId": "get_frames_api_simulations__job_id__frames_get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FrameStatsOut"
+                  },
+                  "title": "Response Get Frames Api Simulations  Job Id  Frames Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}/cancel": {
+      "post": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Cancel a simulation",
+        "description": "Cancel a queued job, or ask a running one to stop (within about a second).",
+        "operationId": "cancel_simulation_api_simulations__job_id__cancel_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}/duplicate": {
+      "post": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Run the same scenario again",
+        "description": "Queue a new simulation with an identical scenario.",
+        "operationId": "duplicate_simulation_api_simulations__job_id__duplicate_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationCreated"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}/result": {
+      "get": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Viewer bundle (gzipped JSON)",
+        "description": "Quantised frames for 3D playback (full-resolution data is in the GeoTIFFs).",
+        "operationId": "get_result_api_simulations__job_id__result_get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          },
+          {
+            "name": "max_cells",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1600,
+              "minimum": 128,
+              "description": "Viewer detail: max cells per side",
+              "default": 640,
+              "title": "Max Cells"
+            },
+            "description": "Viewer detail: max cells per side"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/simulations/{job_id}/files/{name}": {
+      "get": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Download an artifact",
+        "description": "GeoTIFF maxima, inundation outline, scenario YAML, summary or log.",
+        "operationId": "get_artifact_api_simulations__job_id__files__name__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "max_depth.tif",
+                "max_speed.tif",
+                "inundation.geojson",
+                "inundation.kml",
+                "scenario.yaml",
+                "summary.json",
+                "run.log"
+              ],
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenarios/default": {
+      "get": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "Default scenario (Semeru summit collapse)",
+        "description": "A ready-to-run scenario with sensible defaults.",
+        "operationId": "default_scenario_api_scenarios_default_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenarios/presets": {
+      "get": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "Grid-spacing presets [m]",
+        "description": "Quick / standard / fine grid spacing.",
+        "operationId": "resolution_presets_api_scenarios_presets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "number"
+                  },
+                  "type": "object",
+                  "title": "Response Resolution Presets Api Scenarios Presets Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenarios/estimate": {
+      "post": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "Estimate grid size, memory and runtime",
+        "description": "Rough cost of a scenario before submitting it.",
+        "operationId": "estimate_scenario_api_scenarios_estimate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioEstimate"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenarios/export": {
+      "post": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "Scenario as YAML",
+        "description": "Commented YAML for the given scenario (download).",
+        "operationId": "export_scenario_api_scenarios_export_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/x-yaml": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/scenarios/import": {
+      "post": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "Validate an uploaded YAML config",
+        "description": "Parse a YAML config; returns field-level errors instead of failing.",
+        "operationId": "import_scenario_api_scenarios_import_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_import_scenario_api_scenarios_import_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioImportOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Backend": {
+        "type": "string",
+        "enum": [
+          "numpy",
+          "numba"
+        ],
+        "title": "Backend",
+        "description": "Compute backend for the flux and friction kernels."
+      },
+      "Body_import_scenario_api_scenarios_import_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "Scenario YAML"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_import_scenario_api_scenarios_import_post"
+      },
+      "Body_upload_dem_api_dems_post": {
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Files",
+            "description": "One or more GeoTIFF tiles"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Name",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "Body_upload_dem_api_dems_post"
+      },
+      "DemOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "builtin",
+              "upload"
+            ],
+            "title": "Source"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "processing",
+              "ready",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "files": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MosaicInfoOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "jobs": {
+            "type": "integer",
+            "title": "Jobs",
+            "description": "Number of simulations that used this DEM",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "source",
+          "status",
+          "files",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "DemOut",
+        "description": "A registered DEM."
+      },
+      "DomainIn": {
+        "properties": {
+          "center_lon": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 180.0,
+                "minimum": -180.0,
+                "description": "Longitude [deg]"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Center Lon",
+            "description": "Anchor longitude; defaults to the first source"
+          },
+          "center_lat": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 90.0,
+                "minimum": -90.0,
+                "description": "Latitude [deg]"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Center Lat",
+            "description": "Anchor latitude; defaults to the first source"
+          },
+          "west_km": {
+            "type": "number",
+            "maximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "West Km",
+            "description": "Extent west of anchor [km]",
+            "default": 6.0
+          },
+          "east_km": {
+            "type": "number",
+            "maximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "East Km",
+            "description": "Extent east of anchor [km]",
+            "default": 16.0
+          },
+          "south_km": {
+            "type": "number",
+            "maximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "South Km",
+            "description": "Extent south [km]",
+            "default": 14.0
+          },
+          "north_km": {
+            "type": "number",
+            "maximum": 100.0,
+            "exclusiveMinimum": 0.0,
+            "title": "North Km",
+            "description": "Extent north [km]",
+            "default": 6.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DomainIn",
+        "description": "Computational domain around an anchor point."
+      },
+      "EarthPressure": {
+        "type": "string",
+        "enum": [
+          "hydrostatic",
+          "savage-hutter"
+        ],
+        "title": "EarthPressure",
+        "description": "Earth-pressure coefficient model."
+      },
+      "FluxSourceIn": {
+        "properties": {
+          "lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lon",
+            "description": "Longitude [deg]",
+            "default": 112.9225
+          },
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat",
+            "description": "Latitude [deg]",
+            "default": -8.108
+          },
+          "radius": {
+            "type": "number",
+            "maximum": 5000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Radius",
+            "description": "Footprint radius [m]",
+            "default": 100.0
+          },
+          "influx": {
+            "type": "number",
+            "maximum": 50.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Influx",
+            "description": "Peak extrusion rate at the centre [m/s]",
+            "default": 1.0
+          },
+          "start": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Start",
+            "description": "Start time [s]",
+            "default": 0.0
+          },
+          "duration": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Duration",
+            "description": "Duration [s]",
+            "default": 60.0
+          },
+          "speed": {
+            "type": "number",
+            "maximum": 200.0,
+            "minimum": 0.0,
+            "title": "Speed",
+            "description": "Initial speed [m/s]",
+            "default": 0.0
+          },
+          "direction_deg": {
+            "type": "number",
+            "exclusiveMaximum": 360.0,
+            "minimum": 0.0,
+            "title": "Direction Deg",
+            "description": "Initial direction, clockwise from north [deg]",
+            "default": 0.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FluxSourceIn",
+        "description": "Titan2D-style flux (vent) source."
+      },
+      "FrameStatsOut": {
+        "properties": {
+          "t": {
+            "type": "number",
+            "title": "T"
+          },
+          "steps": {
+            "type": "integer",
+            "title": "Steps"
+          },
+          "vol": {
+            "type": "number",
+            "title": "Vol"
+          },
+          "vol_out": {
+            "type": "number",
+            "title": "Vol Out"
+          },
+          "released_m3": {
+            "type": "number",
+            "title": "Released M3"
+          },
+          "hmax": {
+            "type": "number",
+            "title": "Hmax"
+          },
+          "umax": {
+            "type": "number",
+            "title": "Umax"
+          },
+          "area": {
+            "type": "number",
+            "title": "Area"
+          },
+          "runout": {
+            "type": "number",
+            "title": "Runout"
+          }
+        },
+        "type": "object",
+        "required": [
+          "t",
+          "steps",
+          "vol",
+          "vol_out",
+          "released_m3",
+          "hmax",
+          "umax",
+          "area",
+          "runout"
+        ],
+        "title": "FrameStatsOut",
+        "description": "Statistics of one output frame."
+      },
+      "GridOut": {
+        "properties": {
+          "nx": {
+            "type": "integer",
+            "title": "Nx"
+          },
+          "ny": {
+            "type": "integer",
+            "title": "Ny"
+          },
+          "dx": {
+            "type": "number",
+            "title": "Dx"
+          },
+          "x0": {
+            "type": "number",
+            "title": "X0"
+          },
+          "y0": {
+            "type": "number",
+            "title": "Y0"
+          },
+          "crs": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crs"
+          },
+          "bounds": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Bounds"
+          },
+          "bounds_lonlat": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bounds Lonlat"
+          },
+          "zmin": {
+            "type": "number",
+            "title": "Zmin"
+          },
+          "zmax": {
+            "type": "number",
+            "title": "Zmax"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nx",
+          "ny",
+          "dx",
+          "x0",
+          "y0",
+          "crs",
+          "bounds",
+          "bounds_lonlat",
+          "zmin",
+          "zmax"
+        ],
+        "title": "GridOut",
+        "description": "Computational grid of a run."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthOut": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "commit": {
+            "type": "string",
+            "title": "Commit"
+          },
+          "max_concurrent_runs": {
+            "type": "integer",
+            "title": "Max Concurrent Runs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "commit",
+          "max_concurrent_runs"
+        ],
+        "title": "HealthOut",
+        "description": "Service status."
+      },
+      "ImportErrorItem": {
+        "properties": {
+          "loc": {
+            "type": "string",
+            "title": "Loc"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Msg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg"
+        ],
+        "title": "ImportErrorItem",
+        "description": "One field-level validation problem in an imported config."
+      },
+      "MaterialIn": {
+        "properties": {
+          "rheology": {
+            "$ref": "#/components/schemas/Rheology",
+            "default": "coulomb"
+          },
+          "phi_bed_deg": {
+            "type": "number",
+            "exclusiveMaximum": 60.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Phi Bed Deg",
+            "description": "Basal friction angle [deg]",
+            "default": 24.0
+          },
+          "phi_int_deg": {
+            "type": "number",
+            "exclusiveMaximum": 60.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Phi Int Deg",
+            "description": "Internal friction angle [deg]",
+            "default": 34.0
+          },
+          "mu": {
+            "type": "number",
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Mu",
+            "description": "Voellmy friction coefficient",
+            "default": 0.12
+          },
+          "xi": {
+            "type": "number",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Xi",
+            "description": "Voellmy turbulence coefficient [m/s²]",
+            "default": 1000.0
+          },
+          "earth_pressure": {
+            "$ref": "#/components/schemas/EarthPressure",
+            "default": "savage-hutter"
+          },
+          "curvature": {
+            "type": "boolean",
+            "title": "Curvature",
+            "description": "Bed-curvature (centripetal) term",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MaterialIn",
+        "description": "Material model."
+      },
+      "MosaicInfoOut": {
+        "properties": {
+          "crs": {
+            "type": "string",
+            "title": "Crs"
+          },
+          "bounds": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Bounds"
+          },
+          "bounds_lonlat": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Bounds Lonlat",
+            "description": "(west, south, east, north) in degrees"
+          },
+          "res": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Res"
+          },
+          "res_m": {
+            "type": "number",
+            "title": "Res M",
+            "description": "Approximate pixel size [m]"
+          },
+          "shape": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Shape"
+          },
+          "nan_fraction": {
+            "type": "number",
+            "title": "Nan Fraction"
+          },
+          "summit": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Summit",
+            "description": "(lon, lat, elevation)"
+          },
+          "zmin": {
+            "type": "number",
+            "title": "Zmin"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "tiles": {
+            "type": "integer",
+            "title": "Tiles"
+          },
+          "crs_assumed": {
+            "type": "boolean",
+            "title": "Crs Assumed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "crs",
+          "bounds",
+          "bounds_lonlat",
+          "res",
+          "res_m",
+          "shape",
+          "nan_fraction",
+          "summit",
+          "zmin",
+          "sha256",
+          "tiles",
+          "crs_assumed"
+        ],
+        "title": "MosaicInfoOut",
+        "description": "Stitched mosaic metadata."
+      },
+      "NumericsIn": {
+        "properties": {
+          "dx": {
+            "type": "number",
+            "maximum": 500.0,
+            "minimum": 10.0,
+            "title": "Dx",
+            "description": "Grid spacing [m] (DEMNAS pixel ≈ 8.3 m)",
+            "default": 20.0
+          },
+          "cfl": {
+            "type": "number",
+            "maximum": 0.9,
+            "exclusiveMinimum": 0.05,
+            "title": "Cfl",
+            "description": "Courant number",
+            "default": 0.4
+          },
+          "backend": {
+            "$ref": "#/components/schemas/Backend",
+            "default": "numba"
+          },
+          "precision": {
+            "$ref": "#/components/schemas/Precision",
+            "default": "float64"
+          },
+          "h_dry": {
+            "type": "number",
+            "maximum": 0.1,
+            "exclusiveMinimum": 0.0,
+            "title": "H Dry",
+            "description": "Dry threshold [m]",
+            "default": 0.001
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "NumericsIn",
+        "description": "Grid and solver settings."
+      },
+      "PileIn": {
+        "properties": {
+          "lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lon",
+            "description": "Longitude [deg]",
+            "default": 112.9225
+          },
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat",
+            "description": "Latitude [deg]",
+            "default": -8.108
+          },
+          "height": {
+            "type": "number",
+            "maximum": 1000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Height",
+            "description": "Peak thickness H [m]",
+            "default": 60.0
+          },
+          "radius": {
+            "type": "number",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Radius",
+            "description": "Radius R [m]",
+            "default": 300.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PileIn",
+        "description": "Paraboloid pile released at ``t = 0``."
+      },
+      "Precision": {
+        "type": "string",
+        "enum": [
+          "float64",
+          "float32"
+        ],
+        "title": "Precision",
+        "description": "Floating-point precision of the state arrays."
+      },
+      "ProgressOut": {
+        "properties": {
+          "fraction": {
+            "type": "number",
+            "title": "Fraction",
+            "description": "Completed fraction of simulated time (0–1)"
+          },
+          "sim_t": {
+            "type": "number",
+            "title": "Sim T",
+            "description": "Simulated time [s]"
+          },
+          "t_end": {
+            "type": "number",
+            "title": "T End"
+          },
+          "steps": {
+            "type": "integer",
+            "title": "Steps"
+          },
+          "frames": {
+            "type": "integer",
+            "title": "Frames"
+          },
+          "elapsed_s": {
+            "type": "number",
+            "title": "Elapsed S"
+          },
+          "eta_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eta S"
+          },
+          "hmax": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hmax",
+            "description": "Max depth in the latest frame [m]"
+          },
+          "umax": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Umax",
+            "description": "Max speed in the latest frame [m/s]"
+          },
+          "runout": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runout",
+            "description": "Runout in the latest frame [m]"
+          },
+          "area": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area",
+            "description": "Inundated area [km²]"
+          },
+          "vol_in_domain": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vol In Domain",
+            "description": "Fraction of released volume"
+          },
+          "vol_out": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vol Out",
+            "description": "Fraction that left the domain"
+          },
+          "released_m3": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Released M3"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fraction",
+          "sim_t",
+          "t_end",
+          "steps",
+          "frames",
+          "elapsed_s",
+          "eta_s"
+        ],
+        "title": "ProgressOut",
+        "description": "Live progress of a run."
+      },
+      "Rheology": {
+        "type": "string",
+        "enum": [
+          "coulomb",
+          "voellmy"
+        ],
+        "title": "Rheology",
+        "description": "Basal resistance law."
+      },
+      "ScenarioEstimate": {
+        "properties": {
+          "grid_shape": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Grid Shape"
+          },
+          "cells": {
+            "type": "integer",
+            "title": "Cells"
+          },
+          "memory_mb": {
+            "type": "number",
+            "title": "Memory Mb",
+            "description": "Approximate peak memory of the solver [MB]"
+          },
+          "released_m3": {
+            "type": "number",
+            "title": "Released M3"
+          },
+          "frames": {
+            "type": "integer",
+            "title": "Frames"
+          },
+          "runtime_class": {
+            "type": "string",
+            "enum": [
+              "seconds",
+              "minutes",
+              "tens of minutes",
+              "hours"
+            ],
+            "title": "Runtime Class"
+          }
+        },
+        "type": "object",
+        "required": [
+          "grid_shape",
+          "cells",
+          "memory_mb",
+          "released_m3",
+          "frames",
+          "runtime_class"
+        ],
+        "title": "ScenarioEstimate",
+        "description": "Cost estimate for a scenario before running it."
+      },
+      "ScenarioImportOut": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "scenario": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScenarioRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/ImportErrorItem"
+            },
+            "type": "array",
+            "title": "Errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "title": "ScenarioImportOut",
+        "description": "Result of importing a YAML config."
+      },
+      "ScenarioRequest": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "default": "Semeru summit collapse"
+          },
+          "dem_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Dem Id",
+            "default": "semeru"
+          },
+          "piles": {
+            "items": {
+              "$ref": "#/components/schemas/PileIn"
+            },
+            "type": "array",
+            "title": "Piles"
+          },
+          "flux_sources": {
+            "items": {
+              "$ref": "#/components/schemas/FluxSourceIn"
+            },
+            "type": "array",
+            "title": "Flux Sources"
+          },
+          "domain": {
+            "$ref": "#/components/schemas/DomainIn"
+          },
+          "material": {
+            "$ref": "#/components/schemas/MaterialIn"
+          },
+          "numerics": {
+            "$ref": "#/components/schemas/NumericsIn"
+          },
+          "t_end": {
+            "type": "number",
+            "maximum": 86400.0,
+            "exclusiveMinimum": 0.0,
+            "title": "T End",
+            "description": "Simulated time [s]",
+            "default": 300.0
+          },
+          "output_every": {
+            "type": "number",
+            "maximum": 3600.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Output Every",
+            "description": "Output interval [s]",
+            "default": 2.0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ScenarioRequest",
+        "description": "A complete simulation configuration."
+      },
+      "SimulationCreated": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ],
+            "title": "Status"
+          },
+          "estimated_cells": {
+            "type": "integer",
+            "title": "Estimated Cells"
+          },
+          "grid_shape": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Grid Shape"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "estimated_cells",
+          "grid_shape"
+        ],
+        "title": "SimulationCreated",
+        "description": "Response to a submitted simulation."
+      },
+      "SimulationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "dem_id": {
+            "type": "string",
+            "title": "Dem Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ],
+            "title": "Status"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/ScenarioRequest"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/ProgressOut"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          },
+          "grid": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GridOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parent_job_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Job Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "cancel_requested": {
+            "type": "boolean",
+            "title": "Cancel Requested",
+            "default": false
+          },
+          "artifacts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Artifacts",
+            "description": "Downloadable artifact names"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "dem_id",
+          "status",
+          "scenario",
+          "progress",
+          "created_at"
+        ],
+        "title": "SimulationOut",
+        "description": "A simulation job."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

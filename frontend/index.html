@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="titan3d: Titan2D-style granular-flow simulation, monitoring and analysis" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>titan3d</title>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="brand" href="#/setup">titan3d<small>granular-flow model</small></a>
+        <nav class="tabs" aria-label="Views">
+          <a href="#/setup" data-tab="setup">Setup</a>
+          <a href="#/runs" data-tab="runs">Runs</a>
+          <a href="#/run" data-tab="run" id="tabRun" aria-disabled="true">Results</a>
+        </nav>
+        <div class="topbar-meta">
+          <span class="dem-name" id="demIndicator"></span>
+        </div>
+        <div class="topbar-actions">
+          <div class="toolgroup">
+            <button type="button" id="themeBtn" aria-label="Switch colour theme" title="Colour theme">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" /><path d="M8 2.5v11" /><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor" /></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="stage" aria-label="Map and 3D view">
+          <div class="stage-view" id="stageView">
+            <canvas id="gl" aria-label="Terrain map" role="img"></canvas>
+            <canvas id="furniture" aria-hidden="true"></canvas>
+            <div class="stage-tools">
+              <div class="toolgroup" role="group" aria-label="View">
+                <button type="button" id="viewPlan" aria-pressed="true" title="Plan view (map)">Plan</button>
+                <button type="button" id="view3d" aria-pressed="false" title="Perspective 3D view">3D</button>
+              </div>
+              <div class="toolgroup" role="group" aria-label="Terrain surface">
+                <button type="button" id="surfNatural" aria-pressed="true" title="Natural-colour relief derived from the DEM (synthetic, not imagery)">Natural</button>
+                <button type="button" id="surfRelief" aria-pressed="false" title="Greyscale hillshade">Hillshade</button>
+              </div>
+              <div class="toolgroup" role="group" aria-label="Zoom">
+                <button type="button" id="zoomIn" aria-label="Zoom in" title="Zoom in">
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" /></svg>
+                </button>
+                <button type="button" id="zoomOut" aria-label="Zoom out" title="Zoom out">
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10" /></svg>
+                </button>
+                <button type="button" id="zoomFit" aria-label="Reset view" title="Reset view">
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="probe" id="probe" hidden></div>
+            <div class="stage-message" id="stageMessage" hidden></div>
+          </div>
+          <div class="stage-legend">
+            <div class="stage-badges" id="badges"></div>
+            <div class="colourbar" id="colourbar" hidden></div>
+          </div>
+          <div class="caption" id="caption" aria-live="off"></div>
+        </section>
+        <aside class="panel" id="panel" aria-label="Controls"></aside>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
