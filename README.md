@@ -20,6 +20,7 @@
   - [2. Run](#2-run)
   - [3. Results](#3-results)
   - [Runs, presenter mode and themes](#runs-presenter-mode-and-themes)
+  - [System](#system)
 - [Parameters](#parameters)
 - [Outputs](#outputs)
 - [Command line](#command-line)
@@ -83,7 +84,7 @@ Check the installation:
 
 ```bash
 uv run titan3d --version
-uv run pytest -q          # 95 tests, about 40 s
+uv run pytest -q          # 101 tests, about 40 s
 ```
 
 ## Files to prepare
@@ -162,7 +163,7 @@ titan3d must be served at the root of a domain or subdomain. A sub-path such as 
 
 ## Using the web app
 
-The top bar has three views: **Setup**, **Runs** and **Results**. The left side is always a map figure with a UTM graticule, a scale bar and north arrow (lower left), and a caption that describes exactly what is shown.
+The top bar has four views: **Setup**, **Runs**, **Results** and **System**. The left side is always a map figure with a UTM graticule, a scale bar and north arrow (lower left), and a caption that describes exactly what is shown.
 
 Map tools are in the upper right:
 - **Plan / 3D:** the map view or a perspective view.
@@ -253,6 +254,22 @@ A finished run opens on the **briefing figure**: the maximum flow depth over the
   - plain-language legend ("Flow thickness", "Deepest flow reached");
   - real-time, 2× and 5× playback; **Esc** exits.
 - **Theme:** the top-right button cycles system / light / dark.
+
+### System
+
+The **System** page shows server and application health. It is not realtime: one reading is reused for 5 minutes, and **Re-measure** reads again.
+
+- **Summary:** overall condition (the worst status below), when it was measured, host, OS, Python and titan3d versions, app and server uptime.
+- **Server:**
+  - disk (the partition holding the data folder), memory (physical RAM, excluding reclaimable cache) and CPU (utilisation and load average where the OS reports it);
+  - each has a usage bar with the warning and critical limits marked;
+  - limits: disk and memory warn from 80 % and are critical from 90 %; CPU warns from 80 % and is critical from 95 %.
+- **Services:**
+  - SQLite (probe time, size, journal mode);
+  - the job queue (running, queued, worker processes, failed in the last 24 h);
+  - the Numba solver kernels (version, threads);
+  - the DEM store (ready, stitching, failed, built-in).
+- **Storage:** sizes of run outputs, DEMs, the database, logs and the regenerable caches. **Clear caches** removes only terrain previews and playback bundles, after a confirm step; they are rebuilt on request.
 
 ## Parameters
 
@@ -349,6 +366,7 @@ The web app uses a JSON API under `/api`. It is documented interactively at `/ap
 | `POST /api/simulations/{id}/cancel`, `/duplicate`, `DELETE /api/simulations/{id}` | Run control |
 | `GET /api/simulations/{id}/result`, `/files/{name}` | Playback bundle, downloadable outputs |
 | `GET /api/scenarios/default`, `/presets`, `POST /estimate`, `/export`, `/import` | Defaults, presets, cost estimate, YAML |
+| `GET /api/system[?refresh=true]`, `POST /api/system/caches/clear` | System health (cached 5 min), clear regenerable caches |
 
 ## Model and numerics
 
@@ -379,7 +397,7 @@ Numerics:
 
 ## Verification
 
-`uv run pytest` in `backend/` runs 95 tests (one more real-DEM test is opt-in with `TITAN3D_REAL_DEM=1`):
+`uv run pytest` in `backend/` runs 101 tests (one more real-DEM test is opt-in with `TITAN3D_REAL_DEM=1`):
 
 | Test | Result |
 |---|---|

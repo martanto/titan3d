@@ -29,6 +29,7 @@ src/
   ui/running.ts        Running view (progress, phases, live charts)
   ui/results.ts        Results view (envelope masking, playback, readouts, downloads, presenter)
   ui/runs.ts           Runs list
+  ui/system.ts         System health page
   ui/terrain.ts        DEM preview loading, scenario overlays, terrain captions
   ui/chart.ts          time-series charts with axes
   ui/dom.ts, format.ts DOM helper h(), icons, toasts; number and unit formatting
@@ -44,6 +45,7 @@ src/
 | Running | `#/run/<id>` (queued or running) | Phases inferred from the job record; hatched and indeterminate progress (with reduced-motion variants); ETA; live readouts and charts; cancel |
 | Results | `#/run/<id>` (completed) | Max-depth envelope (release masked and outlined) in plan view; depth/speed playback; H/L; charts; downloads; Export figure / Copy caption; display controls; presenter mode |
 | Runs | `#/runs` | History with live progress; open, run again, delete with confirm; terrain on the stage |
+| System | `#/system` | Full-width health page (the map workspace is hidden and 3D rendering paused): summary strip, Server table with usage bars and limit marks, Services table, Storage with Clear caches (two-step confirm). Not realtime: it loads the cached reading, and Re-measure forces a new one. |
 
 The router mounts one view at a time. Each view returns a cleanup function that stops polling, ticks and handlers.
 

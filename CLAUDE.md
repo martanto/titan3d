@@ -14,6 +14,8 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
     single source of truth, YAML in `scenario_yaml.py`); `workers/` (spawned run process + dispatcher).
     `main.py` serves `frontend/dist` (index.html `no-cache`, hashed assets `immutable`).
   - `db/` — SQLite (`dems`, `jobs`, `job_frames`), only `repositories.py` writes SQL.
+  - System health: `api/controllers/system_controller.py` (psutil; reading cached 5 min, `?refresh=true`;
+    clear regenerable previews/bundles) → `GET /api/system`, `POST /api/system/caches/clear`.
   - `cli.py` — Click: `serve`, `run`, `init-config`, `stitch-dem`, `openapi`.
   - `openapi.json` — regenerate with `uv run titan3d openapi -o openapi.json` (a test checks it), then
     `npm run gen:api` in `frontend/`.
@@ -23,7 +25,7 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
     `furniture.ts` (graticule, scale bar + north arrow lower left, labelled index contours avoiding data/labels),
     `ramps.ts`/`cmaps.ts` (Crameri batlow/imola/lajolla-reversed).
   - `src/ui/*` views: setup (DEM upload, click-to-place sources, pile volume entry), running, results
-    (presenter mode, export figure, copy caption), runs; `stage.ts` (surface context: Natural on terrain views,
+    (presenter mode, export figure, copy caption), runs, system (health page, not realtime); `stage.ts` (surface context: Natural on terrain views,
     Hillshade under data).
   - Styling: `styles/tokens.css` (light/dark tokens) + `styles/app.css` = `@import "tailwindcss"`, `@theme inline`
     mapping tokens (default palette removed), `@layer base` / `@layer components`; utilities in `src/ui/*.ts` for
@@ -51,7 +53,7 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
 
 ## Verified
 - Lake at rest, slope at rest, symmetry, mass balance with outflow, active window ≡ full domain,
-  Numba ≡ NumPy, curvature, flux sources, DEM stitching, API end to end (`uv run pytest` in backend/, 95 tests).
+  Numba ≡ NumPy, curvature, flux sources, DEM stitching, API end to end, system health (`uv run pytest` in backend/, 101 tests).
 - Semeru 20 m default domain (1,100 × 1,000): 300 s simulated in ~85 s (Numba, 20 threads).
 - Frontend: `npm run build` (tsc + vite), impeccable detector clean, playwright-cli captures (desktop/mobile,
   light/dark; use `--browser=msedge`, Chrome is not installed).

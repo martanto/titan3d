@@ -62,9 +62,9 @@ print(res.stats[-1], res.h_max.max())
 | Part | Files | Role |
 |---|---|---|
 | App | `main.py` | `create_app()`: lifespan (DB init, orphan recovery, built-in DEM registration, dispatcher), CORS, GZip, optional basic auth, frontend serving with cache headers, `AppError` handler |
-| Routes | `routes/health.py`, `dems.py`, `simulations.py`, `scenarios.py` | HTTP only: parse, call a controller, return a model or file |
-| Controllers | `controllers/dem_controller.py`, `simulation_controller.py`, `scenario_controller.py` | Upload streaming, stitching thread, previews; submit with coverage check, list, cancel, duplicate, delete, artifacts; estimate; YAML |
-| Schemas | `schemas/scenario.py`, `scenario_yaml.py`, `simulation.py`, `dem.py` | `ScenarioRequest` and sub-models, YAML import/export, response models |
+| Routes | `routes/health.py`, `dems.py`, `simulations.py`, `scenarios.py`, `system.py` | HTTP only: parse, call a controller, return a model or file |
+| Controllers | `controllers/dem_controller.py`, `simulation_controller.py`, `scenario_controller.py`, `system_controller.py` | Upload streaming, stitching thread, previews; submit with coverage check, list, cancel, duplicate, delete, artifacts; estimate; YAML; system health (psutil disk/memory/CPU, SQLite probe, queue, Numba, DEM store, storage sizes; cached 5 min; clear regenerable caches) |
+| Schemas | `schemas/scenario.py`, `scenario_yaml.py`, `simulation.py`, `dem.py`, `system.py` | `ScenarioRequest` and sub-models, YAML import/export, response models, system health snapshot |
 | Workers | `workers/runner.py`, `dispatcher.py` | `execute_run` (shared with the CLI), `worker_main` (child process), `build_bundle`; `Dispatcher` (launch, reap, recover) |
 | Errors | `errors.py` | `BadRequest` 400, `NotFound` 404, `Conflict` 409, `PayloadTooLarge` 413, `Unprocessable` 422 |
 | DI | `deps.py` | Controllers from `app.state` via `Annotated[..., Depends]` |
@@ -122,7 +122,7 @@ Schema v1 (`database.py`). Each operation opens a short connection in WAL mode w
 
 ## Tests
 
-`uv run pytest` runs 95 tests. Outputs are written next to the tests as `tests/out_*`, which is git-ignored.
+`uv run pytest` runs 101 tests. Outputs are written next to the tests as `tests/out_*`, which is git-ignored.
 
 | File | Covers |
 |---|---|
@@ -133,6 +133,7 @@ Schema v1 (`database.py`). Each operation opens a short connection in WAL mode w
 | `test_dem.py` | CRS assumption and rejection, stitching, sentinel nodata, UTM zones, domains, coverage, preview; real Semeru opt-in (`TITAN3D_REAL_DEM=1`) |
 | `test_db.py`, `test_scenario_yaml.py` | Job lifecycle, cancel, recovery, concurrency; YAML round trip and field errors, estimate scaling |
 | `test_api.py`, `test_openapi.py` | End to end with real worker processes; basic auth; `openapi.json` is current |
+| `test_system.py` | System snapshot shape, 5-minute reuse, cache clearing keeps runs and DEMs |
 
 ## Working rules
 

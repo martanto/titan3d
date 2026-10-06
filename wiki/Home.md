@@ -31,7 +31,7 @@ git clone https://github.com/martanto/titan3d.git
 cd titan3d
 cd frontend && npm ci && npm run build      # web UI
 cd ../backend && uv sync                    # backend + Python 3.12
-uv run pytest -q                            # optional: 95 tests, about 40 s
+uv run pytest -q                            # optional: 101 tests, about 40 s
 ```
 
 ### 2. Prepare a DEM

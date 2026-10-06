@@ -23,10 +23,11 @@ from titan3d.config import Settings, get_settings
 from titan3d.logging import setup_logging
 from titan3d.version import package_version
 from titan3d.api.errors import AppError
-from titan3d.api.routes import dems, health, scenarios, simulations
+from titan3d.api.routes import dems, health, system, scenarios, simulations
 from titan3d.db.database import init_db
 from titan3d.api.workers.dispatcher import Dispatcher
 from titan3d.api.controllers.dem_controller import DemController
+from titan3d.api.controllers.system_controller import SystemController
 from titan3d.api.controllers.scenario_controller import ScenarioController
 from titan3d.api.controllers.simulation_controller import SimulationController
 
@@ -110,6 +111,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.dispatcher = dispatcher
         app.state.simulations = SimulationController(settings, dems_ctl, dispatcher)
         app.state.scenarios = ScenarioController()
+        app.state.system = SystemController(settings, dispatcher)
         dispatcher.recover()
         dems_ctl.register_builtin()
         dispatcher.start()
@@ -147,7 +149,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
         logger.info("HTTP basic auth enabled")
 
-    for r in (health.router, dems.router, simulations.router, scenarios.router):
+    for r in (
+        health.router,
+        dems.router,
+        simulations.router,
+        scenarios.router,
+        system.router,
+    ):
         app.include_router(r, prefix=API_PREFIX)
     _mount_frontend(app, settings.frontend_dist)
     return app
