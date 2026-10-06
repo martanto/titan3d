@@ -221,7 +221,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
     const list = h(
       "ul",
       { class: "filelist" },
-      pendingFiles.map((f) => h("li", {}, h("span", {}, f.name), h("span", { class: "muted" }, `${num(f.size / 1e6, 1)} MB`))),
+      pendingFiles.map((f) => h("li", {}, h("span", {}, f.name), h("span", { class: "text-muted" }, `${num(f.size / 1e6, 1)} MB`))),
     );
     const nameInput = h("input", {
       type: "text",
@@ -243,7 +243,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
     const progress = uploadState
       ? h(
           "div",
-          { class: "progress", style: "width:100%" },
+          { class: "progress w-full" },
           h("span", { class: "note" }, `${uploadState.stage}${uploadState.stage === "Uploading" ? ` · ${num((100 * uploadState.loaded) / Math.max(uploadState.total, 1))} %` : "…"}`),
           h(
             "div",
@@ -261,7 +261,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
       pendingFiles.length && !uploadState
         ? h(
             "div",
-            { class: "field", style: "width:100%" },
+            { class: "field w-full" },
             nameInput,
             h(
               "button",
@@ -306,7 +306,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
         "div",
         { class: "source-head" },
         h("span", { class: `swatch${kind === "flux" ? " vent" : ""}`, "aria-hidden": "true" }),
-        h("span", { class: "title" }, `${kind === "pile" ? "Pile" : "Vent"} ${i + 1}`, h("span", { class: "muted" }, ` · ${sci(vol)} m³`)),
+        h("span", { class: "title" }, `${kind === "pile" ? "Pile" : "Vent"} ${i + 1}`, h("span", { class: "text-muted" }, ` · ${sci(vol)} m³`)),
         h(
           "button",
           {
@@ -341,7 +341,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
       ),
       h(
         "div",
-        { class: "grid-2" },
+        { class: "grid grid-cols-2 gap-3" },
         numField("Longitude", "°E", get("lon", 0), set("lon"), { min: -180, max: 180, digits: 5 }),
         numField("Latitude", "°N", get("lat", 0), set("lat"), { min: -90, max: 90, digits: 5 }),
         ...fields,
@@ -373,7 +373,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
     const err = h("span", { class: "error-text", id: `${id}-err` });
     const volField = h(
       "div",
-      { class: "field", style: "grid-column: 1 / -1" },
+      { class: "field col-span-full" },
       h("label", { for: id }, "Volume"),
       h("div", { class: "input-unit" }, volInput, h("span", {}, "m³")),
       help,
@@ -413,7 +413,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
       volField,
       h(
         "div",
-        { style: "grid-column: 1 / -1" },
+        { class: "col-span-full" },
         seg(
           `Keep fixed when the volume changes (pile ${i + 1})`,
           [
@@ -585,7 +585,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
           (s.flux_sources ?? []).map((_, i) => sourceCard("flux", i)),
           h(
             "div",
-            { class: "btn-row" },
+            { class: "flex flex-wrap gap-2" },
             h("button", { type: "button", class: "btn small", onclick: () => addSource("pile") }, icon("plus"), "Add pile"),
             h("button", { type: "button", class: "btn small", onclick: () => addSource("flux") }, icon("plus"), "Add vent"),
           ),
@@ -597,7 +597,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
           h("p", { class: "hint" }, "Distances from the first source. Keep the runout path inside the DEM."),
           h(
             "div",
-            { class: "grid-4" },
+            { class: "grid grid-cols-2 gap-3" },
             numField("West", "km", () => d.west_km ?? 6, (v) => (d.west_km = v), { min: 0.5, max: 100 }),
             numField("East", "km", () => d.east_km ?? 16, (v) => (d.east_km = v), { min: 0.5, max: 100 }),
             numField("South", "km", () => d.south_km ?? 14, (v) => (d.south_km = v), { min: 0.5, max: 100 }),
@@ -622,7 +622,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
           ),
           h(
             "div",
-            { class: "grid-2" },
+            { class: "grid grid-cols-2 gap-3" },
             numField("Basal friction φ_bed", "°", () => m.phi_bed_deg ?? 24, (v) => (m.phi_bed_deg = v), { min: 1, max: 59 }),
             numField("Internal friction φ_int", "°", () => m.phi_int_deg ?? 34, (v) => (m.phi_int_deg = v), { min: 1, max: 59 }),
             m.rheology === "voellmy"
@@ -684,7 +684,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
           }),
           h(
             "div",
-            { class: "grid-2" },
+            { class: "grid grid-cols-2 gap-3" },
             numField("Simulated time", "s", () => s.t_end ?? 300, (v) => (s.t_end = v), { min: 1, max: 86400 }),
             numField("Output every", "s", () => s.output_every ?? 2, (v) => (s.output_every = v), { min: 0.5, max: 3600 }),
           ),
@@ -731,7 +731,7 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
         runError ? h("div", { class: "alert", role: "alert" }, h("strong", {}, "Cannot run: "), runError) : null,
         h(
           "div",
-          { class: "btn-row" },
+          { class: "flex flex-wrap gap-2" },
           yamlInput,
           h("label", { for: "yamlFile", class: "btn small" }, icon("upload"), "Load config"),
           h(

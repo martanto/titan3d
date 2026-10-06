@@ -34,7 +34,10 @@ function drawContourLabels(ctx: CanvasRenderingContext2D, scene: FlowScene, s: F
         const c = Math.floor(b.z / index);
         if (a !== c) {
           const level = Math.max(a, c) * index;
-          const clear = [-18, 0, 18].every((dx) => [-8, 0, 8].every((dy) => !scene.dataAt(xAt(px + dx), yAt(py + dy))));
+          const box = labelBox(ctx, `${Math.max(a, c) * index}`, px, py);
+          const clear =
+            !labelBoxes.some((b) => overlaps(b, box)) &&
+            [-18, 0, 18].every((dx) => [-8, 0, 8].every((dy) => !scene.dataAt(xAt(px + dx), yAt(py + dy))));
           if (level > 0 && clear && placed.every(([x, y]) => Math.hypot(x - px, y - py) > 150) && placed.length < 28) {
             halo(ctx, `${level}`, px, py, s);
             placed.push([px, py]);
@@ -65,7 +68,20 @@ function zoneLabel(crs: string | null): string {
   return m ? `UTM ${Number(m[2])}${m[1] === "7" ? "S" : "N"} (WGS 84)` : "grid coordinates";
 }
 
+type Box = [number, number, number, number]; // x0, y0, x1, y1
+let labelBoxes: Box[] = [];
+
+function labelBox(ctx: CanvasRenderingContext2D, text: string, x: number, y: number): Box {
+  const m = ctx.measureText(text);
+  const w = m.width;
+  const left = ctx.textAlign === "center" ? x - w / 2 : ctx.textAlign === "right" ? x - w : x;
+  return [left - 4, y - m.actualBoundingBoxAscent - 3, left + w + 4, y + m.actualBoundingBoxDescent + 3];
+}
+
+const overlaps = (a: Box, b: Box) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+
 function halo(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, s: FurnitureStyle): void {
+  labelBoxes.push(labelBox(ctx, text, x, y));
   // solid paper chip behind the label: legible over terrain, flow and overlay lines
   const m = ctx.measureText(text);
   const w = m.width;
@@ -146,6 +162,7 @@ export function drawFurniture(ctx: CanvasRenderingContext2D, scene: FlowScene, s
   const w = W / dpr;
   const h = H / dpr;
   ctx.clearRect(0, 0, w, h);
+  labelBoxes = [];
   const b = scene.bounds;
   const meta = scene.gridMeta;
   if (!b || !meta) return;
@@ -190,13 +207,13 @@ export function drawFurniture(ctx: CanvasRenderingContext2D, scene: FlowScene, s
       // labels under the stage toolbar drop below it instead of disappearing
       if (px > 60 && px < w - 40) halo(ctx, coord(x), px, px > w - reserve ? 56 : 6, s);
     }
-    drawContourLabels(ctx, scene, s, xAt, yAt, w, h);
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     for (let y = Math.ceil(y0 / step) * step; y <= y1; y += step) {
       const py = p0.y + (y - b.south) * sy;
       if (py > 24 && py < h - 150) halo(ctx, coord(y), 6, py, s);
     }
+    drawContourLabels(ctx, scene, s, xAt, yAt, w, h);
     drawNorth(ctx, 28, h - 100, { x: 0, y: -1 }, s);
     const mpp = scene.planMetresPerPixel();
     if (mpp) drawScaleBar(ctx, 16, h - 54, mpp, s);

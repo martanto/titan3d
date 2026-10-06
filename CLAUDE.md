@@ -12,25 +12,49 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
     outflow), `dem` (stitch tiles, local UTM domains), `scenario` (run loop, frames), `stats`, `export`.
   - `api/` — `routes/` (HTTP only) → `controllers/` → core/db; `schemas/` (pydantic; `ScenarioRequest` is the
     single source of truth, YAML in `scenario_yaml.py`); `workers/` (spawned run process + dispatcher).
+    `main.py` serves `frontend/dist` (index.html `no-cache`, hashed assets `immutable`).
   - `db/` — SQLite (`dems`, `jobs`, `job_frames`), only `repositories.py` writes SQL.
   - `cli.py` — Click: `serve`, `run`, `init-config`, `stitch-dem`, `openapi`.
-  - `openapi.json` — regenerate with `uv run titan3d openapi -o openapi.json` (a test checks it).
-- `frontend/` — Vite + TS. `src/scene/engine.ts` (WebGL2; heights in the vertex shader; plan/3D views;
-  natural or hillshade surface), `furniture.ts` (graticule, scale bar, north arrow), `ramps.ts`/`cmaps.ts`
-  (Crameri maps); `src/ui/*` views (setup, running, results, runs). `npm run gen:api` regenerates API types.
-- `dem/` — built-in Semeru DEMNAS tiles. `deploy/` — run docs (uv first, optional Docker). `docs/PLAN.md`.
+  - `openapi.json` — regenerate with `uv run titan3d openapi -o openapi.json` (a test checks it), then
+    `npm run gen:api` in `frontend/`.
+- `frontend/` — Vite + TypeScript (TS pinned ~6.0 for openapi-typescript) + three.js + **Tailwind CSS v4**.
+  - `src/scene/engine.ts` (WebGL2; heights in the vertex shader; plan (ortho, north-up) / 3D views; Natural
+    DEM-derived or Hillshade surface; envelope with release footprint masked; plan-only threshold outline),
+    `furniture.ts` (graticule, scale bar + north arrow lower left, labelled index contours avoiding data/labels),
+    `ramps.ts`/`cmaps.ts` (Crameri batlow/imola/lajolla-reversed).
+  - `src/ui/*` views: setup (DEM upload, click-to-place sources, pile volume entry), running, results
+    (presenter mode, export figure, copy caption), runs; `stage.ts` (surface context: Natural on terrain views,
+    Hillshade under data).
+  - Styling: `styles/tokens.css` (light/dark tokens) + `styles/app.css` = `@import "tailwindcss"`, `@theme inline`
+    mapping tokens (default palette removed), `@layer base` / `@layer components`; utilities in `src/ui/*.ts` for
+    layout and one-offs. Never add colours outside the tokens.
+- `dem/` — built-in DEM tiles (local only, git-ignored; never commit them). `deploy/` — run docs (uv first),
+  `nginx.conf.example`, optional Docker. `docs/` — `PLAN.md`, design reviews. `wiki/` — Home, Titan2D,
+  Architecture, Backend, Frontend, API-Reference (+ `_Sidebar.md`).
+- Design records: `PRODUCT.md`, `DESIGN.md`, `.impeccable/design.json`, `.impeccable/surfaces/frontend-index-html.md`
+  (direction contract), `.impeccable/critique/`. Local-only: `.impeccable/review/`, `config.local.json`, `hook.cache.json`.
 
 ## Conventions
 - Arrays are [j, i] = [y, x]; y increases with j (north up). Grid coordinates are CRS metres (local UTM).
 - three.js world in km: X = east, Z = −north, Y = (b − zmin)·vex. Index winding a,b,c / b,d,c (CCW from above).
 - Stats per frame: t, steps, vol and vol_out (fractions of released volume), released_m3, hmax, umax,
   area (km², h > 0.1 m), runout (m from the first source).
-- UI direction (impeccable): "scientific figure" — see `PRODUCT.md`, `.impeccable/surfaces/frontend-index-html.md`.
+- UI direction (impeccable): "scientific figure" — true depth and VE 1× by default, every exaggeration badged,
+  captions state what is shown (incl. "synthesised from the DEM, not imagery" and "not an official hazard map").
+
+## Status
+- Backend, frontend, CI (`.github/workflows/ci.yml`), docs and wiki complete; `docs/PLAN.md` fully ticked.
+- UI: impeccable audit/critique of the old viewer (9/20, 20/40) → rebuilt; finish review **ship** after three
+  verdict passes (material fixes only). Open headroom: 3D axis box, hazard-map-style inundation outline,
+  elevation zoning in the Natural surface.
+- Branches: `ft/fastapi-backend-frontend` (pushed); `ft/tailwind-nginx-wiki` (Tailwind v4, nginx, wiki).
 
 ## Verified
 - Lake at rest, slope at rest, symmetry, mass balance with outflow, active window ≡ full domain,
-  Numba ≡ NumPy, curvature, flux sources, DEM stitching, API end to end (`uv run pytest` in backend/).
+  Numba ≡ NumPy, curvature, flux sources, DEM stitching, API end to end (`uv run pytest` in backend/, 95 tests).
 - Semeru 20 m default domain (1,100 × 1,000): 300 s simulated in ~85 s (Numba, 20 threads).
+- Frontend: `npm run build` (tsc + vite), impeccable detector clean, playwright-cli captures (desktop/mobile,
+  light/dark; use `--browser=msedge`, Chrome is not installed).
 
 ## Working rules
 1. **Log every completed task in the daily changelog.** Any finished task — bug fix, refactor, new feature,

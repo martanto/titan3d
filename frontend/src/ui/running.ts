@@ -88,7 +88,7 @@ export function mountRunning(stage: Stage, panel: HTMLElement, first: Simulation
           ),
           h(
             "div",
-            { class: "readouts", style: "grid-template-columns: repeat(3, 1fr)" },
+            { class: "readouts grid-cols-3" },
             r("Complete", `${pct} %`),
             r("Elapsed", duration(p.elapsed_s)),
             r("Remaining", job.status === "running" && ph === "solving" ? `≈ ${duration(p.eta_s)}` : "—", "estimate"),
@@ -102,7 +102,7 @@ export function mountRunning(stage: Stage, panel: HTMLElement, first: Simulation
               "li",
               { class: i < pi ? "done" : i === pi && active ? "current" : i === pi ? "done" : "", "aria-current": i === pi ? "step" : null },
               label,
-              k === "solving" && p.steps ? h("span", { class: "muted" }, ` · ${num(p.steps)} steps`) : null,
+              k === "solving" && p.steps ? h("span", { class: "text-muted" }, ` · ${num(p.steps)} steps`) : null,
             ),
           ),
         ),
