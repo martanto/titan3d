@@ -31,6 +31,26 @@ def test_dem_lifecycle(db: Path) -> None:
     assert [r.id for r in repo.list_all()] == ["d1"]
 
 
+def test_relocate_dem_paths(db: Path) -> None:
+    repo = DemRepository(db)
+    old = db.parent / "legacy-data"
+    new = db.parent / "moved-data"
+    external = db.parent / "legacy-data-other" / "mosaic.tif"
+    repo.create("inside", "Inside", "upload", [str(old / "tiles/a.tif"), "b.tif"])
+    repo.set_ready("inside", str(old / "dems/inside/mosaic.tif"), {"sha256": "abc"})
+    repo.create("outside", "Outside", "upload", [str(external)])
+    repo.set_ready("outside", str(external), {})
+    assert repo.relocate_paths(old, new) == 1
+    moved = repo.get("inside")
+    assert moved is not None
+    assert moved.mosaic_path == str(new / "dems/inside/mosaic.tif")
+    assert moved.files == [str(new / "tiles/a.tif"), "b.tif"]
+    assert moved.info == {"sha256": "abc"} and moved.status == "ready"
+    assert repo.get("outside").mosaic_path == str(external)  # type: ignore[union-attr]
+    assert repo.get("d1").files == ["a.tif"]  # type: ignore[union-attr]
+    assert repo.relocate_paths(old, new) == 0
+
+
 def test_job_lifecycle_and_provenance(db: Path) -> None:
     jobs = JobRepository(db)
     jobs.create("j1", "run", "d1", {"name": "run"}, t_end=100.0)

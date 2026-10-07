@@ -46,11 +46,12 @@ Use the core directly:
 
 ```python
 from pathlib import Path
+from titan3d.config import Settings
 from titan3d.core.dem import load_domain, lonlat_to_xy
 from titan3d.core.params import FlowParams, PileSource
 from titan3d.core.scenario import Scenario, run_scenario
 
-grid = load_domain(Path("data/dems/semeru/mosaic.tif"), (112.9225, -8.108), (6, 16, 14, 6), dx=40)
+grid = load_domain(Settings().dems_dir / "semeru/mosaic.tif", (112.9225, -8.108), (6, 16, 14, 6), dx=40)
 x, y = lonlat_to_xy(grid.crs, 112.9225, -8.108)
 sc = Scenario(grid=grid, params=FlowParams(phi_bed_deg=16), piles=[PileSource(x, y, 60, 300)], t_end=120)
 res = run_scenario(sc, Path("out"))
@@ -83,7 +84,7 @@ Schema v1 (`database.py`). Each operation opens a short connection in WAL mode w
 
 ## Run artifacts
 
-`data/runs/<id>/`:
+`<repo>/data/runs/<id>/` (sibling to `backend/`; override with `TITAN3D_DATA_DIR`):
 
 | File | Content |
 |---|---|
@@ -101,7 +102,7 @@ Schema v1 (`database.py`). Each operation opens a short connection in WAL mode w
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `data_dir` | `backend/data` | DB, DEMs, runs, logs |
+| `data_dir` | `<repo>/data` | DB, DEMs, runs, logs; independent of working directory |
 | `builtin_dem_dir` / `builtin_dem_id` / `builtin_dem_name` | `<repo>/dem` / `semeru` / `Semeru — DEMNAS 0.27″` | Built-in DEM registration |
 | `max_concurrent_runs` | 1 | Parallel worker processes |
 | `max_upload_file_mb` / `max_upload_files` | 1024 / 64 | Upload limits |

@@ -111,6 +111,41 @@ class DemRepository:
                 (now_iso(), dem_id),
             )
 
+    def relocate_paths(self, old_root: Path, new_root: Path) -> int:
+        """Rebase stored DEM paths after an offline data-directory move.
+
+        Only absolute paths inside ``old_root`` change. Relative file names and
+        external DEM paths are preserved. Call with all servers/workers stopped.
+        """
+        old_root, new_root = old_root.resolve(), new_root.resolve()
+
+        def rebase(value: str) -> str:
+            path = Path(value)
+            if not path.is_absolute():
+                return value
+            try:
+                relative = path.relative_to(old_root)
+            except ValueError:
+                return value
+            return str(new_root / relative)
+
+        changed = 0
+        with session(self.db_path) as c:
+            rows = c.execute("SELECT id, mosaic_path, files_json FROM dems").fetchall()
+            for row in rows:
+                mosaic = row["mosaic_path"]
+                files = _loads(row["files_json"]) or []
+                moved_mosaic = rebase(mosaic) if mosaic else mosaic
+                moved_files = [rebase(file) for file in files]
+                if moved_mosaic == mosaic and moved_files == files:
+                    continue
+                c.execute(
+                    "UPDATE dems SET mosaic_path = ?, files_json = ? WHERE id = ?",
+                    (moved_mosaic, json.dumps(moved_files), row["id"]),
+                )
+                changed += 1
+        return changed
+
     def set_ready(self, dem_id: str, mosaic_path: str, info: dict[str, Any]) -> None:
         """Mark a DEM stitched and usable."""
         with session(self.db_path) as c:

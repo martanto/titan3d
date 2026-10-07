@@ -13,17 +13,17 @@ ARG GIT_COMMIT=unknown
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     TITAN3D_GIT_COMMIT=${GIT_COMMIT} \
-    TITAN3D_DATA_DIR=/app/backend/data \
+    TITAN3D_DATA_DIR=/app/data \
     TITAN3D_BUILTIN_DEM_DIR=/app/dem \
     TITAN3D_FRONTEND_DIST=/app/frontend/dist \
-    NUMBA_CACHE_DIR=/app/backend/data/numba-cache
+    NUMBA_CACHE_DIR=/app/data/numba-cache
 WORKDIR /app/backend
 COPY backend/pyproject.toml backend/uv.lock backend/.python-version backend/README.md ./
 RUN uv sync --locked --no-dev --no-install-project
 COPY backend/src ./src
 RUN uv sync --locked --no-dev
 COPY --from=web /src/frontend/dist /app/frontend/dist
-RUN useradd --create-home titan && mkdir -p data && chown titan data
+RUN useradd --create-home titan && mkdir -p /app/data && chown titan /app/data
 USER titan
 EXPOSE 8000
 CMD ["uv", "run", "--no-dev", "titan3d", "serve", "--host", "0.0.0.0", "--port", "8000"]
