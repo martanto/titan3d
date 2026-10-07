@@ -58,6 +58,11 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
 - Frontend: `npm run build` (tsc + vite), impeccable detector clean, playwright-cli captures (desktop/mobile,
   light/dark; use `--browser=msedge`, Chrome is not installed).
 
+## Reference docs
+- `docs/gis-dem-material-map.md` — Titan2D GIS input (GRASS vs GDAL), DEM use, material maps, and
+  the material-map implementation task (core → tests → API → frontend). Read it before working on
+  terrain input or friction.
+
 ## Working rules
 1. **Log every completed task in the daily changelog.** Any finished task — bug fix, refactor, new feature,
    test, documentation change — must have its outcome recorded in `changelogs/YYYY-mm-dd.md` (today's date)
