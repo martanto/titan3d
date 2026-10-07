@@ -2,6 +2,9 @@
 
 ## About Titan2D
 
+Definitions of AMR, numerical order, CFL, friction models and output metrics are
+in [Terminology](Terminology.md).
+
 [Titan2D](https://github.com/titan2d/titan2d) is an open-source simulation code for dry geophysical mass flows over natural terrain: block-and-ash flows, debris avalanches, rock avalanches and similar granular flows. It was developed by the Geophysical Mass Flow Group (University at Buffalo) and collaborators (Patra et al., 2005; Pitman et al., 2003).
 
 Titan2D:
@@ -10,7 +13,12 @@ Titan2D:
 - reads GIS elevation data and starts flows from **piles** (initial volumes) or **flux sources** (vents);
 - has been used widely for volcanic hazard assessment.
 
-titan3d re-implements the same model family in Python. It keeps Titan2D's physics and inputs, and replaces the C++/AMR code with a compact, tested NumPy/Numba solver on a uniform grid. A web app and API sit around it.
+titan3d re-implements the same model family in Python, with the supported physics
+and inputs listed below. It replaces the C++ code and Adaptive Mesh Refinement
+(AMR) with a compact, tested NumPy/Numba solver on a uniform grid. AMR uses smaller
+cells where detail is needed and larger cells elsewhere; titan3d's active window
+reduces the region evaluated without changing cell sizes. A web app and API sit
+around the solver.
 
 ## Governing equations
 
@@ -62,6 +70,12 @@ Ranges and defaults for every field are in the README's *Parameters* section and
 The defaults (φ_bed 24°, φ_int 34°) come from the original demo and give short runouts at Semeru. Long-runout block-and-ash flows usually need much lower basal friction.
 
 ## Numerical method (titan3d)
+
+Grid spacing and numerical order are separate: a uniform 5 m grid specifies cell
+size, while second order describes the method's expected error scaling for smooth
+solutions. Limiters and flow fronts can reduce the achieved order. See
+[mesh and resolution](Terminology.md#mesh-and-resolution) and
+[numerical method and time](Terminology.md#numerical-method-and-time).
 
 | Aspect | titan3d |
 |---|---|

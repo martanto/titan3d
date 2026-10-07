@@ -74,6 +74,10 @@ Results are model output, not official hazard maps.
 
 More documentation is in the [wiki](wiki/Home.md): [Titan2D model](wiki/Titan2D.md), [Architecture](wiki/Architecture.md), [Backend](wiki/Backend.md), [Frontend](wiki/Frontend.md) and [API Reference](wiki/API-Reference.md).
 
+The [terminology guide](wiki/Terminology.md) explains Adaptive Mesh Refinement
+(AMR), grid spacing versus numerical order, solver acronyms, physical parameters
+and comparison metrics such as runout, IoU and RMSE.
+
 ## Requirements
 
 | What | Version | Notes |
@@ -411,6 +415,9 @@ h_t   + (hu)_x + (hv)_y                          = S_h
 Numerics:
 
 - Finite volumes on a uniform UTM grid.
+- Grid spacing describes cell size; numerical order describes the method's
+  expected accuracy scaling. Adaptive time stepping and the active window do
+  not change cell sizes. See [mesh terminology](wiki/Terminology.md#mesh-and-resolution).
 - MUSCL reconstruction (minmod) of depth, bed and velocity.
 - Hydrostatic reconstruction (Audusse et al., 2004) for a well-balanced bed term with h ≥ 0. Depth and bed are reconstructed separately, so thin flows are not trapped on steep slopes (Delestre et al., 2012).
 - Rusanov flux; SSP-RK2 with an adaptive CFL time step; implicit friction stopping step.
@@ -421,6 +428,12 @@ Numerics:
 **Performance:** the default Semeru domain (22 × 20 km at 20 m, 1,100 × 1,000 cells) simulates 300 s in about 85 s on a 20-thread laptop CPU.
 
 ## Verification
+
+The [executed Colima solver comparison](docs/COLIMA-COMPARISON.md) runs official
+Titan2D 4.2.0 in Docker against titan3d at 10, 5 and 2.5 m. It includes reproducible
+depth/difference maps, speed/runout/volume curves and quantitative metrics. The
+5 m run has close final runout but fails the footprint-overlap screening criterion;
+this does not establish numerical equivalence or field validation.
 
 `uv run pytest` in `backend/` runs 101 tests (one more real-DEM test is opt-in with `TITAN3D_REAL_DEM=1`):
 

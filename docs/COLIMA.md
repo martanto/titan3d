@@ -1,5 +1,8 @@
 # Colima example
 
+See [Terminology](../wiki/Terminology.md) for AMR, numerical order, cylinder versus
+paraboloid releases and the distinction between DEM and solver resolution.
+
 Open **Examples** in the application (`#/examples`). Download the linked upstream
 GeoTIFF, select it in the page, choose Coulomb or Voellmy–Salm, and open Setup.
 Review the terrain and parameters there before running. Setup's **Download config**
@@ -25,3 +28,8 @@ outputs every 100 s. Curvature and pressure retain Titan3D defaults.
 
 This example is an adaptation; matching parameters does not establish numerical
 equivalence to Titan2D or field validation.
+
+An executed [Titan2D/titan3d comparison](COLIMA-COMPARISON.md) uses matched
+cylinder geometry, shared 0–150 s outputs, and three titan3d resolutions. It
+includes depth/difference maps and speed/runout/volume curves, and reports the
+failed footprint similarity criterion rather than claiming solver equivalence.

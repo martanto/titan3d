@@ -6,6 +6,7 @@ titan3d is a Python re-implementation of the [Titan2D](https://github.com/titan2
 |---|---|
 | **Home** (this page) | Getting started: install, prepare a DEM, first simulation |
 | [Titan2D](Titan2D.md) | The model: physics, parameters, calibration, comparison with Titan2D, references |
+| [Terminology](Terminology.md) | AMR, grid spacing, numerical order, solver methods, physical parameters and comparison metrics |
 | [Architecture](Architecture.md) | How the pieces fit: processes, data flow, storage, conventions |
 | [Backend](Backend.md) | Python package: core solver, API layers, database, worker, CLI, configuration, tests |
 | [Frontend](Frontend.md) | Web app: views, 3D engine, map furniture, colour maps, styling (Tailwind v4), build |
