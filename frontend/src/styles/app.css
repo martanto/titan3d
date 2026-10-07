@@ -1672,3 +1672,41 @@ dl.params dd {
   }
 }
 }
+
+@layer components {
+  .colima-example { max-width: 1120px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: var(--s6) var(--s8); align-items: start; }
+  .example-intro { grid-column: 1 / -1; display: grid; gap: var(--s2); max-width: 72ch; }
+  .example-intro h2 { font-size: var(--t-xl); }
+  .example-reference { grid-column: 1; grid-row: 2; min-width: 0; }
+  .colima-example .section { display: grid; gap: var(--s3); padding-block: var(--s6); }
+  .example-reference > .section:first-child { padding-top: 0; }
+  .colima-example h3 { font-size: var(--t-lg); font-weight: 600; }
+  .example-load { grid-column: 2; grid-row: 2; display: grid; gap: var(--s4); padding: var(--s6); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+  .example-load .btn { width: 100%; min-height: 44px; height: auto; white-space: normal; text-align: center; }
+  .example-download { text-decoration: none; }
+  .example-load select { min-height: 44px; }
+  .example-load input[type="file"] { width: 100%; min-width: 0; min-height: 44px; font-size: var(--t-sm); color: var(--muted); }
+  .example-load input::file-selector-button { min-height: 44px; margin-right: var(--s2); padding-inline: var(--s3); border: 1px solid var(--control); border-radius: var(--radius); background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; }
+  .example-load input::file-selector-button:hover { background: var(--panel-2); }
+  .example-load input:disabled::file-selector-button { opacity: 0.5; cursor: default; }
+  .example-load input[aria-invalid="true"] { outline: 1px solid var(--err); outline-offset: 3px; }
+  .example-consequence { font-size: var(--t-sm); padding-top: var(--s4); border-top: 1px solid var(--line); }
+  .example-status { min-height: 3em; }
+  .example-status[data-state="error"] { color: var(--err); }
+  .example-sources > div { display: flex; flex-wrap: wrap; gap: 0 var(--s5); }
+  .example-sources a { display: inline-flex; align-items: center; min-height: 44px; text-underline-offset: 3px; }
+  .example-parameters > div { display: grid; grid-template-columns: minmax(130px, 1fr) 2fr; gap: var(--s3); padding-block: var(--s2); border-bottom: 1px solid var(--line); }
+  .example-parameters dt { color: var(--muted); }
+  .example-parameters dd { margin: 0; }
+  @media (max-width: 960px) {
+    .colima-example { grid-template-columns: minmax(0, 1fr); }
+    .example-load, .example-reference { grid-column: 1; grid-row: auto; }
+    .example-reference { max-width: 75ch; }
+  }
+  @media (max-width: 760px) {
+    .app { grid-template-rows: auto minmax(0, 1fr); }
+    .topbar { flex-wrap: wrap; height: auto; }
+    .tabs { order: 3; width: 100%; height: var(--topbar-h); overflow-x: auto; }
+    .example-parameters > div { grid-template-columns: 1fr; gap: var(--s1); }
+  }
+}

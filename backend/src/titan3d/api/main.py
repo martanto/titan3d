@@ -9,7 +9,7 @@ import base64
 import secrets
 from pathlib import Path
 from contextlib import asynccontextmanager
-from collections.abc import AsyncIterator
+from collections.abc import AsyncGenerator
 
 from loguru import logger
 from fastapi import FastAPI, Request
@@ -102,7 +102,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     setup_logging(settings.log_level, settings.logs_dir / "titan3d.log")
 
     @asynccontextmanager
-    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
         init_db(settings.db_path)
         dispatcher = Dispatcher(settings)
         dems_ctl = DemController(settings)

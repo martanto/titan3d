@@ -8,12 +8,14 @@ import { mountRunning } from "./ui/running";
 import { mountRuns } from "./ui/runs";
 import { mountSetup } from "./ui/setup";
 import { mountSystem } from "./ui/system";
+import { mountExamples } from "./ui/examples";
 import { Stage } from "./ui/stage";
 
 const panel = document.getElementById("panel") as HTMLElement;
 const tabRun = document.getElementById("tabRun") as HTMLAnchorElement;
 const workspace = document.querySelector(".workspace") as HTMLElement;
 const systemPage = document.getElementById("systemPage") as HTMLElement;
+const examplesPage = document.getElementById("examplesPage") as HTMLElement;
 
 /** The System page replaces the map workspace (and pauses 3D rendering). */
 function showWorkspace(on: boolean): void {
@@ -168,8 +170,13 @@ async function route(): Promise<void> {
   stage.hideMessage();
   const hash = location.hash.replace(/^#\/?/, "");
   const [name, id] = hash.split("/");
-  showWorkspace(name !== "system");
-  if (name === "system") {
+  showWorkspace(name !== "system" && name !== "examples");
+  systemPage.hidden = name !== "system";
+  examplesPage.hidden = name !== "examples";
+  if (name === "examples") {
+    setTabs("examples");
+    cleanup = mountExamples(examplesPage);
+  } else if (name === "system") {
     setTabs("system");
     cleanup = mountSystem(systemPage);
   } else if (name === "runs") {
