@@ -146,7 +146,7 @@ uv run titan3d serve --host 0.0.0.0      # reachable from other machines on the 
 
 Open http://127.0.0.1:8000 in a browser. API documentation is at http://127.0.0.1:8000/api/docs.
 
-- **Settings:** set them as `TITAN3D_*` environment variables or in `backend/.env`. The data folder, concurrency, upload limits and optional basic auth (`TITAN3D_BASIC_AUTH_USER` / `TITAN3D_BASIC_AUTH_PASSWORD`) are covered in [deploy/README.md](deploy/README.md).
+- **Settings:** set them as `TITAN3D_*` environment variables or in `backend/.env`; copy [backend/.env.example](backend/.env.example) to get started and run backend commands from `backend/`. The data folder, concurrency, upload limits and optional basic auth (`TITAN3D_BASIC_AUTH_USER` / `TITAN3D_BASIC_AUTH_PASSWORD`) are covered in [deploy/README.md](deploy/README.md). [frontend/.env.example](frontend/.env.example) documents the frontend's proxy setup; it currently requires no custom environment variables.
 - **Server restarts:** runs execute in background worker processes. A run that is in progress when the server stops is marked *interrupted* and can be restarted with **Run again**.
 - **Docker and services:** Docker is optional. Docker Compose and Windows/Linux service setups are also in [deploy/README.md](deploy/README.md).
 

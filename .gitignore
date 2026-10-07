@@ -23,6 +23,14 @@ frontend/dist/
 deploy/.env
 deploy/nginx/.htpasswd
 
+# Local backend/frontend environment settings (examples remain tracked)
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
 # Test outputs (written next to the test files)
 backend/tests/out_*
 
