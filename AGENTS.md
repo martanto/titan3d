@@ -71,6 +71,10 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
 4. **All `uv`, `uvx`, and `python` commands are permitted** — no need to ask.
 5. **Always create a new branch before any commits or modifications:** `git checkout -b <prefix>/<name>`,
    prefix `fix/` (bug fixes), `ft/` (features), `dev/` (everything else). Never work directly on `main`/`master`.
+   Before creating the branch, ensure the working tree is clean, run `git fetch origin`, switch to `main`,
+   and update it with `git merge --ff-only origin/main`. Create the new branch from this updated `main`
+   to reduce PR conflicts. If the fast-forward fails, resolve the divergence before branching; never
+   discard local work or reset `main` automatically.
 6. **Test output always goes in `tests/`**, at the same level as the test file that produces it.
 7. **Run the circular-import test after every module change:** `uv run pytest tests/test_imports.py -v`.
 8. **Frontend work always uses the impeccable and playwright-cli skills.**
