@@ -25,3 +25,8 @@ outputs every 100 s. Curvature and pressure retain Titan3D defaults.
 
 This example is an adaptation; matching parameters does not establish numerical
 equivalence to Titan2D or field validation.
+
+An executed [Titan2D/titan3d comparison](COLIMA-COMPARISON.md) uses matched
+cylinder geometry, shared 0–150 s outputs, and three titan3d resolutions. It
+includes depth/difference maps and speed/runout/volume curves, and reports the
+failed footprint similarity criterion rather than claiming solver equivalence.

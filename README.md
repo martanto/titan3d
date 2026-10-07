@@ -422,6 +422,12 @@ Numerics:
 
 ## Verification
 
+The [executed Colima solver comparison](docs/COLIMA-COMPARISON.md) runs official
+Titan2D 4.2.0 in Docker against titan3d at 10, 5 and 2.5 m. It includes reproducible
+depth/difference maps, speed/runout/volume curves and quantitative metrics. The
+5 m run has close final runout but fails the footprint-overlap screening criterion;
+this does not establish numerical equivalence or field validation.
+
 `uv run pytest` in `backend/` runs 101 tests (one more real-DEM test is opt-in with `TITAN3D_REAL_DEM=1`):
 
 | Test | Result |
