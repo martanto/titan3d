@@ -14,11 +14,12 @@ Titan2D:
 - has been used widely for volcanic hazard assessment.
 
 titan3d re-implements the same model family in Python, with the supported physics
-and inputs listed below. It replaces the C++ code and Adaptive Mesh Refinement
-(AMR) with a compact, tested NumPy/Numba solver on a uniform grid. AMR uses smaller
-cells where detail is needed and larger cells elsewhere; titan3d's active window
-reduces the region evaluated without changing cell sizes. A web app and API sit
-around the solver.
+and inputs listed below. It replaces the C++ implementation with a tested
+NumPy/Numba solver, uniform by default, with opt-in experimental one-level AMR.
+AMR changes cell sizes; the uniform solver's active window changes only the
+region evaluated. A web app and API sit around the solver. The
+[AMR verification report](../docs/AMR-VERIFICATION.md) documents fine-grid
+fidelity, costs and the remaining failed Titan2D footprint screening.
 
 ## Governing equations
 
@@ -101,7 +102,7 @@ solutions. Limiters and flow fronts can reduce the achieved order. See
 | Internal-friction shear term `sgn(∂u/∂y) k ∂(g h)/∂y sin φ_int` | ✔ | Not yet |
 | Piles | Paraboloid and cylinder | Paraboloid (several per scenario) |
 | Flux (vent) sources | ✔ | ✔ (start, duration, initial velocity) |
-| Mesh | Adaptive (AMR), parallel (MPI) | Uniform grid; active window; shared-memory parallel (Numba) |
+| Mesh | Adaptive (AMR), parallel (MPI) | Uniform active window by default; experimental one-level 2:1 AMR; Numba kernels; no MPI |
 | DEM input | GIS rasters | GeoTIFF tiles; multi-tile stitching; automatic UTM reprojection |
 | Outputs | Simulation files, max-height maps | GeoTIFF max depth/speed, GeoJSON/KML inundation, frames, browser playback, PNG figures |
 | Interface | Command line / Python input scripts | Web app, REST API, YAML configs, CLI |

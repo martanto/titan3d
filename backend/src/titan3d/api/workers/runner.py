@@ -61,6 +61,19 @@ def provenance(req: ScenarioRequest, dem_info: dict[str, Any] | None) -> dict[st
         "numba": numba.__version__,
         "rasterio": rasterio.__version__,
         "platform": platform.platform(),
+        "mesh": {
+            "type": "adaptive" if req.numerics.amr else "uniform",
+            "finest_dx_m": req.numerics.dx,
+            "coarsest_dx_m": req.numerics.dx * (2 if req.numerics.amr else 1),
+            "levels": 2 if req.numerics.amr else 1,
+            "gradient": req.numerics.amr_gradient,
+            "buffer_parent_cells": req.numerics.amr_buffer,
+            "regrid_every_steps": req.numerics.amr_regrid_every,
+            "coarsen_delay": req.numerics.amr_coarsen_delay,
+            "output": "conservative finest-grid raster"
+            if req.numerics.amr
+            else "uniform solver grid",
+        },
     }
 
 
@@ -117,6 +130,11 @@ def build_scenario(req: ScenarioRequest, mosaic: Path) -> Scenario:
         h_dry=n.h_dry,
         precision=n.precision,
         backend=n.backend,
+        amr=n.amr,
+        amr_gradient=n.amr_gradient,
+        amr_buffer=n.amr_buffer,
+        amr_regrid_every=n.amr_regrid_every,
+        amr_coarsen_delay=n.amr_coarsen_delay,
     )
     return Scenario(
         grid=grid,

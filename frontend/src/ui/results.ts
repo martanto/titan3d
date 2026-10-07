@@ -147,7 +147,7 @@ export function mountResults(stage: Stage, panel: HTMLElement, job: Simulation):
     return (
       `${what} for “${m.title}” on ${m.dem} (${m.crs}). ${rheo}, φ_int = ${mat.phi_int_deg ?? 34}°, ` +
       `${m.pressure === "hydrostatic" ? "hydrostatic" : "Savage–Hutter"} earth pressure, curvature ${m.curvature ? "on" : "off"}; ` +
-      `${src}; released ${sci(m.volume_m3)} m³. Grid ${num(m.grid_dx)} m (${num(m.grid_shape[1])} × ${num(m.grid_shape[0])} cells), ` +
+      `${src}; released ${sci(m.volume_m3)} m³. ${s.numerics?.amr ? `Experimental AMR ${num(m.grid_dx)}–${num(2 * m.grid_dx)} m; conservative output raster` : "Grid"} ${num(m.grid_dx)} m (${num(m.grid_shape[1])} × ${num(m.grid_shape[0])} cells), ` +
       `${num(m.steps)} steps. Inundated (h_max > ${WET} m) ${num(Math.max(...result.stats.map((x) => x.area)), 2)} km², ` +
       `runout ${num(env.L)} m, mass in domain ${num(last.vol * 100, 2)} %. Display: ${mode === "speed" ? "imola" : mode === "max" ? "lajolla" : "batlow"} colour map, ` +
       `${stage.scene.view === "plan" ? "plan view" : `perspective view, vertical exaggeration ${vex.toFixed(1)}×`}; terrain ${surfaceNote(stage.scene.surface)}` +
@@ -539,6 +539,7 @@ export function mountResults(stage: Stage, panel: HTMLElement, job: Simulation):
             ["Curvature term", mat.curvature === false ? "off" : "on"],
             ["Released volume", m ? `${sci(m.volume_m3)} m³` : "—"],
             ["Grid", job.grid ? `${num(job.grid.nx)} × ${num(job.grid.ny)} @ ${num(job.grid.dx)} m` : "—"],
+            ["Solver mesh", s.numerics?.amr ? `Experimental AMR ${num(s.numerics.dx)}–${num(2 * s.numerics.dx)} m; conservative output raster` : "Uniform grid"],
             ["CRS", job.grid?.crs ?? "—"],
             ["Simulated time", `${num(s.t_end ?? 0)} s, output every ${num(s.output_every ?? 0, 1)} s`],
             ["Time steps", m ? num(m.steps) : "—"],

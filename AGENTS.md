@@ -10,6 +10,10 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
     reconstruction with separate h/b reconstruction, Rusanov), `kernels_numba`, `rheology` (Coulomb/Voellmy,
     Savage–Hutter k), `curvature`, `sources` (piles, flux vents), `solver` (SSP-RK2, CFL, active window,
     outflow), `dem` (stitch tiles, local UTM domains), `scenario` (run loop, frames), `stats`, `export`.
+    Experimental opt-in AMR: `amr_mesh` (one-level 2:1 leaf ownership and conservative water-fill transfers),
+    `amr` (shared split-face MUSCL/hydrostatic fluxes, draining limiter, SSP-RK2, dynamic regridding;
+    Numba neighbour/scatter kernels). `dx` is finest spacing; output remains on that regular grid.
+    See `docs/AMR-DESIGN.md` and `docs/AMR-VERIFICATION.md`; uniform solver remains the default.
   - `api/` — `routes/` (HTTP only) → `controllers/` → core/db; `schemas/` (pydantic; `ScenarioRequest` is the
     single source of truth, YAML in `scenario_yaml.py`); `workers/` (spawned run process + dispatcher).
     `main.py` serves `frontend/dist` (index.html `no-cache`, hashed assets `immutable`).

@@ -12,6 +12,13 @@ npm run gen:api    # regenerate src/api/schema.d.ts from backend/openapi.json
 
 TypeScript is pinned to 6.0 because `openapi-typescript` needs the TS JS API, which TypeScript 7 (native) does not ship. `.npmrc` sets `legacy-peer-deps=true` for its peer range.
 
+Setup offers **Adaptive mesh refinement (experimental)** under Resolution and
+time. `dx` is the finest spacing; the coarsest cells are `2 dx`. Numerics exposes
+gradient, buffer, regrid interval and coarsening delay. Runtime and memory
+estimates are labelled as uniform references when AMR is selected. Results and
+figure captions state the adaptive size range and conservative output raster.
+See [AMR verification](../docs/AMR-VERIFICATION.md) before interpreting the outputs.
+
 ## Source map
 
 ```

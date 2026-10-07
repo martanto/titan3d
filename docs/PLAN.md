@@ -81,6 +81,11 @@ deploy/                        # OPTIONAL: docker-compose.yml, .env.example, ngi
 - Add the working rules to `CLAUDE.md`, add `changelogs/` to `.gitignore`, and create `changelogs/2026-10-06.md`.
 
 ## Progress tracker
+- **Roadmap 1 — Experimental one-level AMR**
+  - [x] Numerical design and pinned Titan2D/primary-reference review; conservative leaf ownership/transfers and shared coarse/fine fluxes.
+  - [x] SSP-RK2/CFL, positivity, dynamic refinement/hysteresis, sources, outflow and historical maxima; NumPy/Numba mathematical verification.
+  - [x] Opt-in API/YAML/CLI settings, provenance, regular outputs, Setup/Results controls and regenerated API types.
+  - [x] Fresh Titan2D and uniform/AMR Colima comparison; publish accuracy/cost measurements and remaining failed upstream footprint screening in `AMR-VERIFICATION.md`.
 - **Roadmap prerequisites**
   - [x] Move default runtime storage to project-root `data/`, preserve existing DEM paths and run artifacts, update deployment and documentation, and verify regressions.
   - [x] Execute and document the Colima Titan2D/titan3d baseline comparison, including resolution sensitivity and failed footprint screening (see `docs/COLIMA-COMPARISON.md`).

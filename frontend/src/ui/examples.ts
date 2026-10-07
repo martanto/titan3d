@@ -15,7 +15,8 @@ function colima(demId: string, voellmy: boolean): Scenario {
     domain: { center_lon: null, center_lat: null, west_km: 3.4, east_km: 1, south_km: 3.4, north_km: 1 },
     material: { rheology: voellmy ? "voellmy" : "coulomb", phi_bed_deg: 27, phi_int_deg: 37,
       mu: 0.35, xi: 120, earth_pressure: "savage-hutter", curvature: true },
-    numerics: { dx: 10, cfl: 0.4, backend: "numba", precision: "float64", h_dry: 0.001 },
+    numerics: { dx: 10, cfl: 0.4, backend: "numba", precision: "float64", h_dry: 0.001,
+      amr: false, amr_gradient: 0.05, amr_buffer: 2, amr_regrid_every: 4, amr_coarsen_delay: 3 },
     t_end: 300, output_every: 1,
   };
 }
@@ -101,4 +102,3 @@ export function mountExamples(root: HTMLElement): () => void {
   );
   return () => { disposed = true; };
 }
-

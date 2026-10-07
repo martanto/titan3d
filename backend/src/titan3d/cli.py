@@ -123,6 +123,11 @@ def _resolve_mosaic(dem: Path | None, out_dir: Path) -> Path:
 )
 @click.option("--dx", type=float, default=None, help="Override grid spacing (m).")
 @click.option(
+    "--amr/--no-amr",
+    default=None,
+    help="Enable/disable experimental one-level adaptive mesh.",
+)
+@click.option(
     "--backend",
     type=click.Choice(["numba", "numpy"]),
     default=None,
@@ -141,6 +146,7 @@ def run(
     dx: float | None,
     backend: str | None,
     precision: str | None,
+    amr: bool | None,
 ) -> None:
     """Run a scenario headless and write its artifacts to OUT."""
     from titan3d.logging import setup_logging
@@ -151,7 +157,12 @@ def run(
 
     overrides = {
         k: v
-        for k, v in {"dx": dx, "backend": backend, "precision": precision}.items()
+        for k, v in {
+            "dx": dx,
+            "backend": backend,
+            "precision": precision,
+            "amr": amr,
+        }.items()
         if v is not None
     }
     if config_path is not None:

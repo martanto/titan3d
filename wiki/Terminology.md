@@ -15,8 +15,10 @@ Titan2D describes its use of AMR in its [official documentation](https://github.
 
 In the executed Colima comparison, Titan2D used AMR with a minimum saved cell
 size of about **3.533 m**. titan3d used separate **10, 5 and 2.5 m uniform-grid
-runs**. AMR remains planned for titan3d; the existing active window does not
-refine the mesh. See the [AMR plan](../docs/roadmap/01-adaptive-mesh-refinement.md).
+runs**. That report is the historical uniform-grid baseline. titan3d now also
+has opt-in experimental one-level AMR, using cells at `dx` and `2 dx` with a
+regular finest-grid output raster. See [AMR verification](../docs/AMR-VERIFICATION.md)
+and the [AMR plan](../docs/roadmap/01-adaptive-mesh-refinement.md).
 
 | Term | Meaning in this project |
 |---|---|
@@ -25,6 +27,10 @@ refine the mesh. See the [AMR plan](../docs/roadmap/01-adaptive-mesh-refinement.
 | Grid spacing, Δx or `dx` | The side length of a square computational cell, in metres. Smaller spacing resolves smaller features but increases work. |
 | DEM resolution | The spacing of elevation samples in the source terrain raster. Using a finer solver grid interpolates those samples; it does not create new measured terrain detail. |
 | Leaf cell | An adaptive cell that has no finer child cells. State integrals use the current leaf cells so coarse parents are not counted again. |
+| Parent / child patch | A parent of width `2 dx` can be replaced by four children of width `dx`; only the leaves evolve. |
+| Shared face flux / reflux | Coarse/fine conservation requires identical integrated transfer on both sides. titan3d splits coarse faces into fine-length segments and shares each flux at both RK stages, avoiding a separate reflux register. |
+| Conservative prolongation / restriction | Transfer a parent state to children / average children to a parent while preserving integrated depth and both momenta. titan3d's water-fill prolongation also preserves nonnegative depth. |
+| Regridding / hysteresis | Update which cells are refined / delay coarsening until several quiet updates to avoid rapid switching. |
 | Refinement / coarsening | Splitting cells into smaller cells / combining them into larger cells. Mass transfer between levels needs conservation checks. |
 | Active window | The uniform-grid region currently evaluated around material and sources, with a stencil margin. Cell sizes are unchanged. |
 | Viewer detail | Downsampled terrain and flow data sent to the browser. This controls display cost separately from solver grid spacing and full-resolution downloads. |

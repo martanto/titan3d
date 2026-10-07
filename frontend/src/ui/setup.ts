@@ -466,8 +466,8 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
         { class: "estimate" },
         r("Grid", `${num(e.grid_shape[1])} × ${num(e.grid_shape[0])}`, `${num(e.cells)} cells`),
         r("Released volume", `${sci(e.released_m3)} m³`),
-        r("Solver memory", `≈ ${num(e.memory_mb)} MB`),
-        r("Runtime", e.runtime_class, `${num(e.frames)} output frames`),
+        r(store.scenario?.numerics?.amr ? "Uniform memory reference" : "Solver memory", `≈ ${num(e.memory_mb)} MB`),
+        r(store.scenario?.numerics?.amr ? "Uniform runtime reference" : "Runtime", e.runtime_class, `${num(e.frames)} output frames`),
       ),
     );
     refreshStage();
@@ -677,11 +677,27 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
               changed(true);
             },
           ),
-          numField("Grid spacing Δx", "m", () => n.dx ?? 20, (v) => (n.dx = v), {
+          numField(n.amr ? "Finest grid spacing Δx" : "Grid spacing Δx", "m", () => n.dx ?? 20, (v) => (n.dx = v), {
             min: 10,
             max: 500,
             help: "DEMNAS pixels are ≈ 8.3 m; halving Δx costs about 8× the runtime.",
           }),
+          h("label", { class: "check" },
+            h("input", {
+              id: "amr-enabled",
+              type: "checkbox",
+              checked: n.amr ?? false,
+              onchange: (e: Event) => {
+                n.amr = (e.target as HTMLInputElement).checked;
+                changed(true);
+                panel.querySelector<HTMLInputElement>("#amr-enabled")?.focus({ preventScroll: true });
+              },
+            }),
+            "Adaptive mesh refinement (experimental)",
+          ),
+          n.amr ? h("p", { class: "sub" },
+            `Cells adapt between ${dx} and ${2 * dx} m. Outputs use a ${dx} m raster; coarse cells contain less flow detail. Runtime and memory estimates describe the uniform solver.`,
+          ) : null,
           h(
             "div",
             { class: "grid grid-cols-2 gap-3" },
@@ -720,6 +736,14 @@ export function mountSetup(stage: Stage, panel: HTMLElement): () => void {
                 },
               ),
               numField("Courant number", "", () => n.cfl ?? 0.4, (v) => (n.cfl = v), { min: 0.05, max: 0.9 }),
+              n.amr ? h("div", {},
+                numField("Relative gradient trigger", "", () => n.amr_gradient ?? 0.05, (v) => (n.amr_gradient = v), {
+                  min: 0.001, max: 1, help: "Smaller values refine more regions; fronts and vent footprints also trigger refinement.",
+                }),
+                numField("Refinement buffer", "parent cells", () => n.amr_buffer ?? 2, (v) => (n.amr_buffer = v), { min: 1, max: 8, step: 1 }),
+                numField("Regrid every", "steps", () => n.amr_regrid_every ?? 4, (v) => (n.amr_regrid_every = v), { min: 1, max: 32, step: 1 }),
+                numField("Coarsen after", "quiet updates", () => n.amr_coarsen_delay ?? 3, (v) => (n.amr_coarsen_delay = v), { min: 1, max: 16, step: 1 }),
+              ) : null,
             ),
           ),
         ),
