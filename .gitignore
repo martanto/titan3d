@@ -12,8 +12,8 @@ changelogs/
 .cache/
 .venv/
 
-# Backend runtime data (DB, uploaded DEMs, runs, logs)
-backend/data/
+# Runtime data (DB, uploaded DEMs, runs, logs)
+/data/
 
 # Frontend
 frontend/node_modules/

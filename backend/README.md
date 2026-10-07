@@ -15,3 +15,8 @@ uv run pytest                # tests
 - `src/titan3d/db/`   — SQLite job and DEM tracking
 
 See the repository root `README.md` for the model description.
+
+Runtime data lives in `../data/` at the project root, alongside `backend/`,
+regardless of the working directory: `titan3d.db`, `dems/`, `runs/` and `logs/`.
+Set `TITAN3D_DATA_DIR` to override it. Existing installations should follow
+[the offline migration steps](../deploy/README.md#moving-existing-data).

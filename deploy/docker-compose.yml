@@ -10,7 +10,7 @@ services:
       - path: .env
         required: false
     volumes:
-      - titan3d-data:/app/backend/data # SQLite DB, uploaded DEMs, run outputs
+      - titan3d-data:/app/data # SQLite DB, uploaded DEMs, run outputs
       - ../dem:/app/dem:ro # built-in DEM tiles
     restart: unless-stopped
 

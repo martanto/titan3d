@@ -83,7 +83,7 @@ More documentation is in the [wiki](wiki/Home.md): [Titan2D model](wiki/Titan2D.
 | OS | Windows 10/11, Linux, macOS | Rasterio and Numba ship binary wheels, so GDAL and a C compiler are not required. |
 | CPU / RAM | 4+ cores, 8 GB+ | The solver uses every core. A 20 m domain of about 1 million cells needs about 150 MB of solver memory, and frames are written to disk. |
 | Browser | Current Chrome, Edge, Firefox or Safari | WebGL 2 is required for the map and 3D view. |
-| Disk | ~1 GB per large study | Stitched DEMs, plus per-run frames and outputs in `backend/data/`. |
+| Disk | ~1 GB per large study | Stitched DEMs, plus per-run frames and outputs in `data/`. |
 
 ## Installation
 
@@ -345,7 +345,11 @@ At least one pile or vent is required, and at most 32 sources.
 
 ## Outputs
 
-Each run is stored in `backend/data/runs/<run id>/`:
+Each run is stored in `<project root>/data/runs/<run id>/`, alongside `backend/`.
+The default is independent of the working directory; `TITAN3D_DATA_DIR` overrides it.
+For existing installations, see [moving existing data](deploy/README.md#moving-existing-data).
+
+Run artifacts:
 
 | File | Content | Use |
 |---|---|---|
@@ -458,6 +462,7 @@ backend/                FastAPI service and solver (uv project, package titan3d)
   tests/                pytest suite
   openapi.json          API schema (checked by tests)
 frontend/               Vite + TypeScript + three.js + Tailwind CSS v4 web app
+data/                   runtime database, uploaded DEMs, runs and logs (local only, git-ignored)
 dem/                    built-in DEM tiles (local only, git-ignored)
 deploy/                 how to run (uv, service, nginx example, optional Docker)
 docs/                   plan and design reviews; PRODUCT.md and DESIGN.md hold product and design context
@@ -483,12 +488,21 @@ CI (`.github/workflows/ci.yml`) runs the backend lint, type check and tests, and
 
 ## Roadmap
 
-Not yet ported from Titan2D:
-- adaptive mesh refinement;
-- two-phase (Pitman–Le) flows;
-- the internal-friction shear term;
-- erosion and entrainment;
-- probabilistic hazard maps from parameter sweeps.
+Planned extensions, to be implemented one by one in the order below. Each
+Markdown plan contains a scope, implementation checklist and completion criteria.
+The plans are written; feature implementation has not started.
+
+| Order | Roadmap item | Plan | Implementation |
+|---|---|---|---|
+| 1 | Adaptive mesh refinement | [AMR plan](docs/roadmap/01-adaptive-mesh-refinement.md) | Next |
+| 2 | Two-phase (Pitman–Le) flows | [Two-phase plan](docs/roadmap/02-two-phase-flows.md) | Pending |
+| 3 | Internal-friction shear term | [Internal-friction plan](docs/roadmap/03-internal-friction-shear.md) | Pending |
+| 4 | Erosion and entrainment | [Entrainment plan](docs/roadmap/04-erosion-entrainment.md) | Pending |
+| 5 | Probabilistic hazard maps from parameter sweeps | [Parameter-sweep plan](docs/roadmap/05-probabilistic-maps.md) | Pending |
+
+Start with [AMR, step 1](docs/roadmap/01-adaptive-mesh-refinement.md#implementation-plan).
+Finish and validate each item before starting the next. Track implementation
+progress in these checklists and record completed work in the daily changelog.
 
 ## References
 

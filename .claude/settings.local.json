@@ -1,0 +1,6 @@
+{
+  "skillOverrides": {
+    "arxiv-database": "off",
+    "pathml": "name-only"
+  }
+}

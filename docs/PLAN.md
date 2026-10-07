@@ -69,7 +69,7 @@ backend/
     cli.py                     # titan3d stitch-dem | run [--config x.yaml] | serve | openapi
   tests/                       # test_imports, test_solver, test_numba_parity, test_curvature, test_sources,
                                # test_dem, test_db, test_config_io, test_api, test_openapi (+ outputs here)
-  data/                        # gitignored: titan3d.db, dems/<id>/, runs/<id>/, logs/
+data/                          # gitignored, project root: titan3d.db, dems/<id>/, runs/<id>/, logs/
 frontend/                      # Vite + TS, three, pako (YAML handled server-side); `npm run build` -> dist/ served by FastAPI
 deploy/                        # OPTIONAL: docker-compose.yml, .env.example, nginx/, README
 .github/workflows/ci.yml
@@ -81,6 +81,8 @@ deploy/                        # OPTIONAL: docker-compose.yml, .env.example, ngi
 - Add the working rules to `CLAUDE.md`, add `changelogs/` to `.gitignore`, and create `changelogs/2026-10-06.md`.
 
 ## Progress tracker
+- **Roadmap prerequisites — storage layout**
+  - [x] Move default runtime storage to project-root `data/`, preserve existing DEM paths and run artifacts, update deployment and documentation, and verify regressions.
 - **Phase 0 — Setup**
   - [x] Create branch `ft/fastapi-backend-frontend`
   - [x] Add `docs/PLAN.md`
@@ -221,7 +223,7 @@ Both skills are already loaded this session.
 
 ## Phase 10 — Cleanup and docs
 - Remove `src/` and `run_demo.py` (Phase 2) and `viewer/` once the frontend matches it.
-- `.gitignore`: add `backend/data/`, `.cache/`, `frontend/node_modules/`, `frontend/dist/`, `.idea/`, `changelogs/`, `deploy/.env`.
+- `.gitignore`: add `data/`, `.cache/`, `frontend/node_modules/`, `frontend/dist/`, `.idea/`, `changelogs/`, `deploy/.env`.
 - Update `README.md` and `CLAUDE.md` (layout, commands, API, YAML format, deploy). Move the remaining items to the roadmap: parameter sweeps/probabilistic maps, AMR, Pitman–Le two-phase, internal-friction shear term.
 
 ## Verification

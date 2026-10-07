@@ -30,6 +30,9 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
   - Styling: `styles/tokens.css` (light/dark tokens) + `styles/app.css` = `@import "tailwindcss"`, `@theme inline`
     mapping tokens (default palette removed), `@layer base` / `@layer components`; utilities in `src/ui/*.ts` for
     layout and one-offs. Never add colours outside the tokens.
+- `data/` — runtime storage at the project root, sibling to `backend/`: `titan3d.db`,
+  uploaded/stitched DEMs in `dems/`, run artifacts in `runs/`, and `logs/` (local only,
+  git-ignored; never commit). Default is independent of cwd; `TITAN3D_DATA_DIR` overrides it.
 - `dem/` — built-in DEM tiles (local only, git-ignored; never commit them). `deploy/` — run docs (uv first),
   `nginx.conf.example`, optional Docker. `docs/` — `PLAN.md`, design reviews. `wiki/` — Home, Titan2D,
   Architecture, Backend, Frontend, API-Reference (+ `_Sidebar.md`).

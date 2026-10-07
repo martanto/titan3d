@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     )
 
     data_dir: Path = Field(
-        default=_BACKEND_ROOT / "data",
+        default=_REPO_ROOT / "data",
         description="Root for the SQLite DB, uploaded DEMs, run artifacts and logs.",
     )
     builtin_dem_dir: Path = Field(

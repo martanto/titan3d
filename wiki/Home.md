@@ -92,4 +92,4 @@ uv run titan3d run --config scenario.yaml --dx 20
 
 **Is the natural-colour terrain a satellite image?** No. It is synthesised from the DEM (elevation, slope, curvature) and labelled as such in every caption. Results default to a greyscale hillshade so colour stays reserved for data.
 
-**Where are my outputs?** In `backend/data/runs/<run id>/`, and downloadable from the Results panel. See [Backend → Run artifacts](Backend.md#run-artifacts).
+**Where are my outputs?** In `<project root>/data/runs/<run id>/`, alongside `backend/`, and downloadable from the Results panel. Override storage with `TITAN3D_DATA_DIR`. See [Backend → Run artifacts](Backend.md#run-artifacts) and [moving existing data](../deploy/README.md#moving-existing-data).

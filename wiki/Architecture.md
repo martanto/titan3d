@@ -81,7 +81,7 @@ sequenceDiagram
 ## Storage
 
 ```
-backend/data/                 (TITAN3D_DATA_DIR)
+data/                         (project root, sibling to backend/; TITAN3D_DATA_DIR)
   titan3d.db                  SQLite: meta, dems, jobs, job_frames (WAL)
   dems/<dem id>/              tiles/, mosaic.tif, preview_<N>.json.gz
   runs/<run id>/              frames/NNNN.npz, grid.npz, maxima.npz, stats.json, meta.json,
