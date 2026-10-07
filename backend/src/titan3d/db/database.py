@@ -8,7 +8,7 @@ while a worker writes progress.
 import sqlite3
 from pathlib import Path
 from contextlib import contextmanager
-from collections.abc import Iterator
+from collections.abc import Generator
 
 
 SCHEMA_VERSION = 1
@@ -89,7 +89,7 @@ def connect(db_path: Path) -> sqlite3.Connection:
 
 
 @contextmanager
-def session(db_path: Path) -> Iterator[sqlite3.Connection]:
+def session(db_path: Path) -> Generator[sqlite3.Connection, None, None]:
     """Connection inside a transaction; committed on success, rolled back on error."""
     conn = connect(db_path)
     try:
