@@ -35,7 +35,7 @@ Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted chang
   git-ignored; never commit). Default is independent of cwd; `TITAN3D_DATA_DIR` overrides it.
 - `dem/` — built-in DEM tiles (local only, git-ignored; never commit them). `deploy/` — run docs (uv first),
   `nginx.conf.example`, optional Docker. `docs/` — `PLAN.md`, design reviews. `wiki/` — Home, Titan2D,
-  Architecture, Backend, Frontend, API-Reference (+ `_Sidebar.md`).
+  Terminology, Architecture, Backend, Frontend, API-Reference (+ `_Sidebar.md`).
 - Design records: `PRODUCT.md`, `DESIGN.md`, `.impeccable/design.json`, `.impeccable/surfaces/frontend-index-html.md`
   (direction contract), `.impeccable/critique/`. Local-only: `.impeccable/review/`, `config.local.json`, `hook.cache.json`.
 

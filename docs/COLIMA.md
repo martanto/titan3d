@@ -1,5 +1,8 @@
 # Colima example
 
+See [Terminology](../wiki/Terminology.md) for AMR, numerical order, cylinder versus
+paraboloid releases and the distinction between DEM and solver resolution.
+
 Open **Examples** in the application (`#/examples`). Download the linked upstream
 GeoTIFF, select it in the page, choose Coulomb or Voellmy–Salm, and open Setup.
 Review the terrain and parameters there before running. Setup's **Download config**

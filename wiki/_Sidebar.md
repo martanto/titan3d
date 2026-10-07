@@ -7,6 +7,7 @@
   - [Equations](Titan2D.md#governing-equations)
   - [Parameters](Titan2D.md#parameters)
   - [Calibration](Titan2D.md#calibration)
+- [Terminology](Terminology.md)
 - [Architecture](Architecture.md)
 - [Backend](Backend.md)
 - [Frontend](Frontend.md)
