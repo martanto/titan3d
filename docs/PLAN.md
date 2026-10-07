@@ -1,5 +1,9 @@
 # titan3d — backend (FastAPI) + frontend (Vite/TS/three.js) refactor, Semeru DEM
 
+## Colima example extension
+- [x] Critique and polish Examples: prominent responsive load flow, themed controls, accessible validation, and locked upload state; verified desktop/tablet/mobile in both themes.
+- [x] Add an Examples page with pinned Titan2D Colima DEM/source links, Coulomb and Voellmy presets, upload-to-Setup flow, and explicit adaptation notes. See `COLIMA.md`.
+
 ## Context
 `granflow` (now `titan3d`) is a NumPy port of Titan2D's depth-averaged granular-flow solver with a single-file three.js viewer. It runs on a synthetic cone, and a CLI writes a JSON file that gets baked into an HTML page. The goal is a real app:
 - a **FastAPI backend** (`backend/`) that keeps the calculation core separate from the API layer and runs long, high-resolution simulations on the **stitched Semeru DEMNAS mosaic** or on user-uploaded DEMs;
