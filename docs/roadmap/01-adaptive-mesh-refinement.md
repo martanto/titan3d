@@ -2,6 +2,10 @@
 
 Status: planned; first roadmap item to implement.
 
+AMR means **Adaptive Mesh Refinement**: changing computational cell sizes where
+detail is needed. See [Terminology](../../wiki/Terminology.md#mesh-and-resolution)
+for its distinction from active windows, adaptive time steps and numerical order.
+
 ## Goal and scope
 
 Resolve flow fronts and changing depth with finer cells while reducing work in

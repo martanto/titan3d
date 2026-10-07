@@ -2,6 +2,9 @@
 
 `backend/` is a [uv](https://docs.astral.sh/uv/) project (Python 3.12) with the package `titan3d` in a src layout.
 
+For definitions of solver acronyms and data fields, see
+[Terminology](Terminology.md).
+
 ```bash
 cd backend
 uv sync                      # install

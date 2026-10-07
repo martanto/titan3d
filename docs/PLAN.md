@@ -84,6 +84,7 @@ deploy/                        # OPTIONAL: docker-compose.yml, .env.example, ngi
 - **Roadmap prerequisites**
   - [x] Move default runtime storage to project-root `data/`, preserve existing DEM paths and run artifacts, update deployment and documentation, and verify regressions.
   - [x] Execute and document the Colima Titan2D/titan3d baseline comparison, including resolution sensitivity and failed footprint screening (see `docs/COLIMA-COMPARISON.md`).
+  - [x] Explain AMR and related modelling/comparison terms in the wiki glossary and link the relevant documentation.
 - **Phase 0 — Setup**
   - [x] Create branch `ft/fastapi-backend-frontend`
   - [x] Add `docs/PLAN.md`

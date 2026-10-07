@@ -1,5 +1,25 @@
 # Colima solver comparison
 
+## Reading the terminology
+
+**AMR (Adaptive Mesh Refinement)** changes cell sizes during a simulation:
+smaller cells resolve fronts and other changing features, while larger cells
+reduce work elsewhere. Titan2D used AMR in this comparison, with a smallest saved
+cell size of about **3.533 m**. titan3d used separate uniform **10, 5 and 2.5 m**
+grids. Its active window changes the region evaluated, not the cell size.
+
+**First order / second order** describe the numerical method's expected error
+scaling, separately from mesh spacing. The selected Titan2D run is first order;
+titan3d uses MUSCL reconstruction and SSP-RK2 time integration. Limiters and sharp
+flow fronts can reduce the achieved order, so a second-order label alone does
+not establish closer agreement. An adaptive CFL time step changes time-step
+length; it does not make a fixed grid adaptive.
+
+The [wiki terminology page](../wiki/Terminology.md) also defines DEM, UTM, CFL,
+MUSCL, SSP-RK2, leaf cells, sampled envelopes, runout, IoU, MAE, RMSE and mass
+balance. See [output and comparison metrics](../wiki/Terminology.md#outputs-and-comparison-metrics)
+when interpreting the figures and screening results.
+
 ## Plan
 
 - [x] Create `dev/colima-solver-comparison`.
