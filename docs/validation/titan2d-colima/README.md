@@ -71,9 +71,45 @@ volume still moves > 1 m/s. Titan2D's max speed fluctuates at 20–35 m/s over t
 but summing the saved state (cell area × pile height) stays at 282,1xx m³ throughout. The
 log value is a diagnostic that excludes some cells; do not use it for mass balance.
 
+## Titan2D second order
+
+Same input with `order='Second'` (`titan2d_input_second_order.py`): 6,516 steps, 28 min.
+Metrics in `metrics_o2.json`.
+
+![Max flow depth: Titan2D 2nd order, titan3d, difference](img/max_depth_maps_o2.png)
+![Time series with Titan2D 2nd order](img/time_series_o2.png)
+
+| Metric | Titan2D 1st | Titan2D 2nd | titan3d 5 m |
+|---|---|---|---|
+| Peak speed | 59.0 m/s | 63.4 m/s | 59.5 m/s |
+| Runout (max depth > 0.1 m) | 2,342 m | 2,299 m | 2,268 m |
+| Mobility H/L | 0.540 | 0.547 | 0.548 |
+| Area > 0.1 m | 2.13 km² | 1.85 km² | 1.73 km² |
+| Area > 1 m | 0.44 km² | 0.48 km² | 0.64 km² |
+| Jaccard vs titan3d at 0.1 / 0.5 / 1 m | 0.67 / 0.60 / 0.52 | 0.71 / 0.64 / 0.58 | — |
+| Front at 15 s | 586 m | 593 m | 744 m |
+| Max deposit thickness at 150 s | 3.1 m | 3.5 m | 8.7 m |
+| Mass, saved state 0 → 150 s | 281,878 → 282,102 (+0.08 %) | 281,878 → 282,404 (+0.19 %) | exact |
+| Wet cell sizes at 150 s | 3.96–31.7 m | 3.96–15.9 m | 5 m |
+
+Titan2D's own sensitivity to order: Jaccard 1st vs 2nd = 0.85 / 0.82 / 0.83.
+
+**What second order explains.** Moving Titan2D from first to second order moves every
+footprint metric toward titan3d: the runout gap shrinks from −3.2 % to −1.4 %, the area
+gap above 0.1 m from −19 % to −6 %, and overlap rises at every threshold. H/L now agrees to
+0.1 %. So a good part of the wider thin-sheet spreading in the first-order run was
+numerical diffusion.
+
+**What it does not explain.** The early front (titan3d ~25 % ahead at 15 s), the larger
+area above 1 m, and the thicker deposits (8.7 m vs 3.5 m) barely change with Titan2D's
+order. These point to model differences rather than order of accuracy. The leading
+candidate is the internal-friction shear term, which Titan2D has and titan3d lacks; the
+1.6 % smaller initial volume in Titan2D and its coarser AMR cells early in the run
+(the pile starts on a 16-cell mesh) are secondary candidates.
+
 ## Next steps
 
-1. Re-run Titan2D with `order='Second'` to separate numerical diffusion from model physics.
+1. ~~Re-run Titan2D with `order='Second'`~~ — done above.
 2. Implement the internal-friction shear term in titan3d and re-compare spreading.
 3. titan3d grid convergence at 2.5 / 5 / 10 m for the footprint metrics.
 4. Turn the agreed metrics (peak speed, runout, H/L, mass) into a regression test with

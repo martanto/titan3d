@@ -2,7 +2,7 @@
 
 Usage: uv run --with matplotlib --with h5py python compare.py T2D_RUN_DIR T3D_DIR [T3D_DIR_10M] OUT_DIR
 """
-import re, sys, json, glob
+import os, re, sys, json, glob
 from pathlib import Path
 import numpy as np
 import h5py
@@ -163,7 +163,7 @@ zoom = [GX[w].min() - pad, GX[w].max() + pad, GY[w].min() - pad, GY[w].max() + p
 vmax = float(np.nanpercentile(np.r_[t2_hmax[t2_hmax > .1], t3_on_g[t3_on_g > .1]], 99))
 
 fig, axs = plt.subplots(1, 3, figsize=(16, 6.2), constrained_layout=True)
-for ax, data, title in [(axs[0], t2_hmax, "Titan2D 4.2.0 (AMR, 1st order)"),
+for ax, data, title in [(axs[0], t2_hmax, f"Titan2D 4.2.0 (AMR, {os.environ.get('T2D_ORDER', '1st')} order)"),
                         (axs[1], t3_on_g, f"titan3d ({s3['dx']:.0f} m, MUSCL 2nd order)")]:
     ax.imshow(shade, extent=ext3, origin="lower", cmap="gray", vmin=0, vmax=1)
     im = ax.imshow(np.ma.masked_less(data, 0.1), extent=extg, origin="lower", cmap="magma_r", vmin=0, vmax=vmax)
