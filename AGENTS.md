@@ -1,41 +1,75 @@
-# Repository Guidelines
+# titan3d — project context
 
-## Project Structure & Module Organization
+Python re-implementation of the Titan2D depth-averaged granular-flow model
+(https://github.com/titan2d/titan2d): FastAPI backend + Vite/TypeScript/three.js frontend.
+Owner: Anto (PVMBG volcanologist). Work incrementally with small, targeted changes.
 
-Titan3d models depth-averaged granular flow with a Python backend and TypeScript/three.js frontend. `backend/src/titan3d/core/` contains computation without web dependencies; `api/` separates routes, controllers, schemas, and workers. Only `db/repositories.py` writes SQL. Backend tests live in `backend/tests/`. Frontend rendering lives in `frontend/src/scene/`, UI views in `frontend/src/ui/`, and styles in `frontend/src/styles/`. Consult `docs/`, `wiki/`, and `deploy/` for design and deployment guidance. Local DEM assets in `dem/` are git-ignored.
+## Layout
+- `backend/` — uv project, package `titan3d` (src layout)
+  - `core/` — pure computation, no web deps: `params`, `grid`, `numerics` (MUSCL-minmod, hydrostatic
+    reconstruction with separate h/b reconstruction, Rusanov), `kernels_numba`, `rheology` (Coulomb/Voellmy,
+    Savage–Hutter k), `curvature`, `sources` (piles, flux vents), `solver` (SSP-RK2, CFL, active window,
+    outflow), `dem` (stitch tiles, local UTM domains), `scenario` (run loop, frames), `stats`, `export`.
+  - `api/` — `routes/` (HTTP only) → `controllers/` → core/db; `schemas/` (pydantic; `ScenarioRequest` is the
+    single source of truth, YAML in `scenario_yaml.py`); `workers/` (spawned run process + dispatcher).
+    `main.py` serves `frontend/dist` (index.html `no-cache`, hashed assets `immutable`).
+  - `db/` — SQLite (`dems`, `jobs`, `job_frames`), only `repositories.py` writes SQL.
+  - System health: `api/controllers/system_controller.py` (psutil; reading cached 5 min, `?refresh=true`;
+    clear regenerable previews/bundles) → `GET /api/system`, `POST /api/system/caches/clear`.
+  - `cli.py` — Click: `serve`, `run`, `init-config`, `stitch-dem`, `openapi`.
+  - `openapi.json` — regenerate with `uv run titan3d openapi -o openapi.json` (a test checks it), then
+    `npm run gen:api` in `frontend/`.
+- `frontend/` — Vite + TypeScript (TS pinned ~6.0 for openapi-typescript) + three.js + **Tailwind CSS v4**.
+  - `src/scene/engine.ts` (WebGL2; heights in the vertex shader; plan (ortho, north-up) / 3D views; Natural
+    DEM-derived or Hillshade surface; envelope with release footprint masked; plan-only threshold outline),
+    `furniture.ts` (graticule, scale bar + north arrow lower left, labelled index contours avoiding data/labels),
+    `ramps.ts`/`cmaps.ts` (Crameri batlow/imola/lajolla-reversed).
+  - `src/ui/*` views: setup (DEM upload, click-to-place sources, pile volume entry), running, results
+    (presenter mode, export figure, copy caption), runs, system (health page, not realtime); `stage.ts` (surface context: Natural on terrain views,
+    Hillshade under data).
+  - Styling: `styles/tokens.css` (light/dark tokens) + `styles/app.css` = `@import "tailwindcss"`, `@theme inline`
+    mapping tokens (default palette removed), `@layer base` / `@layer components`; utilities in `src/ui/*.ts` for
+    layout and one-offs. Never add colours outside the tokens.
+- `dem/` — built-in DEM tiles (local only, git-ignored; never commit them). `deploy/` — run docs (uv first),
+  `nginx.conf.example`, optional Docker. `docs/` — `PLAN.md`, design reviews. `wiki/` — Home, Titan2D,
+  Architecture, Backend, Frontend, API-Reference (+ `_Sidebar.md`).
+- Design records: `PRODUCT.md`, `DESIGN.md`, `.impeccable/design.json`, `.impeccable/surfaces/frontend-index-html.md`
+  (direction contract), `.impeccable/critique/`. Local-only: `.impeccable/review/`, `config.local.json`, `hook.cache.json`.
 
-## Build, Test, and Development Commands
+## Conventions
+- Arrays are [j, i] = [y, x]; y increases with j (north up). Grid coordinates are CRS metres (local UTM).
+- three.js world in km: X = east, Z = −north, Y = (b − zmin)·vex. Index winding a,b,c / b,d,c (CCW from above).
+- Stats per frame: t, steps, vol and vol_out (fractions of released volume), released_m3, hmax, umax,
+  area (km², h > 0.1 m), runout (m from the first source).
+- UI direction (impeccable): "scientific figure" — true depth and VE 1× by default, every exaggeration badged,
+  captions state what is shown (incl. "synthesised from the DEM, not imagery" and "not an official hazard map").
 
-Run backend commands from `backend/`:
+## Status
+- Backend, frontend, CI (`.github/workflows/ci.yml`), docs and wiki complete; `docs/PLAN.md` fully ticked.
+- UI: impeccable audit/critique of the old viewer (9/20, 20/40) → rebuilt; finish review **ship** after three
+  verdict passes (material fixes only). Open headroom: 3D axis box, hazard-map-style inundation outline,
+  elevation zoning in the Natural surface.
+- Branches: `ft/fastapi-backend-frontend` (pushed); `ft/tailwind-nginx-wiki` (Tailwind v4, nginx, wiki).
 
-- `uv sync`: install dependencies.
-- `uv run titan3d serve --reload`: start the API and serve the built UI.
-- `uv run pytest`: run backend tests.
-- `uvx ty check src/`: check Python types.
-- `uv run ruff check --fix src/` and `uv run ruff format src/`: lint and format.
+## Verified
+- Lake at rest, slope at rest, symmetry, mass balance with outflow, active window ≡ full domain,
+  Numba ≡ NumPy, curvature, flux sources, DEM stitching, API end to end, system health (`uv run pytest` in backend/, 101 tests).
+- Semeru 20 m default domain (1,100 × 1,000): 300 s simulated in ~85 s (Numba, 20 threads).
+- Frontend: `npm run build` (tsc + vite), impeccable detector clean, playwright-cli captures (desktop/mobile,
+  light/dark; use `--browser=msedge`, Chrome is not installed).
 
-Run frontend commands from `frontend/`:
-
-- `npm ci`: install locked dependencies.
-- `npm run dev`: start Vite with API proxying.
-- `npm run build`: check TypeScript and build production assets.
-
-After API schema changes, run `uv run titan3d openapi -o openapi.json` in `backend/`, then `npm run gen:api` in `frontend/`.
-
-## Coding Style & Naming Conventions
-
-Use four-space Python indentation, snake_case functions/modules, and PascalCase classes. Follow existing two-space TypeScript indentation and naming. Keep changes small and targeted. Use existing color tokens and Tailwind v4 utilities. Arrays use `[j, i] = [y, x]`, with north increasing along j; grid coordinates are CRS metres.
-
-## Testing Guidelines
-
-Use pytest files named `test_*.py`. Verify affected numerical invariants and API behavior; no numeric coverage threshold is documented. After every Python module change, run `uv run pytest tests/test_imports.py -v`. Keep generated test output beside its producing test under `tests/`. Validate frontend changes with a build and desktop/mobile, light/dark browser checks using Edge.
-
-## Commit & Pull Request Guidelines
-
-Create a new `fix/`, `ft/`, or `dev/` branch before modifications; never work directly on main/master. History uses concise descriptive subjects, sometimes prefixed by the affected area. PRs should explain the problem, resulting behavior, and validation; link relevant issues and include screenshots for visual changes.
-
-## Agent Working Rules
-
-Always run Astral `ty` for Python type checking and Ruff for linting and formatting checks before completing work: from `backend/`, run `uvx ty check src/`, `uv run ruff check src/`, and `uv run ruff format --check src/`. Resolve any failures caused by your changes. Ruff complements `ty`; it does not perform type checking.
-
-Follow `CLAUDE.md`; frontend work requires impeccable and playwright-cli skills. Append completed outcomes to local `changelogs/YYYY-mm-dd.md`; update `docs/PLAN.md` when completing tracked items. Never commit DEM tiles or local configuration.
+## Working rules
+1. **Log every completed task in the daily changelog.** Any finished task — bug fix, refactor, new feature,
+   test, documentation change — must have its outcome recorded in `changelogs/YYYY-mm-dd.md` (today's date)
+   before moving on. Create the file if it does not exist. Append; never overwrite previous entries.
+   `changelogs/` is git-ignored (local only).
+2. **Type checker is `ty`:** `uvx ty check src/` (from `backend/`).
+3. **Lint with ruff:** `uv run ruff check --fix src/` (from `backend/`).
+4. **All `uv`, `uvx`, and `python` commands are permitted** — no need to ask.
+5. **Always create a new branch before any commits or modifications:** `git checkout -b <prefix>/<name>`,
+   prefix `fix/` (bug fixes), `ft/` (features), `dev/` (everything else). Never work directly on `main`/`master`.
+6. **Test output always goes in `tests/`**, at the same level as the test file that produces it.
+7. **Run the circular-import test after every module change:** `uv run pytest tests/test_imports.py -v`.
+8. **Frontend work always uses the impeccable and playwright-cli skills.**
+9. **Use the latest Python and npm packages** where possible.
+10. Progress for the current refactor is tracked in `docs/PLAN.md` (tick items as they finish).
