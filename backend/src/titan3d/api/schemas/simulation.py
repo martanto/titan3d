@@ -95,11 +95,13 @@ RuntimeClass = Literal["seconds", "minutes", "tens of minutes", "hours"]
 
 
 class ScenarioEstimate(BaseModel):
-    """Cost estimate for a scenario before running it."""
+    """Uniform-solver reference cost; AMR management overhead is not estimated."""
 
     grid_shape: tuple[int, int]
     cells: int
-    memory_mb: float = Field(description="Approximate peak memory of the solver [MB]")
+    memory_mb: float = Field(
+        description="Approximate uniform-solver reference memory [MB]; excludes AMR overhead"
+    )
     released_m3: float
     frames: int
     runtime_class: RuntimeClass

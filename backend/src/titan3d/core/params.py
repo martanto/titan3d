@@ -80,6 +80,24 @@ class FlowParams:
     h_dry: float = 1e-3
     precision: Precision = Precision.FLOAT64
     backend: Backend = Backend.NUMBA
+    amr: bool = False
+    amr_gradient: float = 0.05
+    amr_buffer: int = 2
+    amr_regrid_every: int = 4
+    amr_coarsen_delay: int = 3
+
+    def __post_init__(self) -> None:
+        """Reject invalid adaptive-mesh controls for direct core callers."""
+        if not 0 < self.amr_gradient <= 1:
+            raise ValueError("amr_gradient must be in (0, 1]")
+        if (
+            self.amr_buffer < 1
+            or self.amr_regrid_every < 1
+            or self.amr_coarsen_delay < 1
+        ):
+            raise ValueError(
+                "AMR buffer, interval and coarsening delay must be positive"
+            )
 
 
 @dataclass(frozen=True)

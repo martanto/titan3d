@@ -1593,6 +1593,44 @@
             "title": "H Dry",
             "description": "Dry threshold [m]",
             "default": 0.001
+          },
+          "amr": {
+            "type": "boolean",
+            "title": "Amr",
+            "description": "Experimental one-level adaptive mesh; dx is the finest spacing",
+            "default": false
+          },
+          "amr_gradient": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Amr Gradient",
+            "description": "Relative depth/velocity variation triggering refinement",
+            "default": 0.05
+          },
+          "amr_buffer": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Amr Buffer",
+            "description": "Refinement buffer in parent cells",
+            "default": 2
+          },
+          "amr_regrid_every": {
+            "type": "integer",
+            "maximum": 32.0,
+            "minimum": 1.0,
+            "title": "Amr Regrid Every",
+            "description": "Complete RK steps between mesh updates",
+            "default": 4
+          },
+          "amr_coarsen_delay": {
+            "type": "integer",
+            "maximum": 16.0,
+            "minimum": 1.0,
+            "title": "Amr Coarsen Delay",
+            "description": "Quiet mesh updates required before coarsening",
+            "default": 3
           }
         },
         "additionalProperties": false,
@@ -1882,7 +1920,7 @@
           "memory_mb": {
             "type": "number",
             "title": "Memory Mb",
-            "description": "Approximate peak memory of the solver [MB]"
+            "description": "Approximate uniform-solver reference memory [MB]; excludes AMR overhead"
           },
           "released_m3": {
             "type": "number",
@@ -1913,7 +1951,7 @@
           "runtime_class"
         ],
         "title": "ScenarioEstimate",
-        "description": "Cost estimate for a scenario before running it."
+        "description": "Uniform-solver reference cost; AMR management overhead is not estimated."
       },
       "ScenarioImportOut": {
         "properties": {

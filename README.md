@@ -109,7 +109,7 @@ Check the installation:
 
 ```bash
 uv run titan3d --version
-uv run pytest -q          # 101 tests, about 40 s
+uv run pytest -q          # 149 passed, 2 optional tests skipped
 ```
 
 ## Files to prepare
@@ -414,7 +414,8 @@ h_t   + (hu)_x + (hv)_y                          = S_h
 
 Numerics:
 
-- Finite volumes on a uniform UTM grid.
+- Finite volumes on a uniform UTM grid by default; opt-in experimental AMR uses
+  leaf cells at `dx` and `2 dx`, with conservative output on the finest grid.
 - Grid spacing describes cell size; numerical order describes the method's
   expected accuracy scaling. Adaptive time stepping and the active window do
   not change cell sizes. See [mesh terminology](wiki/Terminology.md#mesh-and-resolution).
@@ -422,6 +423,15 @@ Numerics:
 - Hydrostatic reconstruction (Audusse et al., 2004) for a well-balanced bed term with h ≥ 0. Depth and bed are reconstructed separately, so thin flows are not trapped on steep slopes (Delestre et al., 2012).
 - Rusanov flux; SSP-RK2 with an adaptive CFL time step; implicit friction stopping step.
 - **Active window:** only the bounding box of cells holding material is computed. This is exact, because dry cells carry no flux.
+
+**Experimental AMR:** enable it in Setup, set `numerics.amr: true` in YAML, or
+use `uv run titan3d run --config scenario.yaml --amr`. `dx` denotes the finest
+spacing. The [AMR verification report](docs/AMR-VERIFICATION.md) includes
+mathematical tests and a fresh Colima comparison with original Titan2D.
+AMR passes the declared uniform fine-grid fidelity checks, but the current
+implementation is slower and uses more memory; the uniform solver remains the
+default. Titan2D footprint screening still fails, so AMR does not establish
+model equivalence.
 - **Kernels:** Numba (parallel) or NumPy, in float64 or float32.
 - **Outflow accounting:** in-domain volume plus outflow equals released volume.
 
@@ -435,7 +445,8 @@ depth/difference maps, speed/runout/volume curves and quantitative metrics. The
 5 m run has close final runout but fails the footprint-overlap screening criterion;
 this does not establish numerical equivalence or field validation.
 
-`uv run pytest` in `backend/` runs 101 tests (one more real-DEM test is opt-in with `TITAN3D_REAL_DEM=1`):
+`uv run pytest` in `backend/` passes 149 tests; the real-DEM test is opt-in with
+`TITAN3D_REAL_DEM=1`, and the HDF5 comparison requires optional `h5py`:
 
 | Test | Result |
 |---|---|
@@ -450,6 +461,7 @@ this does not establish numerical equivalence or field validation.
 | DEM stitching, CRS handling, coverage checks | synthetic tiles |
 | SQLite jobs (lifecycle, concurrency, recovery) and YAML round trip | pass |
 | API end to end (upload → run in a worker → downloads) | real worker processes |
+| Experimental AMR transfer, shared fluxes, wet/dry flow, sources and uniform agreement | [Numerical checks and Colima results](docs/AMR-VERIFICATION.md) |
 
 ## Troubleshooting
 
@@ -507,13 +519,14 @@ The plans are written; feature implementation has not started.
 
 | Order | Roadmap item | Plan | Implementation |
 |---|---|---|---|
-| 1 | Adaptive mesh refinement | [AMR plan](docs/roadmap/01-adaptive-mesh-refinement.md) | Next |
+| 1 | Adaptive mesh refinement | [AMR plan](docs/roadmap/01-adaptive-mesh-refinement.md) · [Verification](docs/AMR-VERIFICATION.md) | Complete: experimental one-level implementation |
 | 2 | Two-phase (Pitman–Le) flows | [Two-phase plan](docs/roadmap/02-two-phase-flows.md) | Pending |
 | 3 | Internal-friction shear term | [Internal-friction plan](docs/roadmap/03-internal-friction-shear.md) | Pending |
 | 4 | Erosion and entrainment | [Entrainment plan](docs/roadmap/04-erosion-entrainment.md) | Pending |
 | 5 | Probabilistic hazard maps from parameter sweeps | [Parameter-sweep plan](docs/roadmap/05-probabilistic-maps.md) | Pending |
 
-Start with [AMR, step 1](docs/roadmap/01-adaptive-mesh-refinement.md#implementation-plan).
+The first AMR increment is complete. Continue with the
+[two-phase plan](docs/roadmap/02-two-phase-flows.md) when ready.
 Finish and validate each item before starting the next. Track implementation
 progress in these checklists and record completed work in the daily changelog.
 

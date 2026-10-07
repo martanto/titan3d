@@ -11,6 +11,7 @@ from collections.abc import Callable
 
 import numpy as np
 
+from titan3d.core.amr import AdaptiveSolver
 from titan3d.core.grid import Grid
 from titan3d.core.stats import FrameStats, frame_stats
 from titan3d.core.params import (
@@ -149,7 +150,7 @@ def run_scenario(
     frames_dir = out_dir / "frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
     grid, p = scenario.grid, scenario.params
-    solver = Solver(grid, p, scenario.flux_sources)
+    solver = (AdaptiveSolver if p.amr else Solver)(grid, p, scenario.flux_sources)
     h0 = pile_depth(grid, scenario.piles)
     v0 = solver.volume(h0)
     state = solver.initial_state(h0)

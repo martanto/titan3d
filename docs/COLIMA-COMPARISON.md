@@ -1,5 +1,10 @@
 # Colima solver comparison
 
+This is the historical uniform-grid comparison. The subsequent
+[AMR verification report](AMR-VERIFICATION.md) repeats the original Titan2D run
+and compares experimental titan3d AMR with the unchanged uniform 5 m solver,
+including new figures, numerical checks and measured runtime/memory costs.
+
 ## Reading the terminology
 
 **AMR (Adaptive Mesh Refinement)** changes cell sizes during a simulation:

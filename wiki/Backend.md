@@ -39,6 +39,8 @@ src/titan3d/
 | `curvature.py` | Slope cosine and second derivatives; `g_eff = cosθ (g + u·∇∇b·u)` |
 | `sources.py` | Paraboloid piles; `FluxSources`, which integrates vent influx exactly over any time step |
 | `solver.py` | `Solver`: SSP-RK2 step, CFL and source time-step limits, active window, outflow accounting, per-step maxima, `run()` iterator; `NumpyKernels` / `NumbaKernels` |
+| `amr_mesh.py` | One-level parent/child leaf ownership, shared face segments, conservative restriction and equilibrium-aware water-fill prolongation |
+| `amr.py` | Experimental `AdaptiveSolver`: MUSCL/hydrostatic shared-face updates, draining limiter, shared CFL, SSP-RK2 and dynamic refinement/coarsening; Numba neighbour/scatter kernels |
 | `terrain.py` | Synthetic volcano and inclined plane (tests, demos) |
 | `dem.py` | `inspect_tiles`, `stitch_tiles` → `MosaicInfo`, `load_domain` (local UTM, coverage check, gap fill), `preview_grid`, `utm_crs_for`, coordinate transforms |
 | `scenario.py` | `Scenario` dataclass, `run_scenario` (frames to disk, progress and cancel callbacks), `Progress`, `RunResult`, `RunCancelled` |
@@ -46,6 +48,13 @@ src/titan3d/
 | `export.py` | Viewer bundle and terrain preview (quantised, zlib + base64), GeoTIFF writer, inundation GeoJSON and KML |
 
 Use the core directly:
+
+The uniform solver remains the default. `FlowParams(amr=True)` selects the
+experimental one-level solver in `run_scenario`; `Grid.dx` is its finest spacing,
+and parent width is twice that value. The returned frames/maxima retain the
+original regular grid and georeferencing. See
+[AMR verification](../docs/AMR-VERIFICATION.md) for tests, Colima results and the
+measured runtime/memory overhead.
 
 ```python
 from pathlib import Path

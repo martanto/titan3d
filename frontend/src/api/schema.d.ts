@@ -763,6 +763,36 @@ export interface components {
              * @default 0.001
              */
             h_dry: number;
+            /**
+             * Amr
+             * @description Experimental one-level adaptive mesh; dx is the finest spacing
+             * @default false
+             */
+            amr: boolean;
+            /**
+             * Amr Gradient
+             * @description Relative depth/velocity variation triggering refinement
+             * @default 0.05
+             */
+            amr_gradient: number;
+            /**
+             * Amr Buffer
+             * @description Refinement buffer in parent cells
+             * @default 2
+             */
+            amr_buffer: number;
+            /**
+             * Amr Regrid Every
+             * @description Complete RK steps between mesh updates
+             * @default 4
+             */
+            amr_regrid_every: number;
+            /**
+             * Amr Coarsen Delay
+             * @description Quiet mesh updates required before coarsening
+             * @default 3
+             */
+            amr_coarsen_delay: number;
         };
         /**
          * PileIn
@@ -901,7 +931,7 @@ export interface components {
         Rheology: "coulomb" | "voellmy";
         /**
          * ScenarioEstimate
-         * @description Cost estimate for a scenario before running it.
+         * @description Uniform-solver reference cost; AMR management overhead is not estimated.
          */
         ScenarioEstimate: {
             /** Grid Shape */
@@ -913,7 +943,7 @@ export interface components {
             cells: number;
             /**
              * Memory Mb
-             * @description Approximate peak memory of the solver [MB]
+             * @description Approximate uniform-solver reference memory [MB]; excludes AMR overhead
              */
             memory_mb: number;
             /** Released M3 */

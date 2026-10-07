@@ -41,7 +41,8 @@ The same physics as Titan2D: Savage–Hutter depth averaging, Coulomb or Voellmy
 - Resolution: 10–500 m (presets 40 / 20 / 10 m). A separate viewer-detail setting affects only playback.
 - Outputs: 3D playback bundle, per-frame statistics (runout, H/L, area, max depth and speed, mass in domain and outflow), GeoTIFFs, GeoJSON/KML, YAML config, run log.
 - Run control: queue, cancel, duplicate, delete; one run at a time by default.
-- Not yet implemented: adaptive mesh refinement, two-phase (Pitman–Le) flows, the internal-friction shear term, probabilistic hazard maps.
+- Experimental one-level adaptive mesh refinement is available; see `docs/AMR-VERIFICATION.md` for accuracy and performance limits.
+- Not yet implemented: multilevel mesh refinement, two-phase (Pitman–Le) flows, the internal-friction shear term, probabilistic hazard maps.
 - Results are model outputs, not official hazard maps (inferred; wording to confirm).
 
 ## Brand Commitments

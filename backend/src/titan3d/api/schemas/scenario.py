@@ -93,6 +93,25 @@ class NumericsIn(_Model):
     backend: Backend = Backend.NUMBA
     precision: Precision = Precision.FLOAT64
     h_dry: float = Field(1e-3, gt=0, le=0.1, description="Dry threshold [m]")
+    amr: bool = Field(
+        False,
+        description="Experimental one-level adaptive mesh; dx is the finest spacing",
+    )
+    amr_gradient: float = Field(
+        0.05,
+        gt=0,
+        le=1,
+        description="Relative depth/velocity variation triggering refinement",
+    )
+    amr_buffer: int = Field(
+        2, ge=1, le=8, description="Refinement buffer in parent cells"
+    )
+    amr_regrid_every: int = Field(
+        4, ge=1, le=32, description="Complete RK steps between mesh updates"
+    )
+    amr_coarsen_delay: int = Field(
+        3, ge=1, le=16, description="Quiet mesh updates required before coarsening"
+    )
 
 
 class ScenarioRequest(_Model):

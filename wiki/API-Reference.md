@@ -204,6 +204,11 @@ Grid and solver settings.
 | `backend` | Backend | `numba` |  |
 | `precision` | Precision | `float64` |  |
 | `h_dry` | number | `0.001` | Dry threshold [m] (> 0.0, ≤ 0.1) |
+| `amr` | boolean | `false` | Experimental one-level 2:1 mesh; `dx` is the finest spacing |
+| `amr_gradient` | number | `0.05` | Refinement gradient threshold (> 0, ≤ 1) |
+| `amr_buffer` | integer | `2` | Refinement buffer in parent cells (1–8) |
+| `amr_regrid_every` | integer | `4` | Steps between mesh updates (1–32) |
+| `amr_coarsen_delay` | integer | `3` | Quiet mesh updates required before coarsening (1–16) |
 
 ### SimulationCreated
 
@@ -294,13 +299,14 @@ Statistics of one output frame.
 
 ### ScenarioEstimate
 
-Cost estimate for a scenario before running it.
+Uniform-solver reference cost before running a scenario. These estimates exclude
+experimental AMR overhead and do not predict AMR savings.
 
 | Field | Type | Default | Description |
 |---|---|---|---|
 | `grid_shape` | array of object | *required* |  |
 | `cells` | integer | *required* |  |
-| `memory_mb` | number | *required* | Approximate peak memory of the solver [MB] |
+| `memory_mb` | number | *required* | Approximate uniform-solver memory [MB]; excludes AMR overhead |
 | `released_m3` | number | *required* |  |
 | `frames` | integer | *required* |  |
 | `runtime_class` | `seconds` \| `minutes` \| `tens of minutes` \| `hours` | *required* |  |
@@ -464,4 +470,3 @@ Service status.
 | `version` | string | *required* |  |
 | `commit` | string | *required* |  |
 | `max_concurrent_runs` | integer | *required* |  |
-
