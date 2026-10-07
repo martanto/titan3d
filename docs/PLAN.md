@@ -81,8 +81,9 @@ deploy/                        # OPTIONAL: docker-compose.yml, .env.example, ngi
 - Add the working rules to `CLAUDE.md`, add `changelogs/` to `.gitignore`, and create `changelogs/2026-10-06.md`.
 
 ## Progress tracker
-- **Roadmap prerequisites — storage layout**
+- **Roadmap prerequisites**
   - [x] Move default runtime storage to project-root `data/`, preserve existing DEM paths and run artifacts, update deployment and documentation, and verify regressions.
+  - [x] Execute and document the Colima Titan2D/titan3d baseline comparison, including resolution sensitivity and failed footprint screening (see `docs/COLIMA-COMPARISON.md`).
 - **Phase 0 — Setup**
   - [x] Create branch `ft/fastapi-backend-frontend`
   - [x] Add `docs/PLAN.md`
