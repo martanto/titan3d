@@ -147,10 +147,43 @@ numbers are not a controlled performance comparison.
   This benchmark bypasses that source shape in the test harness. The benchmark
   results do not establish parity for the web-app example.
 
-## Artifacts
+## Comparison figures
 
-All generated artifacts are local and git-ignored. Links work after running the
-harness in this checkout:
+These published figures and data are attached to
+[PR #7's comparison comment](https://github.com/martanto/titan3d/pull/7#issuecomment-6039454974)
+and can be viewed with GitHub access to the repository, without running the
+harness locally.
+
+### Maximum flow depth and difference
+
+![Colima maximum-depth comparison: Titan2D AMR, titan3d at 5 m, and titan3d minus Titan2D, with 0.1 m footprint outlines](https://github.com/user-attachments/assets/d86463a0-180d-436d-a102-9252860f5651)
+
+Shared saved states over 0–150 s, shown on the same terrain and UTM grid.
+Black outlines show the Titan2D footprint; orange outlines in the difference
+panel show titan3d. [Download the depth figure as PDF](https://github.com/user-attachments/files/33159715/maximum-depth.pdf).
+
+### Speed, front distance and volume
+
+![Colima time-series comparison: maximum speed, front distance and volume for Titan2D and titan3d at 10, 5 and 2.5 m, with the separate Titan2D log volume diagnostic](https://github.com/user-attachments/assets/154b3ede-d791-4da5-9c69-18847525c25d)
+
+The speed and front-distance curves use h > 0.1 m at shared saved times. Solid
+volume curves integrate saved states; the dotted Titan2D curve is its separate
+log diagnostic. [Download the time-series figure as PDF](https://github.com/user-attachments/files/33159729/time-series.pdf).
+
+Published data accompanying the figures:
+
+- [Metrics and screening verdicts (JSON)](https://github.com/user-attachments/files/33159724/metrics.json)
+- [Run environment and provenance (JSON)](https://github.com/user-attachments/files/33159726/provenance.json)
+- [Shared-state time series (CSV)](https://github.com/user-attachments/files/33159727/time_series.csv)
+
+The footprint screening criterion still fails as reported above; these figures
+illustrate the measured agreement and differences.
+
+## Local artifacts
+
+Harness-generated artifacts remain local and git-ignored. The following local
+links work after running the harness in this checkout; published copies are
+linked above:
 
 - [Maximum-depth and difference figure](../backend/tests/out_colima_comparison/maximum-depth.png)
 - [Speed, front distance and volume figure](../backend/tests/out_colima_comparison/time-series.png)
