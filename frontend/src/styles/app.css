@@ -569,16 +569,36 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 .input-unit {
-  position: relative;
   display: flex;
   align-items: center;
+  gap: var(--s2);
+  padding-right: var(--s2);
+  border: 1px solid var(--control);
+  border-radius: var(--radius);
+  background: var(--panel);
 }
 .input-unit input {
-  padding-right: 2.8em;
+  flex: 1;
+  min-width: 0;
+  padding-right: 0;
+  border: 0;
+  background: transparent;
+}
+.input-unit:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.input-unit input:focus-visible {
+  outline: none;
+}
+.input-unit:hover {
+  border-color: var(--fg);
+}
+.field.invalid .input-unit {
+  border-color: var(--err);
 }
 .input-unit span {
-  position: absolute;
-  right: var(--s2);
+  flex: none;
   color: var(--muted);
   font-size: var(--t-xs);
   pointer-events: none;
