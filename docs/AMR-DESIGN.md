@@ -16,6 +16,9 @@ at **both** RK stages. Boundary faces use transmissive exterior states.
 
 ## Calculations to verify
 
+The [step-by-step MUSCL guide](MUSCL.md) explains the uniform-grid method and
+the changes needed for AMR gradients and split faces.
+
 For leaf area A and segment length L, the finite-volume update is
 `dU/dt = -sum(sign F L)/A + S`. Internal mass and flat-bed momentum fluxes
 cancel pairwise after multiplying by area, including coarse/fine interfaces.

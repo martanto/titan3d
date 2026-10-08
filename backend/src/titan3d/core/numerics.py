@@ -2,7 +2,7 @@
 
 Scheme (per direction, dimension-by-dimension):
 
-* MUSCL reconstruction with a minmod limiter of ``h``, ``η = h + b``, ``u``, ``v``
+* MUSCL reconstruction with a minmod limiter of ``h``, ``b``, ``u``, ``v``
 * Hydrostatic reconstruction (Audusse et al., 2004): well-balanced bed term, ``h ≥ 0``
 * Rusanov (local Lax–Friedrichs) interface flux with earth-pressure coefficient ``k``
 

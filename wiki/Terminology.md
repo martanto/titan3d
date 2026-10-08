@@ -70,6 +70,8 @@ For background on adaptive finite-volume grids, see the
 [AMR algorithm documentation](https://www.clawpack.org/amr_algorithm.html).
 The [titan3d numerical method](Titan2D.md#numerical-method-titan3d) describes the
 implemented scheme.
+For equations and a worked example, see the
+[step-by-step MUSCL guide](../docs/MUSCL.md).
 
 ## Terrain, physics and release
 

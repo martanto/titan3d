@@ -420,6 +420,8 @@ Numerics:
   expected accuracy scaling. Adaptive time stepping and the active window do
   not change cell sizes. See [mesh terminology](wiki/Terminology.md#mesh-and-resolution).
 - MUSCL reconstruction (minmod) of depth, bed and velocity.
+  See the [step-by-step MUSCL guide](docs/MUSCL.md) for equations, a worked
+  example, and how reconstruction connects to terrain corrections and fluxes.
 - Hydrostatic reconstruction (Audusse et al., 2004) for a well-balanced bed term with h ≥ 0. Depth and bed are reconstructed separately, so thin flows are not trapped on steep slopes (Delestre et al., 2012).
 - Rusanov flux; SSP-RK2 with an adaptive CFL time step; implicit friction stopping step.
 - **Active window:** only the bounding box of cells holding material is computed. This is exact, because dry cells carry no flux.
