@@ -91,6 +91,9 @@ solutions. Limiters and flow fronts can reduce the achieved order. See
 
 ## titan3d vs Titan2D
 
+The [step-by-step MUSCL guide](../docs/MUSCL.md) explains the implemented
+reconstruction, limiter, hydrostatic adjustment and flux update.
+
 | Feature | Titan2D | titan3d |
 |---|---|---|
 | Governing equations | Depth-averaged Savage–Hutter | Same |
