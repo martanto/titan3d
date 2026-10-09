@@ -9,6 +9,7 @@ import { mountRuns } from "./ui/runs";
 import { mountSetup } from "./ui/setup";
 import { mountSystem } from "./ui/system";
 import { mountExamples } from "./ui/examples";
+import { mountVisualGuideline } from "./ui/visual-guideline";
 import { Stage } from "./ui/stage";
 
 const panel = document.getElementById("panel") as HTMLElement;
@@ -16,6 +17,7 @@ const tabRun = document.getElementById("tabRun") as HTMLAnchorElement;
 const workspace = document.querySelector(".workspace") as HTMLElement;
 const systemPage = document.getElementById("systemPage") as HTMLElement;
 const examplesPage = document.getElementById("examplesPage") as HTMLElement;
+const guidelinePage = document.getElementById("guidelinePage") as HTMLElement;
 
 /** The System page replaces the map workspace (and pauses 3D rendering). */
 function showWorkspace(on: boolean): void {
@@ -170,10 +172,14 @@ async function route(): Promise<void> {
   stage.hideMessage();
   const hash = location.hash.replace(/^#\/?/, "");
   const [name, id] = hash.split("/");
-  showWorkspace(name !== "system" && name !== "examples");
+  showWorkspace(name !== "system" && name !== "examples" && name !== "visual-guideline");
   systemPage.hidden = name !== "system";
   examplesPage.hidden = name !== "examples";
-  if (name === "examples") {
+  guidelinePage.hidden = name !== "visual-guideline";
+  if (name === "visual-guideline") {
+    setTabs("visual-guideline");
+    cleanup = mountVisualGuideline(guidelinePage);
+  } else if (name === "examples") {
     setTabs("examples");
     cleanup = mountExamples(examplesPage);
   } else if (name === "system") {

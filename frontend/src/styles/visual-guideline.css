@@ -1,0 +1,129 @@
+.tabs a[data-tab="visual-guideline"] { white-space: nowrap; flex-shrink: 0; }
+.guideline-page { overflow-y: auto; min-height: 0; flex: 1; background: var(--panel); }
+.guide-shell { max-width: 1280px; margin: auto; padding: 48px 40px; }
+.guide-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.guide-header h1 { font-size: clamp(1.8rem, 3vw, 2.8rem); letter-spacing: -.025em; }
+.guide-header p { margin-top: 12px; max-width: 65ch; color: var(--muted); font-size: var(--t-lg); }
+.guide-header .badge { white-space: nowrap; }
+.guide-contents { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 24px; }
+.guide-contents button { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; text-align: left; }
+.guide-learning { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+.guide-learning h2, .guide-section-title { font-size: 1.7rem; margin-bottom: 16px; }
+.guide-learning p, .guide-learning li, .guide-glossary dd { max-width: 75ch; line-height: 1.65; }
+.guide-learning ul { padding-left: 20px; margin-block: 20px 24px; }
+.guide-learning li { padding-left: 8px; margin-block: 12px; }
+.model3d-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 32px; margin-top: 24px; }
+.model3d-layout > div { min-width: 0; }
+.model3d-canvas { height: 420px; background: var(--panel-2); }
+.model3d-canvas canvas { touch-action: none; }
+.model3d-layout .guide-note { margin-top: 12px; font-size: var(--t-sm); line-height: 1.65; }
+.model3d-controls { display: flex; flex-direction: column; gap: 16px; }
+.model3d-stages { display: flex; flex-wrap: wrap; gap: 8px; }
+.model3d-stages button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.model3d-controls label { display: flex; justify-content: space-between; font-weight: 600; }
+.model3d-controls input { accent-color: var(--accent); width: 100%; min-height: 36px; }
+.model3d-error { padding: 24px; line-height: 1.65; }
+@media (max-width: 900px) { .model3d-layout { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .model3d-canvas { height: 300px; } }
+.guide-glossary { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 20px 24px; margin-block: 24px; }
+.guide-glossary dt { font-weight: 600; }
+.guide-glossary dd { margin: 0; }
+.guide-example { background: var(--panel-2); padding: 16px 24px; }
+.guide-example summary, .pipeline-source summary { cursor: pointer; min-height: 32px; }
+.guide-example p { margin-top: 16px; }
+.guide-section-title { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+.guideline-page [id] { scroll-margin-top: 24px; }
+.guide-steps { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: 36px; border-block: 1px solid var(--line); }
+.guide-step { display: flex; align-items: center; gap: 12px; padding: 18px 12px; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+.guide-step:hover { background: var(--panel-2); color: var(--fg); }
+.guide-step[aria-pressed="true"] { border-bottom-color: var(--accent); color: var(--accent); background: var(--accent-weak); }
+.guide-index { font-variant-numeric: tabular-nums; font-weight: 600; }
+.guide-body { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; padding-block: 36px; align-items: center; }
+.guide-body figure { margin: 0; min-width: 0; }
+.guide-visual { background: var(--panel-2); }
+.guide-visual svg { display: block; width: 100%; height: auto; }
+.guide-body figcaption { color: var(--muted); font-size: var(--t-sm); margin-top: 16px; max-width: 65ch; }
+.guide-explanation h2 { font-size: 1.7rem; }
+.guide-explanation p { line-height: 1.65; max-width: 68ch; }
+.guide-lead { font-size: var(--t-xl); margin-block: 16px; }
+.guide-io { display: grid; grid-template-columns: 80px 1fr; gap: 12px 16px; margin-block: 24px; padding-block: 20px; border-block: 1px solid var(--line); }
+.guide-io dt { color: var(--muted); }
+.guide-io dd { margin: 0; font-weight: 600; }
+.guide-note { color: var(--muted); }
+.guide-footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; border-top: 1px solid var(--line); padding-top: 24px; }
+.guide-controls { display: flex; align-items: center; gap: 12px; }
+.guide-equation { margin-top: 48px; padding: 24px; background: var(--panel-2); }
+.guide-equation p { margin-top: 12px; max-width: 75ch; line-height: 1.65; }
+.friction-explorer { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line); }
+.friction-jump { margin-top: 20px; }
+.friction-explorer > h2 { font-size: 1.7rem; }
+.friction-explorer p { max-width: 75ch; line-height: 1.65; overflow-wrap: anywhere; }
+.friction-layout, .friction-calculations { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-block: 28px; }
+.friction-picture { background: var(--panel-2); }
+.friction-picture svg { display: block; width: 100%; }
+.friction-settings { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+.friction-settings label { display: flex; justify-content: space-between; font-weight: 600; font-size: var(--t-lg); }
+.friction-settings output { color: var(--accent); }
+.friction-settings input { width: 100%; accent-color: var(--accent); cursor: pointer; min-height: 32px; }
+.friction-settings button { align-self: flex-start; }
+.friction-values h3, .friction-pressure h3 { margin-block: 20px 12px; font-size: var(--t-xl); }
+.friction-values p, .friction-pressure p { margin-bottom: 12px; font-variant-numeric: tabular-nums; }
+.friction-cycle-title { margin-block: 32px 16px; font-size: var(--t-xl); }
+.friction-cycle { padding-left: 24px; max-width: 80ch; }
+.friction-cycle li { padding-left: 8px; margin-block: 16px; line-height: 1.65; }
+.rheology-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-block: 24px; align-items: center; }
+.rheology-layout figure { margin: 0; min-width: 0; }
+.rheology-chart { background: var(--panel-2); }
+.rheology-chart svg { display: block; width: 100%; }
+.rheology-layout figcaption { font-size: var(--t-sm); color: var(--muted); line-height: 1.65; margin-top: 12px; }
+.rheology-controls label { display: flex; justify-content: space-between; font-weight: 600; font-size: var(--t-lg); }
+.rheology-controls output { color: var(--accent); }
+.rheology-controls input { width: 100%; min-height: 44px; margin-block: 12px; accent-color: var(--accent); cursor: pointer; }
+.rheology-table-wrap { overflow-x: auto; margin-block: 24px; }
+.rheology-table { width: 100%; border-collapse: collapse; text-align: left; }
+.rheology-table caption { text-align: left; font-weight: 600; font-size: var(--t-lg); padding-bottom: 12px; }
+.rheology-table th, .rheology-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.6; }
+.rheology-table thead { background: var(--panel-2); }
+.rheology-table th { font-weight: 600; }
+.rheology-table th:first-child { width: 20%; }
+@media (max-width: 640px) { .rheology-layout { grid-template-columns: 1fr; gap: 24px; } .rheology-table { min-width: 620px; } }
+.pipeline-section { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 24px; }
+.pipeline-section > h2 { font-size: 1.7rem; margin-bottom: 12px; }
+.pipeline-section > p { max-width: 75ch; line-height: 1.65; }
+.pipeline-mobile-hint { display: none; }
+.pipeline-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); margin-top: 24px; border: 1px solid var(--line); }
+.pipeline-layout figure { margin: 0; padding: 16px; min-width: 0; }
+.pipeline-diagram { position: relative; width: 100%; aspect-ratio: 620 / 750; }
+.pipeline-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pipeline-node { position: absolute; left: calc(var(--node-x) / 620 * 100%); top: calc(var(--node-y) / 750 * 100%); width: 35.48%; height: 11.33%; background: var(--panel); border: 1px solid var(--control); text-align: left; padding: 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.pipeline-node > span:last-child { font-size: var(--t-xs); color: var(--muted); }
+.pipeline-number { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 1px solid var(--control); border-radius: 50%; flex-shrink: 0; font-size: var(--t-sm); }
+.pipeline-node .pipeline-number { position: absolute; top: -28px; left: -8px; background: var(--panel); }
+.pipeline-node[aria-pressed="true"] { border: 2px solid var(--accent); }
+.pipeline-node[aria-pressed="true"] .pipeline-number, .pipeline-row[aria-pressed="true"] .pipeline-number { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+.pipeline-node:hover, .pipeline-row:hover { background: var(--panel-2); }
+.pipeline-layout figcaption { font-size: var(--t-sm); color: var(--muted); line-height: 1.6; padding: 12px; }
+.pipeline-sidebar { border-left: 1px solid var(--line); }
+.pipeline-detail { padding: 24px; background: var(--panel-2); }
+.pipeline-detail h3 { font-size: var(--t-xl); margin-bottom: 12px; }
+.pipeline-detail p { line-height: 1.65; }
+.pipeline-detail .guide-io { grid-template-columns: 70px 1fr; }
+.pipeline-source { color: var(--muted); font-size: var(--t-sm); overflow-wrap: anywhere; }
+.pipeline-row { display: flex; width: 100%; gap: 12px; padding: 14px 16px; text-align: left; border-top: 1px solid var(--line); cursor: pointer; }
+.pipeline-row > span:last-child { display: flex; flex-direction: column; gap: 4px; }
+.pipeline-row > span:last-child > span { color: var(--muted); font-size: var(--t-sm); }
+.pipeline-row[aria-pressed="true"] { background: var(--accent-weak); }
+@media (max-width: 900px) { .pipeline-layout { grid-template-columns: 1fr; } .pipeline-sidebar { border-left: 0; border-top: 1px solid var(--line); } }
+@media (max-width: 480px) {
+  .pipeline-mobile-hint { display: block; margin-top: 12px; color: var(--muted); }
+  .guide-glossary { grid-template-columns: 1fr; gap: 8px; }
+  .guide-glossary dd { margin-bottom: 16px; }
+  .pipeline-layout figure { overflow-x: auto; }
+  .pipeline-diagram { min-width: 520px; }
+  .pipeline-node { padding: 8px; font-size: var(--t-sm); min-height: 68px; gap: 2px; line-height: 1.3; }
+  .pipeline-node > span:last-child { font-size: var(--t-xs); }
+  .pipeline-detail { padding: 16px; }
+}
+@media (max-width: 640px) { .friction-layout, .friction-calculations { grid-template-columns: 1fr; gap: 24px; } }
+@media (max-width: 900px) { .guide-shell { padding: 28px 24px; } .guide-steps { grid-template-columns: repeat(3, 1fr); } .guide-body { gap: 24px; } }
+@media (max-width: 640px) { .guide-shell { padding: 24px 16px; } .guide-header { flex-direction: column; gap: 12px; } .guide-body { grid-template-columns: 1fr; padding-block: 24px; } .guide-step { padding: 14px 8px; gap: 8px; } .guide-footer { align-items: flex-start; flex-direction: column; } .guide-controls { width: 100%; flex-wrap: wrap; } .guide-controls span { margin-right: auto; } }
