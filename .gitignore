@@ -33,6 +33,7 @@ frontend/.env.*
 
 # Test outputs (written next to the test files)
 backend/tests/out_*
+frontend/tests/*.png
 
 # impeccable: local config, caches and review captures (design records are committed)
 .impeccable/config.local.json
